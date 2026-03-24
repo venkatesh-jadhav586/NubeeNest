@@ -236,7 +236,44 @@ text-align:center;
 }
 
 
-/* mobile responsive */
+/* whatsapp button */
+
+.whatsapp{
+
+position:fixed;
+
+bottom:25px;
+
+right:25px;
+
+background:#25d366;
+
+width:60px;
+
+height:60px;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+
+z-index:1000;
+
+}
+
+.whatsapp img{
+
+width:35px;
+
+}
+
+
+/* mobile */
 
 @media(max-width:768px){
 
