@@ -1,166 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-
-<link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NubeeNest — Play. Learn. Grow.</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header>
-
-<div class="logo-box">
-
-<img src="images/WhatsApp Image 2026-03-29 at 00.26.19.jpeg" class="logo">
-
-
-
-</div>
-
-<nav>
-
-<a href="#">Home</a>
-<a href="#products">Products</a>
-<a href="#stores">Stores</a>
-<a href="#contact">Contact</a>
-
-</nav>
-
-</header>
-
-
-<section class="hero">
-
-<div class="hero-card">
-
-<h2 class="title">
-
-<span class="c1">Play</span> •
-<span class="c2">Learn</span> •
-<span class="c3">Grow</span>
-
-</h2>
-
-<p>Creative toys designed for happy kids!</p>
-
-<a href="#products" class="shop-btn">Shop Our Products</a>
-
-</div>
-
-</section>
-
-
-<section id="products">
-
-<h2 class="section-title">Our Toys</h2>
-
-<div class="product-grid">
-
-<div class="product-card">
-
-<img src="images/megan-qualley-h3u32l2nNk0-unsplash.jpg">
-
-<h3>Educational Blocks</h3>
-
-<a href="#" class="product-btn">View Product</a>
-
-</div>
-
-
-<div class="product-card">
-
-<img src="images/puzzle-toy.jpeg">
-
-<h3>Puzzle Toy</h3>
-
-<a href="#" class="product-btn">View Product</a>
-
-</div>
-
-
-<div class="product-card">
-
-<img src="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg">
-
-<h3>Toy Car Set</h3>
-
-<a href="#" class="product-btn">View Product</a>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section id="stores">
-
-<h2 class="section-title">Shop Our Products On</h2>
-
-<div class="stores">
-
-<a class="amazon">Amazon</a>
-
-<a class="flipkart">Flipkart</a>
-
-<a class="shopify">Shopify</a>
-
-</div>
-
-</section>
-
-
-<section id="contact">
-
-<h2 class="section-title">Contact Us</h2>
-
-<div class="contact-container">
-
-<form action="https://formsubmit.co/nubeenest2491@gmail.com" method="POST" class="contact-form">
-
-<input type="text" name="name" placeholder="Your Name" required>
-
-<input type="email" name="email" placeholder="Your Email" required>
-
-<textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-
-<button type="submit">Send Message</button>
-
-<input type="hidden" name="_captcha" value="false">
-
-<input type="hidden" name="_autoresponse"
-value="Thank you for contacting NubeeNest! We received your message and will respond shortly.">
-
-</form>
-
-</div>
-
-</section>
-
-<footer>
-
-<p>© 2026 NubeeNest</p>
-
-</footer>
-
-
-<!-- WhatsApp Floating Icon -->
-
-<a href="https://wa.me/916362391450" class="whatsapp-float" target="_blank">
-
-<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-
-</a>
+  <!-- ══════════════════════════
+       HEADER
+  ══════════════════════════ -->
+  <header>
+    <div class="logo-box">
+      <img src="images/WhatsApp Image 2026-03-29 at 00.26.19.jpeg" alt="NubeeNest Logo">
+    </div>
+
+    <!-- hamburger (mobile) -->
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav id="main-nav">
+      <a href="#">Home</a>
+      <a href="#products">Products</a>
+      <a href="#why">Why Us</a>
+      <a href="#stores">Stores</a>
+      <a href="#contact" class="nav-cta">Contact Us</a>
+    </nav>
+  </header>
+
+
+  <!-- ══════════════════════════
+       HERO
+  ══════════════════════════ -->
+  <section class="hero">
+    <div class="blob blob-a"></div>
+    <div class="blob blob-b"></div>
+    <div class="blob blob-c"></div>
+    <div class="blob blob-d"></div>
+    <div class="hero-dots"></div>
+
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-pill">🌟 Trusted by 500+ Families</div>
+        <h1>
+          <span class="c1">Play</span> •
+          <span class="c2">Learn</span> •
+          <span class="c3">Grow</span>
+        </h1>
+        <p>Creative toys thoughtfully crafted to spark curiosity, build little skills, and fill every day with joy.</p>
+        <div class="hero-actions">
+          <a href="#products" class="btn-primary">Shop Now</a>
+          <a href="#stores"   class="btn-secondary">Find in Stores</a>
+        </div>
+      </div>
+
+      <div class="hero-mosaic">
+        <div class="mosaic-card">
+          <img src="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Educational Blocks"
+               onerror="this.src='https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80'">
+          <div class="mosaic-tag">Age 3+</div>
+        </div>
+        <div class="mosaic-card">
+          <img src="images/puzzle-toy.jpeg" alt="Puzzle Toy"
+               onerror="this.src='https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80'">
+          <div class="mosaic-tag">Age 4+</div>
+        </div>
+        <div class="mosaic-card">
+          <img src="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Toy Car Set"
+               onerror="this.src='https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80'">
+          <div class="mosaic-tag">Age 2+</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       STATS STRIP
+  ══════════════════════════ -->
+  <div class="stats-strip">
+    <div class="stat">
+      <span class="stat-num">500+</span>
+      <span class="stat-lbl">Happy Families</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">30+</span>
+      <span class="stat-lbl">Toy Collections</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3</span>
+      <span class="stat-lbl">Platforms</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">4.9 ★</span>
+      <span class="stat-lbl">Avg. Rating</span>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════
+       PRODUCTS
+  ══════════════════════════ -->
+  <section id="products">
+    <div class="sec-center">
+      <div class="sec-eyebrow">✨ Our Toys</div>
+      <h2 class="sec-title">Kids Can't Stop Playing 🎉</h2>
+      <p class="sec-sub">Every toy is designed to delight, educate, and grow with your child — safe, vibrant, and built to last.</p>
+    </div>
+
+    <div class="product-grid">
+
+      <div class="product-card reveal">
+        <div class="product-img-wrap">
+          <img src="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Educational Blocks"
+               onerror="this.src='https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=700&q=80'">
+          <div class="prod-emoji">🧱</div>
+          <div class="prod-age">Age 3+</div>
+        </div>
+        <div class="product-info">
+          <h3>Educational Blocks</h3>
+          <p>Colourful stacking blocks that teach shapes, colours, and motor skills through hands-on play.</p>
+          <a href="#" class="prod-btn">View Product</a>
+        </div>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="product-img-wrap">
+          <img src="images/puzzle-toy.jpeg" alt="Puzzle Toy"
+               onerror="this.src='https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=700&q=80'">
+          <div class="prod-emoji">🧩</div>
+          <div class="prod-age">Age 4+</div>
+        </div>
+        <div class="product-info">
+          <h3>Puzzle Toy</h3>
+          <p>Chunky, vibrant puzzles that sharpen problem-solving and keep little minds engaged for hours.</p>
+          <a href="#" class="prod-btn">View Product</a>
+        </div>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="product-img-wrap">
+          <img src="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Toy Car Set"
+               onerror="this.src='https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=700&q=80'">
+          <div class="prod-emoji">🚗</div>
+          <div class="prod-age">Age 2+</div>
+        </div>
+        <div class="product-info">
+          <h3>Toy Car Set</h3>
+          <p>Bright, durable toy cars for imaginative races, ramps, and adventures big or small.</p>
+          <a href="#" class="prod-btn">View Product</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       WHY NUBEENEST
+  ══════════════════════════ -->
+  <section id="why">
+    <div class="sec-center">
+      <div class="sec-eyebrow">💛 Why NubeeNest</div>
+      <h2 class="sec-title">Made with Love for Every Child</h2>
+      <p class="sec-sub">We believe every toy should inspire joy, build skills, and guarantee safe, happy playtime.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <span class="why-icon">🛡️</span>
+        <h4>100% Safe Materials</h4>
+        <p>All toys are non-toxic, BPA-free, and certified safe for babies and toddlers.</p>
+      </div>
+      <div class="why-card reveal">
+        <span class="why-icon">🎨</span>
+        <h4>Bright &amp; Colourful</h4>
+        <p>Vibrant designs that stimulate visual development and keep kids excited to play.</p>
+      </div>
+      <div class="why-card reveal">
+        <span class="why-icon">🧠</span>
+        <h4>Skill-Building Play</h4>
+        <p>Each toy nurtures motor skills, creativity, and cognitive growth.</p>
+      </div>
+      <div class="why-card reveal">
+        <span class="why-icon">🚀</span>
+        <h4>Fast Delivery</h4>
+        <p>Quick, careful shipping right to your door — so the fun starts sooner.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       STORES
+  ══════════════════════════ -->
+  <section id="stores">
+    <div class="sec-center">
+      <div class="sec-eyebrow">🛍️ Available On</div>
+      <h2 class="sec-title">Shop Wherever You Like</h2>
+      <p class="sec-sub">NubeeNest toys are on all major platforms — pick your favourite and start shopping!</p>
+    </div>
+    <div class="stores-wrap">
+      <a href="#" class="store-btn amazon reveal">Amazon</a>
+      <a href="#" class="store-btn flipkart reveal">Flipkart</a>
+      <a href="#" class="store-btn shopify reveal">Shopify</a>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       CONTACT
+  ══════════════════════════ -->
+  <section id="contact">
+    <div class="sec-center">
+      <div class="sec-eyebrow">👋 Get In Touch</div>
+      <h2 class="sec-title">We'd Love to Hear from You</h2>
+      <p class="sec-sub">Questions, bulk orders, or just sharing the joy — we're always happy to chat!</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="reveal">
+        <p class="cinfo-head">Say Hello!</p>
+        <p class="cinfo-body">Whether it's a question about our toys, help with an order, or just a smile to share — drop us a message and we'll get back to you shortly.</p>
+        <div class="cinfo-row">
+          <span class="cinfo-icon">📧</span>
+          nubeenest2491@gmail.com
+        </div>
+        <div class="cinfo-row">
+          <span class="cinfo-icon">📱</span>
+          +91 63623 91450
+        </div>
+        <div class="cinfo-row">
+          <span class="cinfo-icon">📍</span>
+          India
+        </div>
+      </div>
+
+      <form action="https://formsubmit.co/nubeenest2491@gmail.com" method="POST" class="cform reveal">
+        <input type="text"  name="name"    placeholder="Your Name"    required>
+        <input type="email" name="email"   placeholder="Your Email"   required>
+        <textarea           name="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message 🚀</button>
+        <input type="hidden" name="_captcha"      value="false">
+        <input type="hidden" name="_autoresponse" value="Thank you for contacting NubeeNest! We received your message and will respond shortly.">
+      </form>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       FOOTER
+  ══════════════════════════ -->
+  <footer>
+    <p>© 2026 NubeeNest · Made with <span>♥</span> for happy kids everywhere</p>
+  </footer>
+
+
+  <!-- ══════════════════════════
+       WHATSAPP FLOAT
+  ══════════════════════════ -->
+  <a href="https://wa.me/916362391450" class="wa-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+  </a>
+
+
+  <!-- ══════════════════════════
+       JS — mobile nav + reveal
+  ══════════════════════════ -->
+  <script>
+    /* Mobile nav toggle */
+    const toggle  = document.querySelector('.nav-toggle');
+    const nav     = document.querySelector('#main-nav');
+    const navLinks = nav.querySelectorAll('a');
+
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', false);
+        document.body.style.overflow = '';
+      });
+    });
+
+    /* Scroll reveal with stagger */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const siblings = [...entry.target.parentElement.querySelectorAll('.reveal')];
+        const idx = siblings.indexOf(entry.target);
+        entry.target.style.transitionDelay = (idx * 0.1) + 's';
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
 
 </body>
-
 </html>
