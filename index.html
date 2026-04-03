@@ -910,7 +910,117 @@
   </div>
 
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+
+/* =========================
+   MOBILE MENU (SLIDE)
+========================= */
+
+const navToggle = document.querySelector(".nav-toggle");
+const nav = document.querySelector("#main-nav");
+
+navToggle.addEventListener("click", () => {
+  nav.classList.toggle("open");
+});
+
+
+/* =========================
+   AGE FILTER
+========================= */
+
+const ageButtons = document.querySelectorAll(".age-btn");
+const products = document.querySelectorAll(".product-card");
+
+ageButtons.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    ageButtons.forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+
+    const age = button.dataset.age;
+
+    products.forEach(card => {
+
+      card.style.opacity = "0";
+
+      setTimeout(() => {
+
+        if(age === "all"){
+          card.classList.remove("hidden");
+        }
+        else if(card.dataset.age === age){
+          card.classList.remove("hidden");
+        }
+        else{
+          card.classList.add("hidden");
+        }
+
+        card.style.opacity = "1";
+
+      },200);
+
+    });
+
+  });
+
+});
+
+
+/* =========================
+   LIVE SEARCH FILTER
+========================= */
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("keyup", () => {
+
+  const value = searchInput.value.toLowerCase();
+
+  products.forEach(card => {
+
+    const title = card.querySelector("h3").innerText.toLowerCase();
+    const desc = card.querySelector("p").innerText.toLowerCase();
+
+    if(title.includes(value) || desc.includes(value)){
+      card.classList.remove("hidden");
+    }
+    else{
+      card.classList.add("hidden");
+    }
+
+  });
+
+});
+
+
+/* =========================
+   SEARCH DROPDOWN
+========================= */
+
+const dropdown = document.getElementById("searchDropdown");
+
+searchInput.addEventListener("focus", () => {
+  dropdown.classList.add("show");
+});
+
+document.addEventListener("click", (e) => {
+
+  if(!document.getElementById("headerSearch").contains(e.target)){
+    dropdown.classList.remove("show");
+  }
+
+});
+
+function closeSearch(){
+  dropdown.classList.remove("show");
+}
+
+function doSearch(){
+  dropdown.classList.add("show");
+}
+
+</script>
     /* Search bar */
     const searchInput = document.getElementById('searchInput');
     const searchDropdown = document.getElementById('searchDropdown');
