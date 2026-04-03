@@ -980,17 +980,20 @@ document.querySelectorAll('.age-btn').forEach(btn => {
   });
 });
 
-/* Scroll reveal */
+/* Scroll reveal — hide via JS so content always visible if JS fails */
+const revealEls = document.querySelectorAll('.reveal');
+revealEls.forEach(el => el.classList.add('hidden-reveal'));
 const io = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
     const siblings = [...entry.target.parentElement.querySelectorAll('.reveal')];
     entry.target.style.transitionDelay = (siblings.indexOf(entry.target) * 0.1) + 's';
+    entry.target.classList.remove('hidden-reveal');
     entry.target.classList.add('visible');
     io.unobserve(entry.target);
   });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+}, { threshold: 0.05 });
+revealEls.forEach(el => io.observe(el));
 
 /* Animated counters */
 const countObs = new IntersectionObserver(entries => {
