@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -28,19 +29,76 @@
 /* ── Header ── */
 header {
   position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 32px;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 12px 28px;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(124,58,237,0.1);
   box-shadow: 0 2px 20px rgba(124,58,237,0.08);
 }
 .logo-box img { height: 48px; object-fit: contain; }
 .logo-box span { font-size: 1.4rem; font-weight: 800; color: var(--violet); }
-nav { display: flex; align-items: center; gap: 28px; }
-nav a { text-decoration: none; color: var(--ink); font-weight: 500; font-size: 0.9rem; transition: color 0.2s; }
+
+/* ── Fancy Search Bar ── */
+.header-search {
+  flex: 1; max-width: 380px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: 10px 44px 10px 18px;
+  border-radius: 50px;
+  border: 2px solid #EDE9FE;
+  background: #F5F3FF;
+  font-size: 0.88rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  font-family: inherit;
+}
+.header-search input::placeholder { color: #A78BFA; }
+.header-search input:focus {
+  border-color: var(--violet);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(124,58,237,0.12);
+}
+.header-search .search-icon {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--violet);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border: none;
+  transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.35);
+}
+.header-search .search-icon:hover { background: var(--ink2); transform: translateY(-50%) scale(1.1); }
+.header-search .search-icon svg { fill: white; width: 14px; height: 14px; }
+
+/* Search dropdown */
+.search-dropdown {
+  position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(124,58,237,0.18);
+  border: 1px solid #EDE9FE;
+  overflow: hidden; display: none; z-index: 200;
+}
+.search-dropdown.show { display: block; }
+.search-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none; color: var(--ink);
+}
+.search-item:hover { background: #F5F3FF; }
+.search-item-emoji { font-size: 1.3rem; width: 36px; height: 36px; background: #EDE9FE; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.search-item-text strong { display: block; font-size: 0.88rem; font-weight: 700; }
+.search-item-text span { font-size: 0.75rem; color: #9CA3AF; }
+.search-divider { font-size: 0.72rem; font-weight: 700; color: #A78BFA; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 16px 4px; background: #FAFAFF; }
+
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: var(--ink); font-weight: 500; font-size: 0.88rem; transition: color 0.2s; white-space: nowrap; }
 nav a:hover { color: var(--violet); }
-.nav-cta { background: var(--violet); color: #fff !important; padding: 8px 20px; border-radius: 50px; font-weight: 600; transition: background 0.2s, transform 0.2s !important; }
+.nav-cta { background: var(--violet); color: #fff !important; padding: 8px 18px; border-radius: 50px; font-weight: 600; transition: background 0.2s, transform 0.2s !important; }
 .nav-cta:hover { background: var(--ink2) !important; transform: translateY(-1px); }
 .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
 .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: 0.3s; }
@@ -335,8 +393,10 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
 
 /* ── Mobile ── */
 @media (max-width: 900px) {
-  header { padding: 12px 20px; }
-  nav { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.98); flex-direction: column; justify-content: center; align-items: center; gap: 32px; font-size: 1.2rem; }
+  header { padding: 12px 20px; gap: 12px; }
+  .header-search { max-width: 200px; }
+  .header-search input { padding: 8px 40px 8px 14px; font-size: 0.82rem; }
+  nav { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.98); flex-direction: column; justify-content: center; align-items: center; gap: 32px; font-size: 1.2rem; z-index: 300; }
   nav.open { display: flex; }
   .nav-toggle { display: flex; }
   .hero-inner { flex-direction: column; text-align: center; }
@@ -352,6 +412,9 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
   .footer-inner { grid-template-columns: 1fr 1fr; }
   .nl-form { flex-direction: column; }
   section { padding: 60px 20px; }
+}
+@media (max-width: 600px) {
+  .header-search { display: none; }
 }
 ```
 
@@ -385,18 +448,53 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
     <div class="logo-box">
       <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest Logo">
     </div>
-    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <nav id="main-nav">
-      <a href="#">Home</a>
-      <a href="#products">Products</a>
-      <a href="#offers">Offers</a>
-      <a href="#wa-order">WhatsApp Order</a>
-      <a href="#stores">Stores</a>
-      <a href="#instagram">Instagram</a>
-      <a href="#contact" class="nav-cta">Contact Us</a>
-    </nav>
+
+```
+<!-- Fancy Search Bar -->
+<div class="header-search" id="headerSearch">
+  <input type="text" id="searchInput" placeholder="🔍  Search toys, age groups..." autocomplete="off">
+  <button class="search-icon" onclick="doSearch()">
+    <svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+  </button>
+  <div class="search-dropdown" id="searchDropdown">
+    <div class="search-divider">🧸 Our Toys</div>
+    <a href="#products" class="search-item" onclick="closeSearch()">
+      <div class="search-item-emoji">🧱</div>
+      <div class="search-item-text"><strong>Educational Blocks</strong><span>Age 3+ · ₹399 (20% OFF)</span></div>
+    </a>
+    <a href="#products" class="search-item" onclick="closeSearch()">
+      <div class="search-item-emoji">🧩</div>
+      <div class="search-item-text"><strong>Puzzle Toy</strong><span>Age 4+ · ₹449 (Best Seller)</span></div>
+    </a>
+    <a href="#products" class="search-item" onclick="closeSearch()">
+      <div class="search-item-emoji">🚗</div>
+      <div class="search-item-text"><strong>Toy Car Set</strong><span>Age 2+ · Buy 2 Get 1 Free</span></div>
+    </a>
+    <div class="search-divider">⚡ Quick Links</div>
+    <a href="#wa-order" class="search-item" onclick="closeSearch()">
+      <div class="search-item-emoji">📱</div>
+      <div class="search-item-text"><strong>Order on WhatsApp</strong><span>Get 10% instant discount</span></div>
+    </a>
+    <a href="#stores" class="search-item" onclick="closeSearch()">
+      <div class="search-item-emoji">🛍️</div>
+      <div class="search-item-text"><strong>Find on Amazon / Flipkart</strong><span>All major platforms</span></div>
+    </a>
+  </div>
+</div>
+<button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+<nav id="main-nav">
+  <a href="#">Home</a>
+  <a href="#products">Products</a>
+  <a href="#offers">Offers</a>
+  <a href="#wa-order">WhatsApp Order</a>
+  <a href="#stores">Stores</a>
+  <a href="#instagram">Instagram</a>
+  <a href="#contact" class="nav-cta">Contact Us</a>
+</nav>
+```
+
   </header>
 
   <!-- ══ HERO ══ -->
@@ -683,7 +781,8 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
         <span>Shop on Amazon</span>
       </a>
       <a href="#" class="store-card flipkart reveal">
-        <img src="https://upload.wikimedia.org/wikipedia/en/7/74/Flipkart_logo.svg" alt="Flipkart">
+        <img src="https://upload.wikimedia.org/wikipedia/en/7/74/Flipkart_logo.svg" alt="Flipkart"
+             onerror="this.src='https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Emblem.png'; this.onerror=null;">
         <span>Shop on Flipkart</span>
       </a>
       <a href="#" class="store-card shopify reveal">
@@ -743,7 +842,7 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
       <div class="reveal">
         <p class="cinfo-head">Say Hello!</p>
         <p class="cinfo-body">Whether it's a question about our toys, help with an order, or just a smile to share — drop us a message and we'll get back to you shortly.</p>
-        <div class="cinfo-row"><span class="cinfo-icon">📧</span><a href="mailto:nubeenest2491@gmail.com">nubeenest2491@gmail.com</a></div>
+        <div class="cinfo-row"><span class="cinfo-icon">📧</span><a href="/cdn-cgi/l/email-protection#88e6fdeaedede6edfbfcbabcb1b9c8efe5e9e1e4a6ebe7e5"><span class="__cf_email__" data-cfemail="056b706760606b60767137313c34456268646c692b666a68">[email&#160;protected]</span></a></div>
         <div class="cinfo-row"><span class="cinfo-icon">📱</span><a href="tel:+916362391450">+91 63623 91450</a></div>
         <div class="cinfo-row"><span class="cinfo-icon">📍</span>India</div>
         <div class="cinfo-socials">
@@ -771,7 +870,10 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <img src="images/WhatsApp Image 2026-03-29 at 00.26.19.jpeg" alt="NubeeNest">
+        <img src="images/WhatsApp Image 2026-03-29 at 00.26.19.jpeg" alt="NubeeNest"
+             style="height:48px; object-fit:contain; margin-bottom:14px; display:block;"
+             onerror="this.style.display='none'; document.getElementById('footer-logo-text').style.display='block'">
+        <div id="footer-logo-text" style="display:none; font-size:1.6rem; font-weight:900; color:#fff; margin-bottom:14px;">🪺 NubeeNest</div>
         <p>Creative toys crafted to spark curiosity and bring endless joy to children everywhere.</p>
         <div class="footer-socials">
           <a href="https://www.instagram.com/nubeenest.in?igsh=MWZjMnIwZnNvZ2t3ZQ==" target="_blank" rel="noopener" class="fsocial insta">
@@ -798,7 +900,7 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
       </div>
       <div class="footer-col">
         <h5>Contact</h5>
-        <a href="mailto:nubeenest2491@gmail.com">Email Us</a>
+        <a href="/cdn-cgi/l/email-protection#08667d6a6d6d666d7b7c3a3c3139486f65696164266b6765">Email Us</a>
         <a href="tel:+916362391450">+91 63623 91450</a>
         <a href="https://wa.me/916362391450" target="_blank" rel="noopener">WhatsApp</a>
         <a href="https://www.instagram.com/nubeenest.in" target="_blank" rel="noopener">Instagram</a>
@@ -821,65 +923,82 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
     </a>
   </div>
 
-  <script>
-    /* Mobile nav */
-    const toggle = document.querySelector('.nav-toggle');
-    const nav = document.querySelector('#main-nav');
-    toggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', open);
-      document.body.style.overflow = open ? 'hidden' : '';
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+```
+/* Search bar */
+const searchInput = document.getElementById('searchInput');
+const searchDropdown = document.getElementById('searchDropdown');
+const allItems = document.querySelectorAll('.search-item');
+
+searchInput.addEventListener('focus', () => searchDropdown.classList.add('show'));
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.toLowerCase().trim();
+  searchDropdown.classList.add('show');
+  allItems.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = (!q || text.includes(q)) ? 'flex' : 'none';
+  });
+});
+document.addEventListener('click', e => {
+  if (!document.getElementById('headerSearch').contains(e.target)) closeSearch();
+});
+function closeSearch() { searchDropdown.classList.remove('show'); searchInput.value = ''; allItems.forEach(i => i.style.display = 'flex'); }
+function doSearch() {
+  const q = searchInput.value.toLowerCase().trim();
+  if (!q) { document.querySelector('#products').scrollIntoView({behavior:'smooth'}); closeSearch(); return; }
+  const match = [...allItems].find(i => i.textContent.toLowerCase().includes(q));
+  if (match) { match.click(); } else { document.querySelector('#products').scrollIntoView({behavior:'smooth'}); closeSearch(); }
+}
+searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+const toggle = document.querySelector('.nav-toggle');
+const nav = document.querySelector('#main-nav');
+toggle.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  toggle.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+nav.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+  nav.classList.remove('open');
+  toggle.setAttribute('aria-expanded', false);
+  document.body.style.overflow = '';
+}));
+
+/* Age filter */
+document.querySelectorAll('.age-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const age = btn.dataset.age;
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.classList.toggle('hidden', age !== 'all' && card.dataset.age !== age);
     });
-    nav.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', false);
-      document.body.style.overflow = '';
-    }));
+  });
+});
 
-    /* Age filter */
-    document.querySelectorAll('.age-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const age = btn.dataset.age;
-        document.querySelectorAll('.product-card').forEach(card => {
-          card.classList.toggle('hidden', age !== 'all' && card.dataset.age !== age);
-        });
-      });
-    });
+/* Scroll reveal */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const siblings = [...entry.target.parentElement.querySelectorAll('.reveal')];
+    entry.target.style.transitionDelay = (siblings.indexOf(entry.target) * 0.1) + 's';
+    entry.target.classList.add('visible');
+    io.unobserve(entry.target);
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    /* Scroll reveal */
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const siblings = [...entry.target.parentElement.querySelectorAll('.reveal')];
-        entry.target.style.transitionDelay = (siblings.indexOf(entry.target) * 0.1) + 's';
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-    /* Animated counters */
-    const countObs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const raw = el.textContent;
-        const num = parseFloat(raw.replace(/[^0-9.]/g,''));
-        const suffix = raw.replace(/[0-9.]/g,'');
-        let start = 0;
-        const step = num / 60;
-        const timer = setInterval(() => {
-          start += step;
-          if (start >= num) { start = num; clearInterval(timer); }
-          el.textContent = (Number.isInteger(num) ? Math.round(start) : start.toFixed(1)) + suffix;
-        }, 20);
-        countObs.unobserve(el);
-      });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('.stat-num').forEach(c => countObs.observe(c));
-  </script>
-
-</body>
-</html>
+/* Animated counters */
+const countObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const raw = el.textContent;
+    const num = parseFloat(raw.replace(/[^0-9.]/g,''));
+    const suffix = raw.replace(/[0-9.]/g,'');
+    let start = 0;
+    const step = num / 60;
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= num) { start = num; clearInterval(timer)
+```
