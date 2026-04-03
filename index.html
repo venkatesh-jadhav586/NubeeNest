@@ -388,7 +388,8 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
 .wa-float img { width: 28px; height: 28px; }
 
 /* ── Scroll reveal ── */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.hidden-reveal { opacity: 0; transform: translateY(20px); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ── Mobile ── */
@@ -523,18 +524,18 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
 
   <div class="hero-mosaic">
     <div class="mosaic-card">
-      <img src="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Educational Blocks"
-           onerror="this.src='https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80'">
+      <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80"
+           data-local="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Educational Blocks">
       <div class="mosaic-tag">Age 3+</div>
     </div>
     <div class="mosaic-card">
-      <img src="images/puzzle-toy.jpeg" alt="Puzzle Toy"
-           onerror="this.src='https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80'">
+      <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80"
+           data-local="images/puzzle-toy.jpeg" alt="Puzzle Toy">
       <div class="mosaic-tag">Age 4+</div>
     </div>
     <div class="mosaic-card">
-      <img src="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Toy Car Set"
-           onerror="this.src='https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80'">
+      <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80"
+           data-local="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Toy Car Set">
       <div class="mosaic-tag">Age 2+</div>
     </div>
   </div>
@@ -573,8 +574,8 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
   <!-- Product 1: Educational Blocks -->
   <div class="product-card reveal" data-age="3">
     <div class="product-img-wrap">
-      <img src="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Educational Blocks"
-           onerror="this.src='https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=700&q=80'">
+      <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=700&q=80"
+           data-local="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Educational Blocks">
       <div class="prod-emoji">🧱</div>
       <div class="prod-age">Age 3+</div>
       <div class="offer-badge">20% OFF</div>
@@ -601,8 +602,8 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
   <!-- Product 2: Puzzle Toy -->
   <div class="product-card reveal" data-age="4">
     <div class="product-img-wrap">
-      <img src="images/puzzle-toy.jpeg" alt="Puzzle Toy"
-           onerror="this.src='https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=700&q=80'">
+      <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=700&q=80"
+           data-local="images/puzzle-toy.jpeg" alt="Puzzle Toy">
       <div class="prod-emoji">🧩</div>
       <div class="prod-age">Age 4+</div>
       <div class="offer-badge">Best Seller</div>
@@ -629,8 +630,8 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
   <!-- Product 3: Toy Car Set -->
   <div class="product-card reveal" data-age="2">
     <div class="product-img-wrap">
-      <img src="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Toy Car Set"
-           onerror="this.src='https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=700&q=80'">
+      <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=700&q=80"
+           data-local="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Toy Car Set">
       <div class="prod-emoji">🚗</div>
       <div class="prod-age">Age 2+</div>
       <div class="offer-badge">Buy 2 Get 1</div>
@@ -781,8 +782,11 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
         <span>Shop on Amazon</span>
       </a>
       <a href="#" class="store-card flipkart reveal">
-        <img src="https://upload.wikimedia.org/wikipedia/en/7/74/Flipkart_logo.svg" alt="Flipkart"
-             onerror="this.src='https://logos-world.net/wp-content/uploads/2020/11/Flipkart-Emblem.png'; this.onerror=null;">
+        <svg height="40" viewBox="0 0 120 36" xmlns="http://www.w3.org/2000/svg">
+          <rect width="120" height="36" rx="4" fill="#2874F0"/>
+          <text x="10" y="26" font-family="Arial,sans-serif" font-weight="900" font-size="22" fill="white">flipkart</text>
+          <text x="97" y="18" font-family="Arial,sans-serif" font-weight="900" font-size="18" fill="#FFE500">✦</text>
+        </svg>
         <span>Shop on Flipkart</span>
       </a>
       <a href="#" class="store-card shopify reveal">
@@ -807,9 +811,9 @@ footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
         </a>
       </div>
       <div class="insta-right">
-        <div class="insta-img"><img src="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Post" onerror="this.parentElement.innerHTML='🧱'"></div>
-        <div class="insta-img insta-img-2"><img src="images/puzzle-toy.jpeg" alt="Post" onerror="this.parentElement.innerHTML='🧩'"></div>
-        <div class="insta-img"><img src="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Post" onerror="this.parentElement.innerHTML='🚗'"></div>
+        <div class="insta-img"><img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=300&q=80" alt="Post"></div>
+        <div class="insta-img insta-img-2"><img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=300&q=80" alt="Post"></div>
+        <div class="insta-img"><img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=300&q=80" alt="Post"></div>
         <div class="insta-img insta-img-2" style="background:rgba(255,255,255,.25);font-size:1rem;color:#fff;font-weight:700;text-align:center;padding:10px;display:flex;align-items:center;justify-content:center;">+ More on<br>Instagram</div>
       </div>
     </div>
