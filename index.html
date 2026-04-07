@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -24,427 +25,562 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--ink); background: #fff; overflow-x: hidden; }
 
-    /* ── Header ── */
-    header {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between; gap: 20px;
-      padding: 12px 28px;
-      background: rgba(255,255,255,0.97);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(124,58,237,0.1);
-      box-shadow: 0 2px 20px rgba(124,58,237,0.08);
-    }
-    .logo-box img { height: 48px; object-fit: contain; }
-    .logo-box span { font-size: 1.4rem; font-weight: 800; color: var(--violet); }
+```
+/* ── Header ── */
+header {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 12px 28px;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(124,58,237,0.1);
+  box-shadow: 0 2px 20px rgba(124,58,237,0.08);
+}
+.logo-box img { height: 48px; object-fit: contain; }
+.logo-box span { font-size: 1.4rem; font-weight: 800; color: var(--violet); }
+.header-search { flex: 1; max-width: 380px; position: relative; }
+.header-search input {
+  width: 100%; padding: 10px 44px 10px 18px; border-radius: 50px;
+  border: 2px solid #EDE9FE; background: #F5F3FF; font-size: 0.88rem;
+  color: var(--ink); outline: none; transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  font-family: inherit;
+}
+.header-search input::placeholder { color: #A78BFA; }
+.header-search input:focus { border-color: var(--violet); background: #fff; box-shadow: 0 0 0 4px rgba(124,58,237,0.12); }
+.header-search .search-icon {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  width: 32px; height: 32px; border-radius: 50%; background: var(--violet);
+  display: flex; align-items: center; justify-content: center; cursor: pointer; border: none;
+  transition: background 0.2s, transform 0.15s; box-shadow: 0 2px 8px rgba(124,58,237,0.35);
+}
+.header-search .search-icon:hover { background: var(--ink2); transform: translateY(-50%) scale(1.1); }
+.header-search .search-icon svg { fill: white; width: 14px; height: 14px; }
+.search-dropdown {
+  position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(124,58,237,0.18);
+  border: 1px solid #EDE9FE; overflow: hidden; display: none; z-index: 200;
+}
+.search-dropdown.show { display: block; }
+.search-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+  cursor: pointer; transition: background 0.15s; text-decoration: none; color: var(--ink);
+}
+.search-item:hover { background: #F5F3FF; }
+.search-item-emoji { font-size: 1.3rem; width: 36px; height: 36px; background: #EDE9FE; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.search-item-text strong { display: block; font-size: 0.88rem; font-weight: 700; }
+.search-item-text span { font-size: 0.75rem; color: #9CA3AF; }
+.search-divider { font-size: 0.72rem; font-weight: 700; color: #A78BFA; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 16px 4px; background: #FAFAFF; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: var(--ink); font-weight: 500; font-size: 0.88rem; transition: color 0.2s; white-space: nowrap; }
+nav a:hover { color: var(--violet); }
+.nav-cta { background: var(--violet); color: #fff !important; padding: 8px 18px; border-radius: 50px; font-weight: 600; transition: background 0.2s, transform 0.2s !important; }
+.nav-cta:hover { background: var(--ink2) !important; transform: translateY(-1px); }
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
+.nav-toggle span { display: block; width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: 0.3s; }
 
-    /* ── Fancy Search Bar ── */
-    .header-search {
-      flex: 1; max-width: 380px;
-      position: relative;
-    }
-    .header-search input {
-      width: 100%;
-      padding: 10px 44px 10px 18px;
-      border-radius: 50px;
-      border: 2px solid #EDE9FE;
-      background: #F5F3FF;
-      font-size: 0.88rem;
-      color: var(--ink);
-      outline: none;
-      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
-      font-family: inherit;
-    }
-    .header-search input::placeholder { color: #A78BFA; }
-    .header-search input:focus {
-      border-color: var(--violet);
-      background: #fff;
-      box-shadow: 0 0 0 4px rgba(124,58,237,0.12);
-    }
-    .header-search .search-icon {
-      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--violet);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; border: none;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 2px 8px rgba(124,58,237,0.35);
-    }
-    .header-search .search-icon:hover { background: var(--ink2); transform: translateY(-50%) scale(1.1); }
-    .header-search .search-icon svg { fill: white; width: 14px; height: 14px; }
+/* ── Hero ── */
+.hero { min-height: 90vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 80px 32px 60px; background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 40%, #FDF4FF 100%); }
+.blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; }
+.blob-a { width: 500px; height: 500px; background: var(--violet); top: -100px; left: -100px; }
+.blob-b { width: 400px; height: 400px; background: var(--blush); top: 60%; right: -80px; }
+.blob-c { width: 300px; height: 300px; background: var(--sun); bottom: -50px; left: 30%; }
+.blob-d { width: 200px; height: 200px; background: var(--mint); top: 10%; right: 35%; }
+.hero-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 60px; max-width: 1200px; margin: 0 auto; width: 100%; }
+.hero-text { flex: 1; }
+.hero-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,58,237,0.12); color: var(--violet); font-size: 0.85rem; font-weight: 600; padding: 6px 16px; border-radius: 50px; margin-bottom: 20px; }
+.hero-text h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+.c1 { color: var(--violet); } .c2 { color: var(--blush); } .c3 { color: var(--mint); }
+.hero-text p { font-size: 1.1rem; color: #6B7280; line-height: 1.7; margin-bottom: 32px; max-width: 480px; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-primary { background: var(--violet); color: #fff; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(124,58,237,0.4); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,58,237,0.5); }
+.btn-secondary { background: #fff; color: var(--violet); padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 1rem; text-decoration: none; border: 2px solid var(--violet); transition: all 0.2s; }
+.btn-secondary:hover { background: var(--violet); color: #fff; }
+.hero-mosaic { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px; gap: 16px; flex: 0 0 480px; }
+.mosaic-card { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+.mosaic-card:first-child { grid-row: span 2; }
+.mosaic-card img { width: 100%; height: 100%; object-fit: cover; }
+.mosaic-tag { position: absolute; bottom: 12px; left: 12px; background: rgba(255,255,255,0.9); color: var(--ink); font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 50px; }
 
-    /* Search dropdown */
-    .search-dropdown {
-      position: absolute; top: calc(100% + 8px); left: 0; right: 0;
-      background: #fff; border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(124,58,237,0.18);
-      border: 1px solid #EDE9FE;
-      overflow: hidden; display: none; z-index: 200;
-    }
-    .search-dropdown.show { display: block; }
-    .search-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 16px; cursor: pointer;
-      transition: background 0.15s;
-      text-decoration: none; color: var(--ink);
-    }
-    .search-item:hover { background: #F5F3FF; }
-    .search-item-emoji { font-size: 1.3rem; width: 36px; height: 36px; background: #EDE9FE; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .search-item-text strong { display: block; font-size: 0.88rem; font-weight: 700; }
-    .search-item-text span { font-size: 0.75rem; color: #9CA3AF; }
-    .search-divider { font-size: 0.72rem; font-weight: 700; color: #A78BFA; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 16px 4px; background: #FAFAFF; }
+/* ── Stats ── */
+.stats-strip { display: flex; justify-content: center; gap: 0; background: var(--ink); padding: 0; }
+.stat { flex: 1; max-width: 220px; text-align: center; padding: 28px 20px; border-right: 1px solid rgba(255,255,255,0.08); }
+.stat:last-child { border-right: none; }
+.stat-num { display: block; font-size: 2rem; font-weight: 900; color: var(--sun); }
+.stat-lbl { font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
 
-    nav { display: flex; align-items: center; gap: 22px; }
-    nav a { text-decoration: none; color: var(--ink); font-weight: 500; font-size: 0.88rem; transition: color 0.2s; white-space: nowrap; }
-    nav a:hover { color: var(--violet); }
-    .nav-cta { background: var(--violet); color: #fff !important; padding: 8px 18px; border-radius: 50px; font-weight: 600; transition: background 0.2s, transform 0.2s !important; }
-    .nav-cta:hover { background: var(--ink2) !important; transform: translateY(-1px); }
-    .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
-    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: 0.3s; }
+/* ── Sections ── */
+section { padding: 80px 32px; }
+.sec-center { text-align: center; max-width: 700px; margin: 0 auto 48px; }
+.sec-eyebrow { display: inline-block; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--violet); margin-bottom: 12px; }
+.sec-title { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: var(--ink); line-height: 1.2; margin-bottom: 16px; }
+.sec-sub { font-size: 1.05rem; color: #6B7280; line-height: 1.7; }
 
-    /* ── Hero ── */
-    .hero { min-height: 90vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 80px 32px 60px; background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 40%, #FDF4FF 100%); }
-    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; }
-    .blob-a { width: 500px; height: 500px; background: var(--violet); top: -100px; left: -100px; }
-    .blob-b { width: 400px; height: 400px; background: var(--blush); top: 60%; right: -80px; }
-    .blob-c { width: 300px; height: 300px; background: var(--sun); bottom: -50px; left: 30%; }
-    .blob-d { width: 200px; height: 200px; background: var(--mint); top: 10%; right: 35%; }
-    .hero-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 60px; max-width: 1200px; margin: 0 auto; width: 100%; }
-    .hero-text { flex: 1; }
-    .hero-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,58,237,0.12); color: var(--violet); font-size: 0.85rem; font-weight: 600; padding: 6px 16px; border-radius: 50px; margin-bottom: 20px; }
-    .hero-text h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
-    .c1 { color: var(--violet); } .c2 { color: var(--blush); } .c3 { color: var(--mint); }
-    .hero-text p { font-size: 1.1rem; color: #6B7280; line-height: 1.7; margin-bottom: 32px; max-width: 480px; }
-    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
-    .btn-primary { background: var(--violet); color: #fff; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(124,58,237,0.4); }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,58,237,0.5); }
-    .btn-secondary { background: #fff; color: var(--violet); padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 1rem; text-decoration: none; border: 2px solid var(--violet); transition: all 0.2s; }
-    .btn-secondary:hover { background: var(--violet); color: #fff; }
-    .hero-mosaic { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px; gap: 16px; flex: 0 0 480px; }
-    .mosaic-card { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
-    .mosaic-card:first-child { grid-row: span 2; }
-    .mosaic-card img { width: 100%; height: 100%; object-fit: cover; }
-    .mosaic-tag { position: absolute; bottom: 12px; left: 12px; background: rgba(255,255,255,0.9); color: var(--ink); font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 50px; }
+/* ── Age Filter ── */
+.age-filter { display: flex; gap: 10px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+.age-btn { padding: 8px 24px; border-radius: 50px; border: 2px solid #E5E7EB; background: #fff; color: #6B7280; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+.age-btn.active, .age-btn:hover { border-color: var(--violet); background: var(--violet); color: #fff; }
 
-    /* ── Stats ── */
-    .stats-strip { display: flex; justify-content: center; gap: 0; background: var(--ink); padding: 0; }
-    .stat { flex: 1; max-width: 220px; text-align: center; padding: 28px 20px; border-right: 1px solid rgba(255,255,255,0.08); }
-    .stat:last-child { border-right: none; }
-    .stat-num { display: block; font-size: 2rem; font-weight: 900; color: var(--sun); }
-    .stat-lbl { font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+/* ── Products ── */
+#products { background: #FAFAFA; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; max-width: 1200px; margin: 0 auto; }
+.product-card { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s; position: relative; }
+.product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(124,58,237,0.15); }
+.product-card.hidden { display: none; }
+.product-img-wrap { position: relative; height: 220px; overflow: hidden; }
+.product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.product-card:hover .product-img-wrap img { transform: scale(1.06); }
+.prod-emoji { position: absolute; bottom: 12px; right: 12px; background: rgba(255,255,255,0.95); font-size: 1.5rem; padding: 8px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.prod-age { position: absolute; top: 12px; left: 12px; background: var(--violet); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 50px; }
+.offer-badge {
+  position: absolute; top: 12px; right: 12px;
+  background: linear-gradient(135deg, var(--offer-red), var(--offer-orange));
+  color: #fff; font-size: 0.72rem; font-weight: 800;
+  padding: 5px 11px; border-radius: 50px;
+  box-shadow: 0 3px 12px rgba(239,68,68,0.4);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+@keyframes pulse-badge { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+.product-info { padding: 20px 22px 22px; }
+.product-info h3 { font-size: 1.15rem; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.product-info p { font-size: 0.88rem; color: #6B7280; line-height: 1.6; margin-bottom: 14px; }
+.price-block { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.price-now { font-size: 1.3rem; font-weight: 900; color: var(--violet); }
+.price-was { font-size: 0.9rem; color: #9CA3AF; text-decoration: line-through; }
+.price-save { background: #FEF3C7; color: #92400E; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 50px; }
+.card-btns { display: flex; gap: 10px; }
+.prod-btn { flex: 1; text-align: center; padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; text-decoration: none; background: var(--violet); color: #fff; transition: background 0.2s, transform 0.2s; }
+.prod-btn:hover { background: var(--ink2); transform: translateY(-1px); }
+.wa-order-btn { display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; text-decoration: none; background: var(--wa-green); color: #fff; transition: background 0.2s, transform 0.2s; box-shadow: 0 3px 12px rgba(37,211,102,0.35); }
+.wa-order-btn:hover { background: #1ebe59; transform: translateY(-1px); }
+.wa-order-btn svg { flex-shrink: 0; }
 
-    /* ── Sections ── */
-    section { padding: 80px 32px; }
-    .sec-center { text-align: center; max-width: 700px; margin: 0 auto 48px; }
-    .sec-eyebrow { display: inline-block; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--violet); margin-bottom: 12px; }
-    .sec-title { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: var(--ink); line-height: 1.2; margin-bottom: 16px; }
-    .sec-sub { font-size: 1.05rem; color: #6B7280; line-height: 1.7; }
+/* ── Why Us ── */
+#why { background: linear-gradient(135deg, #F5F3FF, #FDF4FF); }
+.why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+.why-card { background: #fff; border-radius: 20px; padding: 28px 24px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.06); transition: transform 0.3s; }
+.why-card:hover { transform: translateY(-4px); }
+.why-icon { font-size: 2rem; display: block; margin-bottom: 14px; }
+.why-card h4 { font-size: 1rem; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
+.why-card p { font-size: 0.88rem; color: #6B7280; line-height: 1.6; }
 
-    /* ── Age Filter ── */
-    .age-filter { display: flex; gap: 10px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
-    .age-btn { padding: 8px 24px; border-radius: 50px; border: 2px solid #E5E7EB; background: #fff; color: #6B7280; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
-    .age-btn.active, .age-btn:hover { border-color: var(--violet); background: var(--violet); color: #fff; }
+/* ── Testimonials ── */
+#testimonials { background: #fff; overflow: hidden; }
+.testimonials-track-wrap { overflow: hidden; }
+.testimonials-track { display: flex; gap: 20px; animation: scroll-track 30s linear infinite; width: max-content; }
+.testimonials-track:hover { animation-play-state: paused; }
+@keyframes scroll-track { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.tcard { background: #F9FAFB; border-radius: 20px; padding: 28px 24px; width: 300px; flex-shrink: 0; border: 1px solid #F3F4F6; position: relative; }
+.tcard-quote { font-size: 3rem; color: var(--violet); opacity: 0.3; line-height: 1; position: absolute; top: 14px; left: 20px; }
+.tcard-stars { color: var(--sun); font-size: 0.9rem; margin-bottom: 12px; }
+.tcard p { font-size: 0.9rem; color: #374151; line-height: 1.65; margin-bottom: 20px; }
+.tcard-author { display: flex; align-items: center; gap: 12px; }
+.tcard-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #fff; flex-shrink: 0; }
+.tcard-name { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+.tcard-meta { font-size: 0.78rem; color: #9CA3AF; }
 
-    /* ══════════════════════════════════════════
-       PRODUCT CARDS — with Offer + WhatsApp
-    ══════════════════════════════════════════ */
-    #products { background: #FAFAFA; }
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; max-width: 1200px; margin: 0 auto; }
-    .product-card { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s; position: relative; }
-    .product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(124,58,237,0.15); }
-    .product-card.hidden { display: none; }
-    .product-img-wrap { position: relative; height: 220px; overflow: hidden; }
-    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-    .product-card:hover .product-img-wrap img { transform: scale(1.06); }
-    .prod-emoji { position: absolute; bottom: 12px; right: 12px; background: rgba(255,255,255,0.95); font-size: 1.5rem; padding: 8px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .prod-age { position: absolute; top: 12px; left: 12px; background: var(--violet); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 50px; }
+/* ── Stores ── */
+#stores { background: #FAFAFA; }
+.stores-wrap { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+.store-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 28px 36px; border-radius: 20px; text-decoration: none; background: #fff; border: 2px solid #F3F4F6; box-shadow: 0 4px 16px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; min-width: 180px; }
+.store-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+.store-card.amazon:hover { border-color: #FF9900; }
+.store-card.flipkart:hover { border-color: #2874F0; }
+.store-card.shopify:hover { border-color: #96BF48; }
+.store-card img { height: 40px; object-fit: contain; }
+.store-card span { font-size: 0.82rem; font-weight: 600; color: #9CA3AF; letter-spacing: 0.04em; }
 
-    /* Offer badge */
-    .offer-badge {
-      position: absolute; top: 12px; right: 12px;
-      background: linear-gradient(135deg, var(--offer-red), var(--offer-orange));
-      color: #fff; font-size: 0.72rem; font-weight: 800;
-      padding: 5px 11px; border-radius: 50px;
-      box-shadow: 0 3px 12px rgba(239,68,68,0.4);
-      letter-spacing: 0.04em; text-transform: uppercase;
-      animation: pulse-badge 2s ease-in-out infinite;
-    }
-    @keyframes pulse-badge {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
+/* ── WhatsApp Order Section ── */
+#wa-order { background: linear-gradient(135deg, #0D1F12 0%, #1A3324 60%, #0A4D2E 100%); padding: 80px 32px; position: relative; overflow: hidden; }
+#wa-order::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 70% 50%, rgba(37,211,102,0.12), transparent 60%); pointer-events: none; }
+.wa-section-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 60px; }
+.wa-left { flex: 1; }
+.wa-eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--wa-green); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px; }
+.wa-left h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 18px; }
+.wa-left h2 span { color: var(--wa-green); }
+.wa-left p { font-size: 1.05rem; color: rgba(255,255,255,0.65); line-height: 1.7; margin-bottom: 32px; max-width: 480px; }
+.wa-steps { display: flex; flex-direction: column; gap: 16px; margin-bottom: 36px; }
+.wa-step { display: flex; align-items: flex-start; gap: 16px; }
+.wa-step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--wa-green); color: #fff; font-weight: 900; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.wa-step-text strong { display: block; color: #fff; font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+.wa-step-text span { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
+.wa-cta-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--wa-green); color: #fff; padding: 16px 36px; border-radius: 50px; font-weight: 800; font-size: 1.05rem; text-decoration: none; box-shadow: 0 6px 24px rgba(37,211,102,0.45); transition: transform 0.2s, box-shadow 0.2s; }
+.wa-cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(37,211,102,0.6); }
+.wa-right { flex: 0 0 380px; }
+.wa-phone-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 28px; backdrop-filter: blur(10px); }
+.wa-phone-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.wa-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--wa-green); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.wa-chat-name { color: #fff; font-weight: 700; font-size: 0.95rem; }
+.wa-chat-status { color: var(--wa-green); font-size: 0.78rem; }
+.wa-messages { display: flex; flex-direction: column; gap: 10px; }
+.wa-msg { padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.5; max-width: 85%; }
+.wa-msg.recv { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); align-self: flex-start; border-bottom-left-radius: 4px; }
+.wa-msg.sent { background: var(--wa-green); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.wa-msg.recv::after { content: attr(data-time); display: block; font-size: 0.68rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+.wa-msg.sent::after { content: attr(data-time); display: block; font-size: 0.68rem; color: rgba(255,255,255,0.6); margin-top: 4px; text-align: right; }
 
-    .product-info { padding: 20px 22px 22px; }
-    .product-info h3 { font-size: 1.15rem; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
-    .product-info p { font-size: 0.88rem; color: #6B7280; line-height: 1.6; margin-bottom: 14px; }
+/* ── Offers Marquee ── */
+.offers-marquee-wrap { background: linear-gradient(90deg, var(--offer-red), var(--offer-orange), var(--sun), var(--offer-orange), var(--offer-red)); background-size: 300%; animation: banner-shift 4s linear infinite; padding: 12px 0; overflow: hidden; }
+@keyframes banner-shift { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+.offers-marquee { display: flex; gap: 0; animation: marquee-run 18s linear infinite; width: max-content; }
+.offers-marquee span { color: #fff; font-weight: 800; font-size: 0.85rem; padding: 0 32px; letter-spacing: 0.06em; white-space: nowrap; }
+.offers-marquee span::after { content: '🔥'; margin-left: 32px; }
+@keyframes marquee-run { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    /* Price block */
-    .price-block { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .price-now { font-size: 1.3rem; font-weight: 900; color: var(--violet); }
-    .price-was { font-size: 0.9rem; color: #9CA3AF; text-decoration: line-through; }
-    .price-save { background: #FEF3C7; color: #92400E; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 50px; }
+/* ── Instagram ── */
+#instagram { background: linear-gradient(135deg, #F0ABFC22, #A78BFA22); }
+.insta-banner { display: flex; gap: 48px; align-items: center; max-width: 1100px; margin: 0 auto; background: linear-gradient(135deg, #7C3AED, #C026D3); border-radius: 32px; padding: 48px; color: #fff; }
+.insta-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.insta-left { flex: 1; }
+.insta-left h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 12px; }
+.insta-left p { opacity: 0.85; line-height: 1.7; margin-bottom: 16px; }
+.insta-handle { font-size: 1.1rem; font-weight: 800; opacity: 0.9; margin-bottom: 24px; }
+.btn-insta { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: #7C3AED; padding: 14px 28px; border-radius: 50px; font-weight: 800; font-size: 0.95rem; text-decoration: none; transition: transform 0.2s; }
+.btn-insta svg { fill: #7C3AED; }
+.btn-insta:hover { transform: translateY(-2px); }
+.insta-right { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 0 0 260px; }
+.insta-img { border-radius: 16px; overflow: hidden; height: 120px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+.insta-img img { width: 100%; height: 100%; object-fit: cover; }
+.insta-img-2 { margin-top: 24px; }
 
-    /* Card button row */
-    .card-btns { display: flex; gap: 10px; }
-    .prod-btn {
-      flex: 1; text-align: center; padding: 10px 14px; border-radius: 12px;
-      font-weight: 700; font-size: 0.85rem; text-decoration: none;
-      background: var(--violet); color: #fff;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .prod-btn:hover { background: var(--ink2); transform: translateY(-1px); }
+/* ── Newsletter ── */
+#newsletter { background: #fff; }
+.newsletter-box { max-width: 680px; margin: 0 auto; background: linear-gradient(135deg, #F5F3FF, #EDE9FE); border-radius: 28px; padding: 52px 48px; text-align: center; }
+.nl-form { display: flex; gap: 12px; margin-top: 0; }
+.nl-form input { flex: 1; padding: 14px 20px; border-radius: 50px; border: 2px solid #E5E7EB; font-size: 0.95rem; outline: none; transition: border 0.2s; }
+.nl-form input:focus { border-color: var(--violet); }
+.nl-form button { padding: 14px 28px; border-radius: 50px; background: var(--violet); color: #fff; font-weight: 700; font-size: 0.95rem; border: none; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+.nl-form button:hover { background: var(--ink2); }
+.nl-note { font-size: 0.8rem; color: #9CA3AF; margin-top: 12px; }
 
-    /* WhatsApp order button */
-    .wa-order-btn {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      flex: 1; padding: 10px 14px; border-radius: 12px;
-      font-weight: 700; font-size: 0.85rem; text-decoration: none;
-      background: var(--wa-green); color: #fff;
-      transition: background 0.2s, transform 0.2s;
-      box-shadow: 0 3px 12px rgba(37,211,102,0.35);
-    }
-    .wa-order-btn:hover { background: #1ebe59; transform: translateY(-1px); }
-    .wa-order-btn svg { flex-shrink: 0; }
+/* ── Contact ── */
+#contact { background: #FAFAFA; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px; max-width: 1000px; margin: 0 auto; }
+.cinfo-head { font-size: 1.2rem; font-weight: 800; color: var(--ink); margin-bottom: 12px; }
+.cinfo-body { font-size: 0.9rem; color: #6B7280; line-height: 1.7; margin-bottom: 24px; }
+.cinfo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.cinfo-icon { font-size: 1.1rem; }
+.cinfo-row a { color: var(--violet); text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+.cinfo-socials { display: flex; gap: 10px; margin-top: 20px; }
+.csocial { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.csocial.insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.csocial.wa { background: var(--wa-green); }
+.cform { display: flex; flex-direction: column; gap: 14px; }
+.cform input, .cform textarea { padding: 14px 18px; border-radius: 14px; border: 2px solid #E5E7EB; font-size: 0.95rem; font-family: inherit; outline: none; transition: border 0.2s; background: #fff; }
+.cform input:focus, .cform textarea:focus { border-color: var(--violet); }
+.cform textarea { height: 130px; resize: vertical; }
+.cform button { padding: 14px; border-radius: 14px; background: var(--violet); color: #fff; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: background 0.2s; }
+.cform button:hover { background: var(--ink2); }
 
-    /* ── Why Us ── */
-    #why { background: linear-gradient(135deg, #F5F3FF, #FDF4FF); }
-    .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
-    .why-card { background: #fff; border-radius: 20px; padding: 28px 24px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.06); transition: transform 0.3s; }
-    .why-card:hover { transform: translateY(-4px); }
-    .why-icon { font-size: 2rem; display: block; margin-bottom: 14px; }
-    .why-card h4 { font-size: 1rem; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
-    .why-card p { font-size: 0.88rem; color: #6B7280; line-height: 1.6; }
+/* ── Footer ── */
+footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
+.footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; max-width: 1100px; margin: 0 auto; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand p { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+.footer-socials { display: flex; gap: 10px; }
+.fsocial { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.fsocial.insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.fsocial.wa { background: var(--wa-green); }
+.footer-col h5 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+.footer-col a { display: block; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: #fff; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; max-width: 1100px; margin: 0 auto; font-size: 0.82rem; }
 
-    /* ── Testimonials ── */
-    #testimonials { background: #fff; overflow: hidden; }
-    .testimonials-track-wrap { overflow: hidden; }
-    .testimonials-track { display: flex; gap: 20px; animation: scroll-track 30s linear infinite; width: max-content; }
-    .testimonials-track:hover { animation-play-state: paused; }
-    @keyframes scroll-track { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-    .tcard { background: #F9FAFB; border-radius: 20px; padding: 28px 24px; width: 300px; flex-shrink: 0; border: 1px solid #F3F4F6; position: relative; }
-    .tcard-quote { font-size: 3rem; color: var(--violet); opacity: 0.3; line-height: 1; position: absolute; top: 14px; left: 20px; }
-    .tcard-stars { color: var(--sun); font-size: 0.9rem; margin-bottom: 12px; }
-    .tcard p { font-size: 0.9rem; color: #374151; line-height: 1.65; margin-bottom: 20px; }
-    .tcard-author { display: flex; align-items: center; gap: 12px; }
-    .tcard-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #fff; flex-shrink: 0; }
-    .tcard-name { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
-    .tcard-meta { font-size: 0.78rem; color: #9CA3AF; }
+/* ── Floating social buttons ── */
+.float-group { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 12px; z-index: 200; }
+.insta-float, .wa-float { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); transition: transform 0.2s; }
+.insta-float:hover, .wa-float:hover { transform: scale(1.1); }
+.insta-float { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.insta-float svg { fill: white; width: 24px; height: 24px; }
+.wa-float { background: var(--wa-green); }
+.wa-float img { width: 28px; height: 28px; }
 
-    /* ── Stores ── */
-    #stores { background: #FAFAFA; }
-    .stores-wrap { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
-    .store-card {
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
-      padding: 28px 36px; border-radius: 20px; text-decoration: none;
-      background: #fff; border: 2px solid #F3F4F6;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-      min-width: 180px;
-    }
-    .store-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
-    .store-card.amazon:hover { border-color: #FF9900; }
-    .store-card.flipkart:hover { border-color: #2874F0; }
-    .store-card.shopify:hover { border-color: #96BF48; }
-    .store-card img { height: 40px; object-fit: contain; }
-    .store-card span { font-size: 0.82rem; font-weight: 600; color: #9CA3AF; letter-spacing: 0.04em; }
+/* ── Scroll reveal ── */
+.reveal { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.hidden-reveal { opacity: 0; transform: translateY(20px); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ═══════════════════════════════════════
-       WHATSAPP ORDER SECTION (NEW)
-    ═══════════════════════════════════════ */
-    #wa-order {
-      background: linear-gradient(135deg, #0D1F12 0%, #1A3324 60%, #0A4D2E 100%);
-      padding: 80px 32px;
-      position: relative;
-      overflow: hidden;
-    }
-    #wa-order::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(circle at 70% 50%, rgba(37,211,102,0.12), transparent 60%);
-      pointer-events: none;
-    }
-    .wa-section-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center; gap: 60px;
-    }
-    .wa-left { flex: 1; }
-    .wa-eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--wa-green); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px; }
-    .wa-left h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 18px; }
-    .wa-left h2 span { color: var(--wa-green); }
-    .wa-left p { font-size: 1.05rem; color: rgba(255,255,255,0.65); line-height: 1.7; margin-bottom: 32px; max-width: 480px; }
-    .wa-steps { display: flex; flex-direction: column; gap: 16px; margin-bottom: 36px; }
-    .wa-step { display: flex; align-items: flex-start; gap: 16px; }
-    .wa-step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--wa-green); color: #fff; font-weight: 900; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .wa-step-text strong { display: block; color: #fff; font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
-    .wa-step-text span { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
-    .wa-cta-btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--wa-green); color: #fff;
-      padding: 16px 36px; border-radius: 50px;
-      font-weight: 800; font-size: 1.05rem; text-decoration: none;
-      box-shadow: 0 6px 24px rgba(37,211,102,0.45);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .wa-cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(37,211,102,0.6); }
-    .wa-right { flex: 0 0 380px; }
-    .wa-phone-card {
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 28px; padding: 28px;
-      backdrop-filter: blur(10px);
-    }
-    .wa-phone-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-    .wa-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--wa-green); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-    .wa-chat-name { color: #fff; font-weight: 700; font-size: 0.95rem; }
-    .wa-chat-status { color: var(--wa-green); font-size: 0.78rem; }
-    .wa-messages { display: flex; flex-direction: column; gap: 10px; }
-    .wa-msg { padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.5; max-width: 85%; }
-    .wa-msg.recv { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); align-self: flex-start; border-bottom-left-radius: 4px; }
-    .wa-msg.sent { background: var(--wa-green); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-    .wa-msg.recv::after { content: attr(data-time); display: block; font-size: 0.68rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
-    .wa-msg.sent::after { content: attr(data-time); display: block; font-size: 0.68rem; color: rgba(255,255,255,0.6); margin-top: 4px; text-align: right; }
+/* ════════════════════════════════════
+   INSTAGRAM FLOATING UPDATES
+════════════════════════════════════ */
+@keyframes bubble-enter {
+  from { transform: scale(0) translateY(20px); opacity: 0; }
+  to   { transform: scale(1) translateY(0);   opacity: 1; }
+}
+@keyframes card-slide-in {
+  from { transform: translateX(120%) scale(0.85); opacity: 0; }
+  to   { transform: translateX(0) scale(1);       opacity: 1; }
+}
+@keyframes card-slide-out {
+  from { transform: translateX(0) scale(1);       opacity: 1; }
+  to   { transform: translateX(120%) scale(0.85); opacity: 0; }
+}
+@keyframes toast-in {
+  from { transform: translateX(-120%) scale(0.85); opacity: 0; }
+  to   { transform: translateX(0) scale(1);        opacity: 1; }
+}
+@keyframes toast-out {
+  from { transform: translateX(0) scale(1);        opacity: 1; }
+  to   { transform: translateX(-120%) scale(0.85); opacity: 0; }
+}
+@keyframes story-pop {
+  from { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg);     opacity: 1; }
+}
 
-    /* ═══════════════════════════════════════
-       OFFERS BANNER (NEW)
-    ═══════════════════════════════════════ */
-    .offers-marquee-wrap {
-      background: linear-gradient(90deg, var(--offer-red), var(--offer-orange), var(--sun), var(--offer-orange), var(--offer-red));
-      background-size: 300%;
-      animation: banner-shift 4s linear infinite;
-      padding: 12px 0; overflow: hidden;
-    }
-    @keyframes banner-shift { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
-    .offers-marquee { display: flex; gap: 0; animation: marquee-run 18s linear infinite; width: max-content; }
-    .offers-marquee span { color: #fff; font-weight: 800; font-size: 0.85rem; padding: 0 32px; letter-spacing: 0.06em; white-space: nowrap; }
-    .offers-marquee span::after { content: '🔥'; margin-left: 32px; }
-    @keyframes marquee-run { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+/* Story bubble — sits above the existing float buttons */
+.ig-story-bubble {
+  position: fixed; bottom: 176px; right: 24px; z-index: 300;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  animation: bubble-enter 0.5s cubic-bezier(0.34,1.56,0.64,1) 2s both;
+  cursor: pointer;
+}
+.ig-story-ring {
+  width: 60px; height: 60px; border-radius: 50%; padding: 3px;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 18px rgba(220,39,67,0.5); position: relative;
+  transition: transform 0.2s;
+}
+.ig-story-ring:hover { transform: scale(1.12); }
+.ig-story-ring-inner {
+  width: 100%; height: 100%; border-radius: 50%; border: 3px solid #fff;
+  overflow: hidden; background: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+}
+.ig-story-ring-inner img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.igc-avatar-inner img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.ig-story-av img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.wa-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.story-new-badge {
+  position: absolute; top: -4px; right: -4px;
+  background: linear-gradient(135deg, #f09433, #dc2743);
+  color: #fff; font-size: 0.58rem; font-weight: 900;
+  padding: 3px 7px; border-radius: 50px; border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(220,39,67,0.4);
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+.story-bubble-label {
+  font-size: 0.66rem; font-weight: 800; color: var(--violet);
+  background: rgba(255,255,255,0.95); padding: 2px 10px;
+  border-radius: 50px; border: 1px solid #EDE9FE;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.12); white-space: nowrap;
+}
 
-    /* ── Instagram ── */
-    #instagram { background: linear-gradient(135deg, #F0ABFC22, #A78BFA22); }
-    .insta-banner { display: flex; gap: 48px; align-items: center; max-width: 1100px; margin: 0 auto; background: linear-gradient(135deg, #7C3AED, #C026D3); border-radius: 32px; padding: 48px; color: #fff; }
-    .insta-icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .insta-left { flex: 1; }
-    .insta-left h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 12px; }
-    .insta-left p { opacity: 0.85; line-height: 1.7; margin-bottom: 16px; }
-    .insta-handle { font-size: 1.1rem; font-weight: 800; opacity: 0.9; margin-bottom: 24px; }
-    .btn-insta { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: #7C3AED; padding: 14px 28px; border-radius: 50px; font-weight: 800; font-size: 0.95rem; text-decoration: none; transition: transform 0.2s; }
-    .btn-insta svg { fill: #7C3AED; }
-    .btn-insta:hover { transform: translateY(-2px); }
-    .insta-right { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 0 0 260px; }
-    .insta-img { border-radius: 16px; overflow: hidden; height: 120px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
-    .insta-img img { width: 100%; height: 100%; object-fit: cover; }
-    .insta-img-2 { margin-top: 24px; }
+/* Floating post card */
+.ig-post-card {
+  position: fixed; right: 24px; z-index: 299; width: 272px;
+  background: #fff; border-radius: 20px; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(124,58,237,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid rgba(124,58,237,0.1);
+  animation: card-slide-in 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+  transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+}
+.ig-post-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 16px 48px rgba(124,58,237,0.25); }
+.ig-post-card.card-exit { animation: card-slide-out 0.4s cubic-bezier(0.55,0,1,0.45) both; }
+.igc-header {
+  display: flex; align-items: center; gap: 10px; padding: 11px 13px;
+  background: linear-gradient(90deg, rgba(124,58,237,0.06), transparent);
+  border-bottom: 1px solid rgba(124,58,237,0.07);
+}
+.igc-avatar { width: 34px; height: 34px; border-radius: 50%; padding: 2px; flex-shrink: 0; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.igc-avatar-inner { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #fff; background: #EDE9FE; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+.igc-handle { font-size: 0.78rem; font-weight: 800; color: var(--ink); }
+.igc-time   { font-size: 0.68rem; color: #9CA3AF; font-weight: 600; }
+.igc-insta  { margin-left: auto; flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; }
+.igc-insta svg { fill: white; width: 13px; height: 13px; }
+.igc-close { width: 22px; height: 22px; border-radius: 50%; background: #F3F4F6; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #9CA3AF; margin-left: 4px; flex-shrink: 0; transition: background 0.2s; }
+.igc-close:hover { background: #E5E7EB; color: #374151; }
+.igc-img { width: 100%; height: 170px; object-fit: cover; display: block; }
+.igc-img-fallback { width: 100%; height: 170px; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: linear-gradient(135deg, #EDE9FE, #FDF4FF); overflow: hidden; }
+.igc-body { padding: 11px 13px; }
+.igc-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 9px; border-radius: 50px; margin-bottom: 7px; }
+.igc-tag.tag-post  { background: #EDE9FE; color: var(--violet); }
+.igc-tag.tag-reel  { background: linear-gradient(135deg,#FCE7F3,#FBCFE8); color: #9D174D; }
+.igc-caption { font-size: 0.8rem; color: #374151; line-height: 1.5; margin-bottom: 8px; font-weight: 600; }
+.igc-caption strong { color: var(--violet); }
+.igc-stats  { display: flex; gap: 12px; font-size: 0.72rem; color: #9CA3AF; font-weight: 700; margin-bottom: 9px; }
+.igc-cta { display: block; background: linear-gradient(135deg, var(--violet), #C026D3); color: #fff; font-size: 0.76rem; font-weight: 800; text-align: center; padding: 7px; border-radius: 9px; text-decoration: none; transition: opacity 0.2s, transform 0.2s; }
+.igc-cta:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    /* ── Newsletter ── */
-    #newsletter { background: #fff; }
-    .newsletter-box { max-width: 680px; margin: 0 auto; background: linear-gradient(135deg, #F5F3FF, #EDE9FE); border-radius: 28px; padding: 52px 48px; text-align: center; }
-    .nl-form { display: flex; gap: 12px; margin-top: 0; }
-    .nl-form input { flex: 1; padding: 14px 20px; border-radius: 50px; border: 2px solid #E5E7EB; font-size: 0.95rem; outline: none; transition: border 0.2s; }
-    .nl-form input:focus { border-color: var(--violet); }
-    .nl-form button { padding: 14px 28px; border-radius: 50px; background: var(--violet); color: #fff; font-weight: 700; font-size: 0.95rem; border: none; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
-    .nl-form button:hover { background: var(--ink2); }
-    .nl-note { font-size: 0.8rem; color: #9CA3AF; margin-top: 12px; }
+/* Toast */
+.ig-toast { position: fixed; bottom: 90px; left: 24px; z-index: 300; display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 16px; padding: 12px 16px; box-shadow: 0 8px 28px rgba(124,58,237,0.18); border: 1px solid rgba(124,58,237,0.1); animation: toast-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both; cursor: pointer; max-width: 252px; transition: transform 0.2s; }
+.ig-toast:hover { transform: translateY(-2px); }
+.ig-toast.toast-exit { animation: toast-out 0.4s cubic-bezier(0.55,0,1,0.45) both; }
+.ig-toast-icon { width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+.ig-toast-text strong { display: block; font-size: 0.78rem; color: var(--ink); font-weight: 800; }
+.ig-toast-text span   { font-size: 0.7rem; color: #9CA3AF; }
+.ig-toast-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-left: auto; background: linear-gradient(135deg, #dc2743, #bc1888); animation: pulse-badge 1.5s ease-in-out infinite; }
 
-    /* ── Contact ── */
-    #contact { background: #FAFAFA; }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px; max-width: 1000px; margin: 0 auto; }
-    .cinfo-head { font-size: 1.2rem; font-weight: 800; color: var(--ink); margin-bottom: 12px; }
-    .cinfo-body { font-size: 0.9rem; color: #6B7280; line-height: 1.7; margin-bottom: 24px; }
-    .cinfo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-    .cinfo-icon { font-size: 1.1rem; }
-    .cinfo-row a { color: var(--violet); text-decoration: none; font-weight: 500; font-size: 0.9rem; }
-    .cinfo-socials { display: flex; gap: 10px; margin-top: 20px; }
-    .csocial { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-    .csocial.insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-    .csocial.wa { background: var(--wa-green); }
-    .cform { display: flex; flex-direction: column; gap: 14px; }
-    .cform input, .cform textarea { padding: 14px 18px; border-radius: 14px; border: 2px solid #E5E7EB; font-size: 0.95rem; font-family: inherit; outline: none; transition: border 0.2s; background: #fff; }
-    .cform input:focus, .cform textarea:focus { border-color: var(--violet); }
-    .cform textarea { height: 130px; resize: vertical; }
-    .cform button { padding: 14px; border-radius: 14px; background: var(--violet); color: #fff; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: background 0.2s; }
-    .cform button:hover { background: var(--ink2); }
+/* Story overlay */
+.ig-story-overlay { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(6px); }
+.ig-story-overlay.open { opacity: 1; pointer-events: all; }
+.ig-story-viewer { width: 310px; height: 545px; border-radius: 24px; overflow: hidden; position: relative; background: #111; box-shadow: 0 24px 64px rgba(0,0,0,0.5); transform: scale(0.85); transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+.ig-story-overlay.open .ig-story-viewer { transform: scale(1); }
+.ig-story-progress { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; gap: 4px; z-index: 10; }
+.ig-story-bar { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.3); overflow: hidden; }
+.ig-story-fill { height: 100%; background: #fff; border-radius: 2px; width: 0%; }
+.ig-story-hdr { position: absolute; top: 26px; left: 12px; right: 12px; display: flex; align-items: center; gap: 10px; z-index: 10; }
+.ig-story-av { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #fff; overflow: hidden; background: #EDE9FE; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+.ig-story-name { font-size: 0.8rem; font-weight: 800; color: #fff; }
+.ig-story-ago  { font-size: 0.66rem; color: rgba(255,255,255,0.65); }
+.ig-story-x { margin-left: auto; background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; opacity: 0.85; transition: opacity 0.2s; }
+.ig-story-x:hover { opacity: 1; }
+.ig-story-body { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+.ig-story-bg   { position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 0.4s; }
+.ig-story-emoji { position: relative; z-index: 2; font-size: 5rem; text-align: center; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4)); animation: story-pop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+.ig-story-textbox { position: absolute; bottom: 58px; left: 14px; right: 14px; z-index: 3; }
+.ig-story-cap { background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); color: #fff; font-size: 0.84rem; font-weight: 700; padding: 11px 15px; border-radius: 13px; line-height: 1.5; }
+.ig-story-footer { position: absolute; bottom: 10px; left: 14px; right: 14px; z-index: 3; display: flex; gap: 8px; align-items: center; }
+.ig-story-reply { flex: 1; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; padding: 7px 14px; color: #fff; font-size: 0.78rem; font-family: inherit; outline: none; }
+.ig-story-reply::placeholder { color: rgba(255,255,255,0.55); }
+.ig-story-heart { font-size: 1.2rem; cursor: pointer; transition: transform 0.2s; }
+.ig-story-heart:hover { transform: scale(1.3); }
 
-    /* ── Footer ── */
-    footer { background: var(--ink); color: #fff; padding: 60px 32px 0; }
-    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; max-width: 1100px; margin: 0 auto; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .footer-brand img { height: 44px; margin-bottom: 14px; filter: brightness(0) invert(1); }
-    .footer-brand p { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
-    .footer-socials { display: flex; gap: 10px; }
-    .fsocial { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-    .fsocial.insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-    .fsocial.wa { background: var(--wa-green); }
-    .footer-col h5 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
-    .footer-col a { display: block; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; margin-bottom: 10px; transition: color 0.2s; }
-    .footer-col a:hover { color: #fff; }
-    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; max-width: 1100px; margin: 0 auto; font-size: 0.82rem; }
+/* ════════════════════════════════════
+   KIDS GAMES SECTION
+════════════════════════════════════ */
+#games { background: linear-gradient(135deg, #FFF7ED 0%, #FEF3C7 50%, #F0FDF4 100%); }
+.games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
 
-    /* ── Floating buttons ── */
-    .float-group { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 12px; z-index: 200; }
-    .insta-float, .wa-float { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); transition: transform 0.2s; }
-    .insta-float:hover, .wa-float:hover { transform: scale(1.1); }
-    .insta-float { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-    .insta-float svg { fill: white; width: 24px; height: 24px; }
-    .wa-float { background: var(--wa-green); }
-    .wa-float img { width: 28px; height: 28px; }
+/* Game card */
+.game-card { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.07); transition: transform 0.3s, box-shadow 0.3s; }
+.game-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(124,58,237,0.15); }
+.game-header { padding: 24px 24px 0; display: flex; align-items: center; gap: 14px; }
+.game-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+.game-icon.purple { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); }
+.game-icon.pink   { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); }
+.game-icon.green  { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); }
+.game-icon.yellow { background: linear-gradient(135deg, #FEF3C7, #FDE68A); }
+.game-meta h3 { font-size: 1.05rem; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+.game-meta span { font-size: 0.75rem; color: #9CA3AF; font-weight: 600; }
+.game-area { padding: 20px 24px 24px; }
 
-    /* ── Scroll reveal ── */
-    .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.hidden-reveal { opacity: 0; transform: translateY(20px); }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+/* ── MEMORY MATCH ── */
+.memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.mem-card {
+  aspect-ratio: 1; border-radius: 12px; font-size: 1.4rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; user-select: none;
+  background: linear-gradient(135deg, var(--violet), #A78BFA);
+  transition: transform 0.3s, background 0.2s;
+  border: none; color: transparent; position: relative;
+}
+.mem-card.flipped { background: #F5F3FF; color: inherit; transform: rotateY(180deg); }
+.mem-card.matched { background: linear-gradient(135deg, var(--mint), #059669); color: #fff; cursor: default; }
+.mem-card:hover:not(.matched) { transform: scale(1.05); }
+.mem-card.flipped:hover { transform: rotateY(180deg) scale(1.05); }
+.game-score { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.game-score-num { font-size: 0.8rem; font-weight: 800; color: var(--violet); background: #EDE9FE; padding: 4px 12px; border-radius: 50px; }
+.game-btn { width: 100%; margin-top: 12px; padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-weight: 800; font-size: 0.85rem; background: linear-gradient(135deg, var(--violet), #A78BFA); color: #fff; transition: opacity 0.2s; font-family: inherit; }
+.game-btn:hover { opacity: 0.88; }
 
-    /* ── Mobile ── */
-    @media (max-width: 900px) {
-      header { padding: 12px 20px; gap: 12px; }
-      .header-search { max-width: 200px; }
-      .header-search input { padding: 8px 40px 8px 14px; font-size: 0.82rem; }
-      nav { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.98); flex-direction: column; justify-content: center; align-items: center; gap: 32px; font-size: 1.2rem; z-index: 300; }
-      nav.open { display: flex; }
-      .nav-toggle { display: flex; }
-      .hero-inner { flex-direction: column; text-align: center; }
-      .hero-text p { max-width: 100%; }
-      .hero-mosaic { flex: none; width: 100%; max-width: 400px; margin: 0 auto; }
-      .hero-actions { justify-content: center; }
-      .stats-strip { flex-wrap: wrap; }
-      .stat { min-width: 140px; }
-      .wa-section-inner { flex-direction: column; }
-      .wa-right { flex: none; width: 100%; max-width: 400px; margin: 0 auto; }
-      .insta-banner { flex-direction: column; padding: 32px 24px; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .footer-inner { grid-template-columns: 1fr 1fr; }
-      .nl-form { flex-direction: column; }
-      section { padding: 60px 20px; }
-    }
-    @media (max-width: 600px) {
-      .header-search { display: none; }
-    }
+/* ── COLOUR MATCH ── */
+.colour-display { text-align: center; margin-bottom: 14px; }
+.colour-word { font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.02em; }
+.colour-prompt { font-size: 0.78rem; color: #9CA3AF; font-weight: 600; }
+.colour-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.colour-opt {
+  padding: 14px 10px; border-radius: 12px; border: 3px solid transparent;
+  cursor: pointer; font-weight: 800; font-size: 0.85rem; color: #fff;
+  transition: transform 0.15s, border-color 0.2s;
+  font-family: inherit;
+}
+.colour-opt:hover { transform: scale(1.04); }
+.colour-opt.correct { border-color: var(--mint); box-shadow: 0 0 0 3px rgba(52,211,153,0.3); }
+.colour-opt.wrong   { border-color: var(--offer-red); box-shadow: 0 0 0 3px rgba(239,68,68,0.3); opacity: 0.6; }
+.colour-score { text-align: center; margin-top: 10px; font-size: 0.78rem; font-weight: 800; color: var(--violet); }
+
+/* ── COUNTING GAME ── */
+.count-display { text-align: center; padding: 12px 0; }
+.count-emojis { font-size: 1.6rem; line-height: 1.8; letter-spacing: 2px; min-height: 60px; margin-bottom: 10px; word-break: break-all; }
+.count-question { font-size: 0.9rem; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+.count-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.count-opt {
+  padding: 10px 4px; border-radius: 12px; border: 2px solid #E5E7EB;
+  background: #fff; font-weight: 900; font-size: 1.1rem; cursor: pointer;
+  transition: all 0.15s; font-family: inherit; color: var(--ink);
+}
+.count-opt:hover { border-color: var(--violet); background: #EDE9FE; }
+.count-opt.correct { background: var(--mint); border-color: var(--mint); color: #fff; }
+.count-opt.wrong   { background: var(--offer-red); border-color: var(--offer-red); color: #fff; }
+.count-result { text-align: center; margin-top: 10px; font-size: 0.85rem; font-weight: 800; min-height: 22px; }
+
+/* ── BALLOON POP ── */
+.balloon-area { position: relative; height: 180px; background: linear-gradient(180deg, #E0F2FE, #BAE6FD); border-radius: 14px; overflow: hidden; margin-bottom: 10px; }
+.balloon {
+  position: absolute; font-size: 2rem; cursor: pointer;
+  animation: balloon-float linear infinite;
+  user-select: none; transition: transform 0.1s;
+  border: none; background: none;
+}
+.balloon:hover { transform: scale(1.2); }
+@keyframes balloon-float {
+  from { transform: translateY(200px); }
+  to   { transform: translateY(-60px); }
+}
+.balloon-score { text-align: center; font-size: 0.8rem; font-weight: 800; color: var(--violet); }
+.balloon-combo { display: inline-block; background: #FEF3C7; color: #92400E; padding: 2px 10px; border-radius: 50px; margin-left: 6px; }
+
+/* ── Mobile ── */
+@media (max-width: 900px) {
+  header { padding: 12px 20px; gap: 12px; }
+  .header-search { max-width: 200px; }
+  .header-search input { padding: 8px 40px 8px 14px; font-size: 0.82rem; }
+  nav { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.98); flex-direction: column; justify-content: center; align-items: center; gap: 32px; font-size: 1.2rem; z-index: 300; }
+  nav.open { display: flex; }
+  .nav-toggle { display: flex; }
+  .hero-inner { flex-direction: column; text-align: center; }
+  .hero-text p { max-width: 100%; }
+  .hero-mosaic { flex: none; width: 100%; max-width: 400px; margin: 0 auto; }
+  .hero-actions { justify-content: center; }
+  .stats-strip { flex-wrap: wrap; }
+  .stat { min-width: 140px; }
+  .wa-section-inner { flex-direction: column; }
+  .wa-right { flex: none; width: 100%; max-width: 400px; margin: 0 auto; }
+  .insta-banner { flex-direction: column; padding: 32px 24px; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .nl-form { flex-direction: column; }
+  section { padding: 60px 20px; }
+  .ig-post-card { width: 240px; }
+  .ig-story-bubble { bottom: 160px; }
+}
+@media (max-width: 600px) {
+  .header-search { display: none; }
+  .ig-toast { max-width: 200px; }
+}
+```
+
   </style>
 </head>
 <body>
 
   <!-- ══ OFFERS MARQUEE BANNER ══ -->
+
   <div class="offers-marquee-wrap">
     <div class="offers-marquee">
       <span>🎉 LAUNCH OFFER — Flat 20% OFF on Educational Blocks</span>
       <span>🚗 Buy 2 Toy Car Sets, Get 1 FREE</span>
       <span>🧩 Puzzle Toy — ₹399 only (was ₹499)</span>
       <span>🚚 FREE Delivery on orders above ₹499</span>
-      <span>📱 Order via WhatsApp & get 10% instant discount</span>
+      <span>📱 Order via WhatsApp &amp; get 10% instant discount</span>
       <span>🎁 Gift wrapping FREE on all orders this week</span>
-      <!-- duplicate for loop -->
       <span>🎉 LAUNCH OFFER — Flat 20% OFF on Educational Blocks</span>
       <span>🚗 Buy 2 Toy Car Sets, Get 1 FREE</span>
       <span>🧩 Puzzle Toy — ₹399 only (was ₹499)</span>
       <span>🚚 FREE Delivery on orders above ₹499</span>
-      <span>📱 Order via WhatsApp & get 10% instant discount</span>
+      <span>📱 Order via WhatsApp &amp; get 10% instant discount</span>
       <span>🎁 Gift wrapping FREE on all orders this week</span>
     </div>
   </div>
 
   <!-- ══ HEADER ══ -->
+
   <header>
     <div class="logo-box">
-      <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest Logo">
+      <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+      <span style="display:none">🪺 NubeeNest</span>
     </div>
-
-    <!-- Fancy Search Bar -->
     <div class="header-search" id="headerSearch">
       <input type="text" id="searchInput" placeholder="🔍  Search toys, age groups..." autocomplete="off">
       <button class="search-icon" onclick="doSearch()">
@@ -481,59 +617,50 @@
     <nav id="main-nav">
       <a href="#">Home</a>
       <a href="#products">Products</a>
-      <a href="#offers">Offers</a>
       <a href="#wa-order">WhatsApp Order</a>
       <a href="#stores">Stores</a>
       <a href="#instagram">Instagram</a>
+      <a href="#games">🎮 Play Games</a>
       <a href="#contact" class="nav-cta">Contact Us</a>
     </nav>
   </header>
 
-
   <!-- ══ HERO ══ -->
+
   <section class="hero">
     <div class="blob blob-a"></div>
     <div class="blob blob-b"></div>
     <div class="blob blob-c"></div>
     <div class="blob blob-d"></div>
-
     <div class="hero-inner">
       <div class="hero-text">
         <div class="hero-pill">🌟 Trusted by 500+ Families</div>
-        <h1>
-          <span class="c1">Play</span> •
-          <span class="c2">Learn</span> •
-          <span class="c3">Grow</span>
-        </h1>
+        <h1><span class="c1">Play</span> • <span class="c2">Learn</span> • <span class="c3">Grow</span></h1>
         <p>Creative toys thoughtfully crafted to spark curiosity, build little skills, and fill every day with joy.</p>
         <div class="hero-actions">
           <a href="#products" class="btn-primary">Shop Now 🛍️</a>
           <a href="#wa-order" class="btn-secondary">📱 Order on WhatsApp</a>
         </div>
       </div>
-
       <div class="hero-mosaic">
         <div class="mosaic-card">
-          <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80"
-               data-local="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Educational Blocks">
+          <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80" alt="Educational Blocks">
           <div class="mosaic-tag">Age 3+</div>
         </div>
         <div class="mosaic-card">
-          <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80"
-               data-local="images/puzzle-toy.jpeg" alt="Puzzle Toy">
+          <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80" alt="Puzzle Toy">
           <div class="mosaic-tag">Age 4+</div>
         </div>
         <div class="mosaic-card">
-          <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80"
-               data-local="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Toy Car Set">
+          <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80" alt="Toy Car Set">
           <div class="mosaic-tag">Age 2+</div>
         </div>
       </div>
     </div>
   </section>
 
-
   <!-- ══ STATS ══ -->
+
   <div class="stats-strip">
     <div class="stat"><span class="stat-num">500+</span><span class="stat-lbl">Happy Families</span></div>
     <div class="stat"><span class="stat-num">30+</span><span class="stat-lbl">Toy Collections</span></div>
@@ -541,8 +668,8 @@
     <div class="stat"><span class="stat-num">4.9 ★</span><span class="stat-lbl">Avg. Rating</span></div>
   </div>
 
-
   <!-- ══ PRODUCTS ══ -->
+
   <section id="products">
     <div class="sec-center">
       <div class="sec-eyebrow">✨ Our Toys</div>
@@ -555,14 +682,11 @@
         <button class="age-btn" data-age="4">Age 4+</button>
       </div>
     </div>
-
     <div class="product-grid">
-
-      <!-- Product 1: Educational Blocks -->
+      <!-- Product 1 -->
       <div class="product-card reveal" data-age="3">
         <div class="product-img-wrap">
-          <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=700&q=80"
-               data-local="images/megan-qualley-h3u32l2nNk0-unsplash.jpg" alt="Educational Blocks">
+          <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=700&q=80" alt="Educational Blocks">
           <div class="prod-emoji">🧱</div>
           <div class="prod-age">Age 3+</div>
           <div class="offer-badge">20% OFF</div>
@@ -577,20 +701,17 @@
           </div>
           <div class="card-btns">
             <a href="#" class="prod-btn">View Details</a>
-            <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20%F0%9F%91%8B%20I%27d%20like%20to%20order%20the%20*Educational%20Blocks%20(Age%203%2B)*%20at%20%E2%82%B9399.%20Please%20confirm%20availability%20and%20delivery%20details.%20Thank%20you!"
-               target="_blank" rel="noopener" class="wa-order-btn">
+            <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20order%20the%20Educational%20Blocks%20(Age%203%2B)%20at%20%E2%82%B9399." target="_blank" rel="noopener" class="wa-order-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               Order on WhatsApp
             </a>
           </div>
         </div>
       </div>
-
-      <!-- Product 2: Puzzle Toy -->
+      <!-- Product 2 -->
       <div class="product-card reveal" data-age="4">
         <div class="product-img-wrap">
-          <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=700&q=80"
-               data-local="images/puzzle-toy.jpeg" alt="Puzzle Toy">
+          <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=700&q=80" alt="Puzzle Toy">
           <div class="prod-emoji">🧩</div>
           <div class="prod-age">Age 4+</div>
           <div class="offer-badge">Best Seller</div>
@@ -605,20 +726,17 @@
           </div>
           <div class="card-btns">
             <a href="#" class="prod-btn">View Details</a>
-            <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20%F0%9F%91%8B%20I%27d%20like%20to%20order%20the%20*Puzzle%20Toy%20(Age%204%2B)*%20at%20%E2%82%B9449.%20Please%20confirm%20availability%20and%20delivery%20details.%20Thank%20you!"
-               target="_blank" rel="noopener" class="wa-order-btn">
+            <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20order%20the%20Puzzle%20Toy%20(Age%204%2B)%20at%20%E2%82%B9449." target="_blank" rel="noopener" class="wa-order-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               Order on WhatsApp
             </a>
           </div>
         </div>
       </div>
-
-      <!-- Product 3: Toy Car Set -->
+      <!-- Product 3 -->
       <div class="product-card reveal" data-age="2">
         <div class="product-img-wrap">
-          <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=700&q=80"
-               data-local="images/girl-with-red-hat-pN-Prl1jMVM-unsplash.jpg" alt="Toy Car Set">
+          <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=700&q=80" alt="Toy Car Set">
           <div class="prod-emoji">🚗</div>
           <div class="prod-age">Age 2+</div>
           <div class="offer-badge">Buy 2 Get 1</div>
@@ -633,20 +751,18 @@
           </div>
           <div class="card-btns">
             <a href="#" class="prod-btn">View Details</a>
-            <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20%F0%9F%91%8B%20I%27d%20like%20to%20order%20the%20*Toy%20Car%20Set%20(Age%202%2B)*%20at%20%E2%82%B9299%20with%20Buy%202%20Get%201%20Free%20offer.%20Please%20confirm%20availability%20and%20delivery%20details.%20Thank%20you!"
-               target="_blank" rel="noopener" class="wa-order-btn">
+            <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20order%20the%20Toy%20Car%20Set%20(Age%202%2B)%20with%20Buy%202%20Get%201%20Free%20offer." target="_blank" rel="noopener" class="wa-order-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               Order on WhatsApp
             </a>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
+  <!-- ══ WHATSAPP ORDER ══ -->
 
-  <!-- ══ WHATSAPP ORDER SECTION (NEW) ══ -->
   <section id="wa-order">
     <div class="wa-section-inner">
       <div class="wa-left">
@@ -657,48 +773,25 @@
         <h2>Order Directly on <span>WhatsApp</span> — It's That Easy!</h2>
         <p>No apps to download, no complicated checkouts. Just tap, message, and your favourite toy is on its way. Plus get an <strong style="color:var(--wa-green)">instant 10% discount</strong> when you order via WhatsApp!</p>
         <div class="wa-steps">
-          <div class="wa-step">
-            <div class="wa-step-num">1</div>
-            <div class="wa-step-text">
-              <strong>Pick Your Toy</strong>
-              <span>Browse our products above and click "Order on WhatsApp"</span>
-            </div>
-          </div>
-          <div class="wa-step">
-            <div class="wa-step-num">2</div>
-            <div class="wa-step-text">
-              <strong>We Confirm Your Order</strong>
-              <span>We'll reply quickly with price, availability & delivery date</span>
-            </div>
-          </div>
-          <div class="wa-step">
-            <div class="wa-step-num">3</div>
-            <div class="wa-step-text">
-              <strong>Pay & Receive</strong>
-              <span>Pay via UPI / bank transfer. We ship it right to your door!</span>
-            </div>
-          </div>
+          <div class="wa-step"><div class="wa-step-num">1</div><div class="wa-step-text"><strong>Pick Your Toy</strong><span>Browse our products above and click "Order on WhatsApp"</span></div></div>
+          <div class="wa-step"><div class="wa-step-num">2</div><div class="wa-step-text"><strong>We Confirm Your Order</strong><span>We'll reply quickly with price, availability &amp; delivery date</span></div></div>
+          <div class="wa-step"><div class="wa-step-num">3</div><div class="wa-step-text"><strong>Pay &amp; Receive</strong><span>Pay via UPI / bank transfer. We ship it right to your door!</span></div></div>
         </div>
-        <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20%F0%9F%91%8B%20I%27d%20like%20to%20browse%20your%20toys%20and%20place%20an%20order.%20Please%20share%20your%20catalogue%20and%20current%20offers.%20Thank%20you!"
-           target="_blank" rel="noopener" class="wa-cta-btn">
+        <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20browse%20your%20toys%20and%20place%20an%20order." target="_blank" rel="noopener" class="wa-cta-btn">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Start Ordering Now
         </a>
       </div>
-
       <div class="wa-right">
         <div class="wa-phone-card">
           <div class="wa-phone-header">
-            <div class="wa-avatar">🪺</div>
-            <div>
-              <div class="wa-chat-name">NubeeNest</div>
-              <div class="wa-chat-status">● Online</div>
-            </div>
+            <div class="wa-avatar"><img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest" onerror="this.style.display='none'"></div>
+            <div><div class="wa-chat-name">NubeeNest</div><div class="wa-chat-status">● Online</div></div>
           </div>
           <div class="wa-messages">
             <div class="wa-msg recv" data-time="10:31 AM">Hi! Welcome to NubeeNest 🎉 What toy can I help you with today?</div>
             <div class="wa-msg sent" data-time="10:32 AM">Hi! I'd like to order the Educational Blocks for my 3 year old 🧱</div>
-            <div class="wa-msg recv" data-time="10:32 AM">Great choice! The blocks are ₹399 (was ₹499). Free delivery above ₹499. Shall I confirm your order? 🚚</div>
+            <div class="wa-msg recv" data-time="10:32 AM">Great choice! The blocks are ₹399 (was ₹499). Free delivery above ₹499. Shall I confirm? 🚚</div>
             <div class="wa-msg sent" data-time="10:33 AM">Yes please! Deliver to Mumbai 😊</div>
             <div class="wa-msg recv" data-time="10:33 AM">Order confirmed! 🎊 You'll receive it in 2–3 days. Pay via UPI to 6362391450@upi. Thank you!</div>
           </div>
@@ -707,8 +800,8 @@
     </div>
   </section>
 
-
   <!-- ══ WHY US ══ -->
+
   <section id="why">
     <div class="sec-center">
       <div class="sec-eyebrow">💛 Why NubeeNest</div>
@@ -723,8 +816,8 @@
     </div>
   </section>
 
-
   <!-- ══ TESTIMONIALS ══ -->
+
   <section id="testimonials">
     <div class="sec-center">
       <div class="sec-eyebrow">💬 Happy Parents</div>
@@ -732,26 +825,26 @@
       <p class="sec-sub">Real reviews from real parents who trust NubeeNest toys every day.</p>
     </div>
     <div class="testimonials-track-wrap">
-      <div class="testimonials-track" id="ttrack">
+      <div class="testimonials-track">
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>My 3-year-old loves the building blocks! Quality is amazing — no sharp edges, super colourful.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--violet)">P</div><div><div class="tcard-name">Priya M.</div><div class="tcard-meta">Mom of 1 · Bangalore</div></div></div></div>
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>The puzzle toy kept my daughter busy for hours! Delivery was super fast. Will definitely order again.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">R</div><div><div class="tcard-name">Rahul S.</div><div class="tcard-meta">Dad of 2 · Mumbai</div></div></div></div>
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>Ordered via WhatsApp — so easy! Got a reply in 2 minutes and toy arrived in 2 days. Amazing!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--wa-green)">A</div><div><div class="tcard-name">Anita K.</div><div class="tcard-meta">Aunt · Chennai</div></div></div></div>
-        <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>NubeeNest toys are genuinely educational. Seen my son's motor skills improve so much. Totally worth every rupee!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--sun); color:var(--ink)">S</div><div><div class="tcard-name">Sneha D.</div><div class="tcard-meta">Mom of 1 · Pune</div></div></div></div>
+        <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>NubeeNest toys are genuinely educational. Seen my son's motor skills improve so much. Totally worth it!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--sun);color:var(--ink)">S</div><div><div class="tcard-name">Sneha D.</div><div class="tcard-meta">Mom of 1 · Pune</div></div></div></div>
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>The 20% offer on blocks was a steal. WhatsApp ordering is so convenient — no complicated checkout!</p><div class="tcard-author"><div class="tcard-avatar" style="background:#6C3CE1">V</div><div><div class="tcard-name">Vikram R.</div><div class="tcard-meta">Dad of 1 · Hyderabad</div></div></div></div>
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>My twins both got a puzzle set and they race to finish them — so much fun! Highly recommend.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">M</div><div><div class="tcard-name">Meena T.</div><div class="tcard-meta">Mom of 2 · Delhi</div></div></div></div>
-        <!-- duplicates -->
+        <!-- duplicates for infinite scroll -->
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>My 3-year-old loves the building blocks! Quality is amazing — no sharp edges, super colourful.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--violet)">P</div><div><div class="tcard-name">Priya M.</div><div class="tcard-meta">Mom of 1 · Bangalore</div></div></div></div>
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>The puzzle toy kept my daughter busy for hours! Delivery was super fast. Will definitely order again.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">R</div><div><div class="tcard-name">Rahul S.</div><div class="tcard-meta">Dad of 2 · Mumbai</div></div></div></div>
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>Ordered via WhatsApp — so easy! Got a reply in 2 minutes and toy arrived in 2 days. Amazing!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--wa-green)">A</div><div><div class="tcard-name">Anita K.</div><div class="tcard-meta">Aunt · Chennai</div></div></div></div>
-        <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>NubeeNest toys are genuinely educational. Seen my son's motor skills improve so much. Totally worth every rupee!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--sun); color:var(--ink)">S</div><div><div class="tcard-name">Sneha D.</div><div class="tcard-meta">Mom of 1 · Pune</div></div></div></div>
-        <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>The 20% offer on blocks was a steal. WhatsApp ordering is so convenient — no complicated checkout!</p><div class="tcard-avatar" style="background:#6C3CE1; display:none">V</div></div>
+        <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>NubeeNest toys are genuinely educational. Seen my son's motor skills improve so much. Totally worth it!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--sun);color:var(--ink)">S</div><div><div class="tcard-name">Sneha D.</div><div class="tcard-meta">Mom of 1 · Pune</div></div></div></div>
+        <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>The 20% offer on blocks was a steal. WhatsApp ordering is so convenient — no complicated checkout!</p><div class="tcard-author"><div class="tcard-avatar" style="background:#6C3CE1">V</div><div><div class="tcard-name">Vikram R.</div><div class="tcard-meta">Dad of 1 · Hyderabad</div></div></div></div>
         <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>My twins both got a puzzle set and they race to finish them — so much fun! Highly recommend.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">M</div><div><div class="tcard-name">Meena T.</div><div class="tcard-meta">Mom of 2 · Delhi</div></div></div></div>
       </div>
     </div>
   </section>
 
-
   <!-- ══ STORES ══ -->
+
   <section id="stores">
     <div class="sec-center">
       <div class="sec-eyebrow">🛍️ Available On</div>
@@ -764,11 +857,7 @@
         <span>Shop on Amazon</span>
       </a>
       <a href="#" class="store-card flipkart reveal">
-        <svg height="40" viewBox="0 0 120 36" xmlns="http://www.w3.org/2000/svg">
-          <rect width="120" height="36" rx="4" fill="#2874F0"/>
-          <text x="10" y="26" font-family="Arial,sans-serif" font-weight="900" font-size="22" fill="white">flipkart</text>
-          <text x="97" y="18" font-family="Arial,sans-serif" font-weight="900" font-size="18" fill="#FFE500">✦</text>
-        </svg>
+        <svg height="40" viewBox="0 0 120 36" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="36" rx="4" fill="#2874F0"/><text x="10" y="26" font-family="Arial,sans-serif" font-weight="900" font-size="22" fill="white">flipkart</text><text x="97" y="18" font-family="Arial,sans-serif" font-weight="900" font-size="18" fill="#FFE500">✦</text></svg>
         <span>Shop on Flipkart</span>
       </a>
       <a href="#" class="store-card shopify reveal">
@@ -778,8 +867,8 @@
     </div>
   </section>
 
-
   <!-- ══ INSTAGRAM ══ -->
+
   <section id="instagram">
     <div class="insta-banner reveal">
       <div class="insta-left">
@@ -801,8 +890,90 @@
     </div>
   </section>
 
+  <!-- ══ KIDS GAMES ══ -->
+
+  <section id="games">
+    <div class="sec-center">
+      <div class="sec-eyebrow">🎮 Play Corner</div>
+      <h2 class="sec-title">Fun Games for Little Minds! 🌈</h2>
+      <p class="sec-sub">Take a break and play! These mini-games are designed just for kids — tap, match, count, and pop!</p>
+    </div>
+
+```
+<div class="games-grid">
+
+  <!-- GAME 1: Memory Match -->
+  <div class="game-card reveal">
+    <div class="game-header">
+      <div class="game-icon purple">🧠</div>
+      <div class="game-meta"><h3>Memory Match</h3><span>Find all the pairs! 🃏</span></div>
+    </div>
+    <div class="game-area">
+      <div class="game-score">
+        <span>Moves: <span id="mem-moves">0</span></span>
+        <span class="game-score-num">Pairs: <span id="mem-pairs">0</span>/8</span>
+      </div>
+      <div class="memory-grid" id="memGrid"></div>
+      <button class="game-btn" onclick="initMemory()">🔄 New Game</button>
+    </div>
+  </div>
+
+  <!-- GAME 2: Colour Match -->
+  <div class="game-card reveal">
+    <div class="game-header">
+      <div class="game-icon pink">🎨</div>
+      <div class="game-meta"><h3>Colour Match</h3><span>Tap the RIGHT colour! 🌈</span></div>
+    </div>
+    <div class="game-area">
+      <div class="colour-display">
+        <div class="colour-word" id="colourWord">RED</div>
+        <div class="colour-prompt">Tap the colour of the <strong>text</strong>, not the word!</div>
+      </div>
+      <div class="colour-options" id="colourOpts"></div>
+      <div class="colour-score">Score: <span id="colourScore">0</span> &nbsp;|&nbsp; Best: <span id="colourBest">0</span></div>
+    </div>
+  </div>
+
+  <!-- GAME 3: Counting Fun -->
+  <div class="game-card reveal">
+    <div class="game-header">
+      <div class="game-icon yellow">🔢</div>
+      <div class="game-meta"><h3>Count & Pick</h3><span>How many can you count? ⭐</span></div>
+    </div>
+    <div class="game-area">
+      <div class="count-display">
+        <div class="count-emojis" id="countEmojis"></div>
+        <div class="count-question" id="countQ">How many are there?</div>
+      </div>
+      <div class="count-options" id="countOpts"></div>
+      <div class="count-result" id="countResult"></div>
+      <div class="colour-score" style="margin-top:8px">Score: <span id="countScore">0</span></div>
+    </div>
+  </div>
+
+  <!-- GAME 4: Balloon Pop -->
+  <div class="game-card reveal">
+    <div class="game-header">
+      <div class="game-icon green">🎈</div>
+      <div class="game-meta"><h3>Balloon Pop!</h3><span>Pop as many as you can! 💥</span></div>
+    </div>
+    <div class="game-area">
+      <div class="balloon-area" id="balloonArea"></div>
+      <div class="balloon-score">
+        Popped: <span id="balloonCount">0</span>
+        <span class="balloon-combo" id="balloonCombo" style="display:none">🔥 Combo x<span id="comboNum">1</span></span>
+      </div>
+      <button class="game-btn" style="background:linear-gradient(135deg,var(--mint),#059669);margin-top:10px" onclick="initBalloons()">🎈 New Balloons</button>
+    </div>
+  </div>
+
+</div>
+```
+
+  </section>
 
   <!-- ══ NEWSLETTER ══ -->
+
   <section id="newsletter">
     <div class="newsletter-box reveal">
       <div class="sec-eyebrow">📬 Stay Updated</div>
@@ -810,14 +981,14 @@
       <p class="sec-sub" style="margin-bottom:32px;">Join 500+ parents already getting exclusive offers and fun activity ideas straight to their inbox.</p>
       <div class="nl-form">
         <input type="email" placeholder="Enter your email address" required>
-        <button type="button" onclick="this.textContent='Subscribed ✓'; this.style.background='var(--mint)'">Subscribe Free</button>
+        <button type="button" onclick="this.textContent='Subscribed ✓';this.style.background='var(--mint)'">Subscribe Free</button>
       </div>
       <p class="nl-note">🔒 No spam ever. Unsubscribe anytime.</p>
     </div>
   </section>
 
-
   <!-- ══ CONTACT ══ -->
+
   <section id="contact">
     <div class="sec-center">
       <div class="sec-eyebrow">👋 Get In Touch</div>
@@ -828,7 +999,7 @@
       <div class="reveal">
         <p class="cinfo-head">Say Hello!</p>
         <p class="cinfo-body">Whether it's a question about our toys, help with an order, or just a smile to share — drop us a message and we'll get back to you shortly.</p>
-        <div class="cinfo-row"><span class="cinfo-icon">📧</span><a href="/cdn-cgi/l/email-protection#88e6fdeaedede6edfbfcbabcb1b9c8efe5e9e1e4a6ebe7e5"><span class="__cf_email__" data-cfemail="056b706760606b60767137313c34456268646c692b666a68">[email&#160;protected]</span></a></div>
+        <div class="cinfo-row"><span class="cinfo-icon">📧</span><a href="mailto:nubeenest2491@gmail.com">nubeenest2491@gmail.com</a></div>
         <div class="cinfo-row"><span class="cinfo-icon">📱</span><a href="tel:+916362391450">+91 63623 91450</a></div>
         <div class="cinfo-row"><span class="cinfo-icon">📍</span>India</div>
         <div class="cinfo-socials">
@@ -851,42 +1022,30 @@
     </div>
   </section>
 
-
   <!-- ══ FOOTER ══ -->
+
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest"
-             style="height:48px; object-fit:contain; margin-bottom:14px; display:block;"
-             onerror="this.style.display='none'; document.getElementById('footer-logo-text').style.display='block'">
-        <div id="footer-logo-text" style="display:none; font-size:1.6rem; font-weight:900; color:#fff; margin-bottom:14px;">🪺 NubeeNest</div>
+        <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest" style="height:48px;object-fit:contain;margin-bottom:14px;display:block;filter:brightness(0) invert(1)" onerror="this.style.display='none';document.getElementById('fltext').style.display='block'">
+        <div id="fltext" style="display:none;font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:14px;">🪺 NubeeNest</div>
         <p>Creative toys crafted to spark curiosity and bring endless joy to children everywhere.</p>
         <div class="footer-socials">
-          <a href="https://www.instagram.com/nubeenest.in?igsh=MWZjMnIwZnNvZ2t3ZQ==" target="_blank" rel="noopener" class="fsocial insta">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </a>
-          <a href="https://wa.me/916362391450" target="_blank" rel="noopener" class="fsocial wa">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </a>
+          <a href="https://www.instagram.com/nubeenest.in?igsh=MWZjMnIwZnNvZ2t3ZQ==" target="_blank" rel="noopener" class="fsocial insta"><svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+          <a href="https://wa.me/916362391450" target="_blank" rel="noopener" class="fsocial wa"><svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
         </div>
       </div>
       <div class="footer-col">
         <h5>Quick Links</h5>
-        <a href="#">Home</a>
-        <a href="#products">Products</a>
-        <a href="#wa-order">WhatsApp Order</a>
-        <a href="#why">Why NubeeNest</a>
-        <a href="#testimonials">Reviews</a>
+        <a href="#">Home</a><a href="#products">Products</a><a href="#wa-order">WhatsApp Order</a><a href="#why">Why NubeeNest</a><a href="#testimonials">Reviews</a>
       </div>
       <div class="footer-col">
         <h5>Shop On</h5>
-        <a href="#">Amazon</a>
-        <a href="#">Flipkart</a>
-        <a href="#">Shopify</a>
+        <a href="#">Amazon</a><a href="#">Flipkart</a><a href="#">Shopify</a>
       </div>
       <div class="footer-col">
         <h5>Contact</h5>
-        <a href="/cdn-cgi/l/email-protection#08667d6a6d6d666d7b7c3a3c3139486f65696164266b6765">Email Us</a>
+        <a href="mailto:nubeenest2491@gmail.com">Email Us</a>
         <a href="tel:+916362391450">+91 63623 91450</a>
         <a href="https://wa.me/916362391450" target="_blank" rel="noopener">WhatsApp</a>
         <a href="https://www.instagram.com/nubeenest.in" target="_blank" rel="noopener">Instagram</a>
@@ -898,8 +1057,8 @@
     </div>
   </footer>
 
+  <!-- ══ EXISTING FLOATING BUTTONS ══ -->
 
-  <!-- ══ FLOATING BUTTONS ══ -->
   <div class="float-group">
     <a href="https://www.instagram.com/nubeenest.in?igsh=MWZjMnIwZnNvZ2t3ZQ==" target="_blank" rel="noopener" class="insta-float" title="Follow on Instagram">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -909,143 +1068,49 @@
     </a>
   </div>
 
-<script>
+  <!-- ══ INSTAGRAM STORY BUBBLE ══ -->
 
-/* =========================
-   MOBILE MENU (SLIDE)
-========================= */
+  <div class="ig-story-bubble" id="igStoryBubble" onclick="igOpenStory()">
+    <div class="ig-story-ring">
+      <div class="ig-story-ring-inner"><img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest" onerror="this.style.display='none';this.parentElement.innerHTML='🪺'"></div>
+      <div class="story-new-badge">NEW</div>
+    </div>
+    <div class="story-bubble-label">@nubeenest.in</div>
+  </div>
 
-const navToggle = document.querySelector(".nav-toggle");
-const nav = document.querySelector("#main-nav");
+  <!-- ══ INSTAGRAM STORY VIEWER ══ -->
 
-navToggle.addEventListener("click", () => {
-  nav.classList.toggle("open");
-});
+  <div class="ig-story-overlay" id="igStoryOverlay">
+    <div class="ig-story-viewer">
+      <div class="ig-story-progress">
+        <div class="ig-story-bar"><div class="ig-story-fill" id="igSF0"></div></div>
+        <div class="ig-story-bar"><div class="ig-story-fill" id="igSF1"></div></div>
+        <div class="ig-story-bar"><div class="ig-story-fill" id="igSF2"></div></div>
+      </div>
+      <div class="ig-story-hdr">
+        <div class="ig-story-av"><img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest" onerror="this.style.display='none'"></div>
+        <div>
+          <div class="ig-story-name">nubeenest.in</div>
+          <div class="ig-story-ago">Just now</div>
+        </div>
+        <button class="ig-story-x" onclick="igCloseStory()">✕</button>
+      </div>
+      <div class="ig-story-body">
+        <div class="ig-story-bg" id="igStoryBg"></div>
+        <div class="ig-story-emoji" id="igStoryEmoji">🧱</div>
+      </div>
+      <div class="ig-story-textbox">
+        <div class="ig-story-cap" id="igStoryCap">🎉 LAUNCH OFFER! Flat 20% OFF on Educational Blocks — today only!</div>
+      </div>
+      <div class="ig-story-footer">
+        <input class="ig-story-reply" placeholder="Send message...">
+        <div class="ig-story-heart" onclick="this.textContent='❤️'">🤍</div>
+      </div>
+    </div>
+  </div>
 
-
-/* =========================
-   AGE FILTER
-========================= */
-
-const ageButtons = document.querySelectorAll(".age-btn");
-const products = document.querySelectorAll(".product-card");
-
-ageButtons.forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    ageButtons.forEach(b => b.classList.remove("active"));
-    button.classList.add("active");
-
-    const age = button.dataset.age;
-
-    products.forEach(card => {
-
-      card.style.opacity = "0";
-
-      setTimeout(() => {
-
-        if(age === "all"){
-          card.classList.remove("hidden");
-        }
-        else if(card.dataset.age === age){
-          card.classList.remove("hidden");
-        }
-        else{
-          card.classList.add("hidden");
-        }
-
-        card.style.opacity = "1";
-
-      },200);
-
-    });
-
-  });
-
-});
-
-
-/* =========================
-   LIVE SEARCH FILTER
-========================= */
-
-const searchInput = document.getElementById("searchInput");
-
-searchInput.addEventListener("keyup", () => {
-
-  const value = searchInput.value.toLowerCase();
-
-  products.forEach(card => {
-
-    const title = card.querySelector("h3").innerText.toLowerCase();
-    const desc = card.querySelector("p").innerText.toLowerCase();
-
-    if(title.includes(value) || desc.includes(value)){
-      card.classList.remove("hidden");
-    }
-    else{
-      card.classList.add("hidden");
-    }
-
-  });
-
-});
-
-
-/* =========================
-   SEARCH DROPDOWN
-========================= */
-
-const dropdown = document.getElementById("searchDropdown");
-
-searchInput.addEventListener("focus", () => {
-  dropdown.classList.add("show");
-});
-
-document.addEventListener("click", (e) => {
-
-  if(!document.getElementById("headerSearch").contains(e.target)){
-    dropdown.classList.remove("show");
-  }
-
-});
-
-function closeSearch(){
-  dropdown.classList.remove("show");
-}
-
-function doSearch(){
-  dropdown.classList.add("show");
-}
-
-</script><script>
-
-    /* Search bar */
-    const searchInput = document.getElementById('searchInput');
-    const searchDropdown = document.getElementById('searchDropdown');
-    const allItems = document.querySelectorAll('.search-item');
-
-    searchInput.addEventListener('focus', () => searchDropdown.classList.add('show'));
-    searchInput.addEventListener('input', () => {
-      const q = searchInput.value.toLowerCase().trim();
-      searchDropdown.classList.add('show');
-      allItems.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = (!q || text.includes(q)) ? 'flex' : 'none';
-      });
-    });
-    document.addEventListener('click', e => {
-      if (!document.getElementById('headerSearch').contains(e.target)) closeSearch();
-    });
-    function closeSearch() { searchDropdown.classList.remove('show'); searchInput.value = ''; allItems.forEach(i => i.style.display = 'flex'); }
-    function doSearch() {
-      const q = searchInput.value.toLowerCase().trim();
-      if (!q) { document.querySelector('#products').scrollIntoView({behavior:'smooth'}); closeSearch(); return; }
-      const match = [...allItems].find(i => i.textContent.toLowerCase().includes(q));
-      if (match) { match.click(); } else { document.querySelector('#products').scrollIntoView({behavior:'smooth'}); closeSearch(); }
-    }
-    searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+  <script>
+    /* ── Nav toggle ── */
     const toggle = document.querySelector('.nav-toggle');
     const nav = document.querySelector('#main-nav');
     toggle.addEventListener('click', () => {
@@ -1059,7 +1124,27 @@ function doSearch(){
       document.body.style.overflow = '';
     }));
 
-    /* Age filter */
+    /* ── Search ── */
+    const searchInput = document.getElementById('searchInput');
+    const searchDropdown = document.getElementById('searchDropdown');
+    const allItems = document.querySelectorAll('.search-item');
+    searchInput.addEventListener('focus', () => searchDropdown.classList.add('show'));
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().trim();
+      searchDropdown.classList.add('show');
+      allItems.forEach(item => { item.style.display = (!q || item.textContent.toLowerCase().includes(q)) ? 'flex' : 'none'; });
+    });
+    document.addEventListener('click', e => { if (!document.getElementById('headerSearch').contains(e.target)) closeSearch(); });
+    function closeSearch() { searchDropdown.classList.remove('show'); searchInput.value = ''; allItems.forEach(i => i.style.display = 'flex'); }
+    function doSearch() {
+      const q = searchInput.value.toLowerCase().trim();
+      if (!q) { document.querySelector('#products').scrollIntoView({behavior:'smooth'}); closeSearch(); return; }
+      const match = [...allItems].find(i => i.textContent.toLowerCase().includes(q));
+      if (match) { match.click(); } else { document.querySelector('#products').scrollIntoView({behavior:'smooth'}); closeSearch(); }
+    }
+    searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+    /* ── Age filter ── */
     document.querySelectorAll('.age-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
@@ -1071,7 +1156,7 @@ function doSearch(){
       });
     });
 
-    /* Scroll reveal — hide via JS so content always visible if JS fails */
+    /* ── Scroll reveal ── */
     const revealEls = document.querySelectorAll('.reveal');
     revealEls.forEach(el => el.classList.add('hidden-reveal'));
     const io = new IntersectionObserver(entries => {
@@ -1086,16 +1171,312 @@ function doSearch(){
     }, { threshold: 0.05 });
     revealEls.forEach(el => io.observe(el));
 
-    /* Animated counters */
-    const countObs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const raw = el.textContent;
-        const num = parseFloat(raw.replace(/[^0-9.]/g,''));
-        const suffix = raw.replace(/[0-9.]/g,'');
-        let start = 0;
-        const step = num / 60;
-        const timer = setInterval(() => {
-          start += step;
-          if (start >= num) { start = num; clearInterval(timer)
+    /* ════════════════════════════════════
+       INSTAGRAM FLOATING UPDATES
+    ════════════════════════════════════ */
+    (function() {
+      var igPosts = [
+        { tag:'NEW POST', tagClass:'tag-post', emoji:'🧱',
+          bg:'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80',
+          caption:'🎉 Our <strong>Educational Blocks</strong> are live! Grab yours at ₹399 — 20% OFF today!',
+          likes:'248', comments:'31', time:'2 min ago' },
+        { tag:'🎬 REEL', tagClass:'tag-reel', emoji:'🎬',
+          bg:'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=600&q=80',
+          caption:'😍 Watch kids go crazy for our <strong>Puzzle Toy</strong>! This reel hit 12K views. Save it!',
+          likes:'1.2K', comments:'89', time:'30 min ago' },
+        { tag:'NEW POST', tagClass:'tag-post', emoji:'🚗',
+          bg:'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80',
+          caption:'🚗 Buy 2 Toy Car Sets, Get 1 <strong>FREE</strong>. Limited stock — order on WhatsApp now!',
+          likes:'317', comments:'42', time:'12 min ago' }
+      ];
+      var igStories = [
+        { emoji:'🧱', bg:'linear-gradient(135deg,#7C3AED,#C026D3,#F472B6)', cap:'🔥 20% OFF on Blocks — today only! Order via WhatsApp now!' },
+        { emoji:'🚗', bg:'linear-gradient(135deg,#FBBF24,#F97316,#EF4444)', cap:'🚗 Buy 2 Get 1 FREE on Toy Cars! Tap to grab yours 🛒' },
+        { emoji:'🧩', bg:'linear-gradient(135deg,#34D399,#059669,#065F46)', cap:'🧩 Puzzle Toy — ₹449. Ships in 24hrs anywhere in India! 🇮🇳' }
+      ];
+      var igToasts = [
+        { icon:'📸', title:'@nubeenest.in posted!', sub:'New toy drop — tap to see' },
+        { icon:'✨', title:'New Story is live!', sub:'Flash offer — 2 hrs left 🔥' },
+        { icon:'🎬', title:'New Reel posted!', sub:'Kids unboxing our blocks 😍' }
+      ];
+      var igPI = 0, igTI = 0, igSIdx = 0, igStTimer = null;
+
+      function igMakeCard(data) {
+        var old = document.querySelector('.ig-post-card');
+        if (old) igDismiss(null, old);
+        var card = document.createElement('div');
+        card.className = 'ig-post-card';
+        card.style.bottom = '176px';
+        var igSVG = '<svg viewBox="0 0 24 24"><path fill="white" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>';
+        card.innerHTML =
+          '<div class="igc-header">' +
+            '<div class="igc-avatar"><div class="igc-avatar-inner"><img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest" onerror="this.style.display=\'none\'"></div></div>' +
+            '<div><div class="igc-handle">nubeenest.in</div><div class="igc-time">' + data.time + '</div></div>' +
+            '<div class="igc-insta">' + igSVG + '</div>' +
+            '<button class="igc-close" onclick="igDismiss(this)">✕</button>' +
+          '</div>' +
+          '<div class="igc-img-fallback"><img class="igc-img" src="' + data.bg + '" alt="post" onerror="this.parentElement.innerHTML=\'<span style=font-size:3rem>' + data.emoji + '</span>\'"></div>' +
+          '<div class="igc-body">' +
+            '<div class="igc-tag ' + data.tagClass + '">' + data.tag + '</div>' +
+            '<div class="igc-caption">' + data.caption + '</div>' +
+            '<div class="igc-stats"><span>❤️ ' + data.likes + '</span><span>💬 ' + data.comments + '</span></div>' +
+            '<a href="https://www.instagram.com/nubeenest.in" target="_blank" rel="noopener" class="igc-cta">View on Instagram →</a>' +
+          '</div>';
+        document.body.appendChild(card);
+        setTimeout(function() { igDismiss(null, card); }, 7000);
+      }
+
+      window.igDismiss = function(btn, cardEl) {
+        var card = cardEl || (btn && btn.closest('.ig-post-card'));
+        if (!card || card.dataset.dismissed) return;
+        card.dataset.dismissed = '1';
+        card.classList.add('card-exit');
+        setTimeout(function() { card.remove(); }, 400);
+      };
+
+      function igShowToast() {
+        document.querySelectorAll('.ig-toast').forEach(function(t) { t.remove(); });
+        var data = igToasts[igTI++ % igToasts.length];
+        var t = document.createElement('div');
+        t.className = 'ig-toast';
+        t.innerHTML =
+          '<div class="ig-toast-icon">' + data.icon + '</div>' +
+          '<div class="ig-toast-text"><strong>' + data.title + '</strong><span>' + data.sub + '</span></div>' +
+          '<div class="ig-toast-dot"></div>';
+        document.body.appendChild(t);
+        t.onclick = function() { t.classList.add('toast-exit'); setTimeout(function() { t.remove(); }, 400); };
+        setTimeout(function() { t.classList.add('toast-exit'); setTimeout(function() { t.remove(); }, 400); }, 5500);
+      }
+
+      /* Story viewer */
+      window.igOpenStory = function() {
+        igSIdx = 0;
+        document.getElementById('igStoryOverlay').classList.add('open');
+        igRunProgress();
+      };
+      window.igCloseStory = function() {
+        document.getElementById('igStoryOverlay').classList.remove('open');
+        clearTimeout(igStTimer);
+        igResetBars();
+      };
+      function igLoadStory(i) {
+        var s = igStories[i];
+        var em = document.getElementById('igStoryEmoji');
+        em.textContent = s.emoji;
+        em.style.animation = 'none';
+        setTimeout(function() { em.style.animation = ''; }, 10);
+        document.getElementById('igStoryBg').style.background = s.bg;
+        document.getElementById('igStoryCap').textContent = s.cap;
+      }
+      function igResetBars() {
+        [0,1,2].forEach(function(i) {
+          var el = document.getElementById('igSF' + i);
+          if (!el) return;
+          el.style.transition = 'none'; el.style.width = '0%';
+        });
+      }
+      function igRunProgress() { clearTimeout(igStTimer); igResetBars(); igAnimBar(0); }
+      function igAnimBar(i) {
+        if (i >= igStories.length) { igCloseStory(); return; }
+        igLoadStory(i);
+        var bar = document.getElementById('igSF' + i);
+        setTimeout(function() { bar.style.transition = 'width 4s linear'; bar.style.width = '100%'; }, 50);
+        igStTimer = setTimeout(function() { igSIdx = i + 1; igAnimBar(igSIdx); }, 4200);
+      }
+      var ov = document.getElementById('igStoryOverlay');
+      if (ov) ov.addEventListener('click', function(e) { if (e.target === this) igCloseStory(); });
+
+      /* Auto-sequence on load */
+      window.addEventListener('load', function() {
+        setTimeout(igShowToast, 3500);
+        setTimeout(function() { igMakeCard(igPosts[igPI++ % igPosts.length]); }, 5500);
+        setInterval(function() {
+          igMakeCard(igPosts[igPI++ % igPosts.length]);
+          if (igPI % 2 === 0) igShowToast();
+        }, 28000);
+      });
+    })();
+    /* ════════════════════════════════════
+       KIDS GAMES
+    ════════════════════════════════════ */
+
+    /* ── MEMORY MATCH ── */
+    var memEmojis = ['🧱','🧩','🚗','🎈','⭐','🌈','🦁','🐸'];
+    var memCards = [], memFlipped = [], memMatched = 0, memMoves = 0, memLock = false;
+    function initMemory() {
+      var pairs = [...memEmojis, ...memEmojis].sort(()=>Math.random()-0.5);
+      memCards = []; memFlipped = []; memMatched = 0; memMoves = 0; memLock = false;
+      document.getElementById('mem-moves').textContent = 0;
+      document.getElementById('mem-pairs').textContent = 0;
+      var grid = document.getElementById('memGrid'); grid.innerHTML = '';
+      pairs.forEach(function(em, i) {
+        var btn = document.createElement('button');
+        btn.className = 'mem-card'; btn.dataset.emoji = em; btn.dataset.idx = i;
+        btn.textContent = ''; btn.setAttribute('aria-label','card');
+        btn.addEventListener('click', function() { flipMem(this); });
+        grid.appendChild(btn); memCards.push(btn);
+      });
+    }
+    function flipMem(card) {
+      if (memLock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+      card.classList.add('flipped'); card.textContent = card.dataset.emoji;
+      memFlipped.push(card);
+      if (memFlipped.length === 2) {
+        memLock = true; memMoves++;
+        document.getElementById('mem-moves').textContent = memMoves;
+        if (memFlipped[0].dataset.emoji === memFlipped[1].dataset.emoji) {
+          memFlipped[0].classList.add('matched'); memFlipped[1].classList.add('matched');
+          memMatched++; document.getElementById('mem-pairs').textContent = memMatched;
+          memFlipped = []; memLock = false;
+          if (memMatched === 8) setTimeout(function(){ alert('🎉 You matched all pairs in '+memMoves+' moves!'); }, 200);
+        } else {
+          setTimeout(function() {
+            memFlipped[0].classList.remove('flipped'); memFlipped[0].textContent = '';
+            memFlipped[1].classList.remove('flipped'); memFlipped[1].textContent = '';
+            memFlipped = []; memLock = false;
+          }, 900);
+        }
+      }
+    }
+    initMemory();
+
+    /* ── COLOUR MATCH ── */
+    var colours = [
+      {name:'RED',   hex:'#EF4444'},
+      {name:'BLUE',  hex:'#3B82F6'},
+      {name:'GREEN', hex:'#22C55E'},
+      {name:'PINK',  hex:'#EC4899'},
+      {name:'ORANGE',hex:'#F97316'},
+      {name:'PURPLE',hex:'#8B5CF6'},
+      {name:'YELLOW',hex:'#EAB308'},
+      {name:'TEAL',  hex:'#14B8A6'}
+    ];
+    var colourScore = 0, colourBest = 0, colourCorrect = null, colourLocked = false;
+    function nextColour() {
+      colourLocked = false;
+      var word  = colours[Math.floor(Math.random()*colours.length)];
+      var inkCol = colours[Math.floor(Math.random()*colours.length)];
+      colourCorrect = inkCol.name;
+      document.getElementById('colourWord').textContent = word.name;
+      document.getElementById('colourWord').style.color = inkCol.hex;
+      // 4 options: inkCol + 3 random others
+      var opts = [inkCol];
+      var pool = colours.filter(function(c){return c.name!==inkCol.name;}).sort(()=>Math.random()-0.5).slice(0,3);
+      opts = opts.concat(pool).sort(()=>Math.random()-0.5);
+      var container = document.getElementById('colourOpts'); container.innerHTML='';
+      opts.forEach(function(c) {
+        var btn = document.createElement('button');
+        btn.className = 'colour-opt'; btn.style.background = c.hex;
+        btn.textContent = c.name; btn.dataset.name = c.name;
+        btn.addEventListener('click', function() { checkColour(this); });
+        container.appendChild(btn);
+      });
+    }
+    function checkColour(btn) {
+      if (colourLocked) return; colourLocked = true;
+      if (btn.dataset.name === colourCorrect) {
+        btn.classList.add('correct'); colourScore++;
+        if (colourScore > colourBest) colourBest = colourScore;
+        document.getElementById('colourScore').textContent = colourScore;
+        document.getElementById('colourBest').textContent  = colourBest;
+        setTimeout(nextColour, 700);
+      } else {
+        btn.classList.add('wrong'); colourScore = 0;
+        document.getElementById('colourScore').textContent = colourScore;
+        setTimeout(nextColour, 900);
+      }
+    }
+    nextColour();
+
+    /* ── COUNT & PICK ── */
+    var countItems = ['🌟','🍎','🐸','🚗','🧩','🎈','🦁','🌈'];
+    var countScore = 0, countLocked = false;
+    function nextCount() {
+      countLocked = false;
+      document.getElementById('countResult').textContent = '';
+      var n = Math.floor(Math.random()*9)+1;
+      var em = countItems[Math.floor(Math.random()*countItems.length)];
+      document.getElementById('countEmojis').textContent = em.repeat(n);
+      document.getElementById('countQ').textContent = 'How many ' + em + ' are there?';
+      var wrongs = new Set([n]);
+      while(wrongs.size < 4) wrongs.add(Math.floor(Math.random()*12)+1);
+      var opts = Array.from(wrongs).sort(()=>Math.random()-0.5);
+      var container = document.getElementById('countOpts'); container.innerHTML = '';
+      opts.forEach(function(num) {
+        var btn = document.createElement('button');
+        btn.className = 'count-opt'; btn.textContent = num;
+        btn.addEventListener('click', function(){ checkCount(this, num, n); });
+        container.appendChild(btn);
+      });
+    }
+    function checkCount(btn, chosen, correct) {
+      if (countLocked) return; countLocked = true;
+      if (chosen === correct) {
+        btn.classList.add('correct');
+        document.getElementById('countResult').innerHTML = '🎉 Correct! Great counting!';
+        document.getElementById('countResult').style.color = '#059669';
+        countScore++; document.getElementById('countScore').textContent = countScore;
+        setTimeout(nextCount, 1200);
+      } else {
+        btn.classList.add('wrong');
+        document.getElementById('countResult').innerHTML = '❌ Oops! It was <strong>' + correct + '</strong>. Try again!';
+        document.getElementById('countResult').style.color = '#EF4444';
+        countScore = Math.max(0, countScore-1); document.getElementById('countScore').textContent = countScore;
+        setTimeout(nextCount, 1400);
+      }
+    }
+    nextCount();
+
+    /* ── BALLOON POP ── */
+    var balloonEmojis = ['🎈','🎀','⭐','🌟','💛','🧡','❤️','💜','💚','💙'];
+    var balloonPopped = 0, balloonCombo = 0, balloonTimers = [];
+    function initBalloons() {
+      var area = document.getElementById('balloonArea');
+      area.innerHTML = ''; balloonPopped = 0; balloonCombo = 0;
+      balloonTimers.forEach(clearTimeout); balloonTimers = [];
+      document.getElementById('balloonCount').textContent = 0;
+      document.getElementById('balloonCombo').style.display = 'none';
+      spawnBalloons(6);
+    }
+    function spawnBalloons(n) {
+      var area = document.getElementById('balloonArea');
+      for (var i = 0; i < n; i++) {
+        (function(delay) {
+          var t = setTimeout(function(){
+            var b = document.createElement('button');
+            b.className = 'balloon';
+            b.textContent = balloonEmojis[Math.floor(Math.random()*balloonEmojis.length)];
+            var dur = (3 + Math.random()*4).toFixed(1);
+            var left = (5 + Math.random()*85).toFixed(0);
+            b.style.left = left + '%';
+            b.style.animationDuration = dur + 's';
+            b.style.animationDelay = '0s';
+            b.addEventListener('click', function() { popBalloon(this, area); });
+            area.appendChild(b);
+            // remove if not popped
+            var rem = setTimeout(function(){ if(b.parentNode){b.remove(); balloonCombo=0; document.getElementById('balloonCombo').style.display='none';} }, parseFloat(dur)*1000+200);
+            balloonTimers.push(rem);
+          }, delay);
+          balloonTimers.push(t);
+        })(i * 400);
+      }
+      // keep spawning
+      var loop = setTimeout(function(){ spawnBalloons(3); }, n*400+1000);
+      balloonTimers.push(loop);
+    }
+    function popBalloon(btn, area) {
+      btn.style.transform = 'scale(1.6)'; btn.style.opacity = '0';
+      setTimeout(function(){ if(btn.parentNode) btn.remove(); }, 180);
+      balloonPopped++; balloonCombo++;
+      document.getElementById('balloonCount').textContent = balloonPopped;
+      if (balloonCombo > 1) {
+        document.getElementById('balloonCombo').style.display = 'inline-block';
+        document.getElementById('comboNum').textContent = balloonCombo;
+      }
+    }
+    initBalloons();
+
+  </script>
+
+</body>
+</html>
