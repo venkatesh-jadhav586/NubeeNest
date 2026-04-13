@@ -449,7 +449,8 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
 
 <header>
   <a href="#" class="logo-box">
-    <span>🪺 NubeeNest</span>
+    <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest Logo" style="height:48px;object-fit:contain;" onerror="this.style.display='none';document.getElementById('logoText').style.display='inline'">
+    <span id="logoText" style="display:none;font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:900;color:var(--violet)">🪺 NubeeNest</span>
   </a>
   <div class="header-search">
     <input type="text" placeholder="🔍  Search toys, age groups...">
@@ -535,7 +536,7 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
       <label>Mobile Number</label>
       <div class="phone-row">
         <input class="country-code" value="+91" readonly>
-        <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="10" style="flex:1">
+        <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="12" inputmode="numeric" style="flex:1" oninput="this.value=this.value.replace(/[^0-9\s]/g,'')">
       </div>
     </div>
     <button class="send-otp-btn" onclick="sendOTP()">Send OTP →</button>
@@ -963,7 +964,7 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     <div class="reveal">
       <p class="cinfo-head">Say Hello!</p>
       <p class="cinfo-body">Whether it's a question about our toys, help with an order, or just a smile — drop us a message!</p>
-      <div class="cinfo-row"><span>📧</span><a href="mailto:nubeenest2491@gmail.com">nubeenest2491@gmail.com</a></div>
+      <div class="cinfo-row"><span>📧</span><a href="/cdn-cgi/l/email-protection#4b253e292e2e252e383f797f727a0b2c262a222765282426"><span class="__cf_email__" data-cfemail="acc2d9cec9c9c2c9dfd89e98959deccbc1cdc5c082cfc3c1">[email&#160;protected]</span></a></div>
       <div class="cinfo-row"><span>📱</span><a href="tel:+916362391450">+91 63623 91450</a></div>
       <div class="cinfo-row"><span>📍</span><span style="font-size:0.88rem;color:#6B7280">India</span></div>
       <div class="cinfo-socials">
@@ -995,7 +996,7 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     </div>
     <div class="footer-col"><h5>Quick Links</h5><a href="#">Home</a><a href="#products">Products</a><a href="#wa-order">WhatsApp Order</a><a href="#why">Why NubeeNest</a><a href="#testimonials">Reviews</a></div>
     <div class="footer-col"><h5>Shop On</h5><a href="https://amzn.in/d/06avxXTL" target="_blank">Amazon</a><a href="#">Flipkart</a><a href="#">Shopify</a></div>
-    <div class="footer-col"><h5>Contact</h5><a href="mailto:nubeenest2491@gmail.com">Email Us</a><a href="tel:+916362391450">+91 63623 91450</a><a href="https://wa.me/916362391450" target="_blank">WhatsApp</a><a href="https://www.instagram.com/nubeenest.in" target="_blank">Instagram</a></div>
+    <div class="footer-col"><h5>Contact</h5><a href="/cdn-cgi/l/email-protection#4c22392e292922293f387e78757d0c2b212d2520622f2321">Email Us</a><a href="tel:+916362391450">+91 63623 91450</a><a href="https://wa.me/916362391450" target="_blank">WhatsApp</a><a href="https://www.instagram.com/nubeenest.in" target="_blank">Instagram</a></div>
   </div>
   <div class="footer-bottom">
     <span>© 2026 NubeeNest · Made with ♥ for happy kids everywhere</span>
@@ -1014,62 +1015,63 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
   </a>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
 /* ══ CART STATE ══ */
 var cart = [];
 
 function getCartTotal() { return cart.reduce(function(s,i){return s+i.price*i.qty},0); }
 
 function updateCartUI() {
-  var total = getCartTotal();
-  var count = cart.reduce(function(s,i){return s+i.qty},0);
-  var cc = document.getElementById('cartCount');
-  if (count > 0) { cc.classList.remove('hidden'); cc.textContent = count; }
-  else { cc.classList.add('hidden'); }
-  var el = document.getElementById('cartItems');
-  var footer = document.getElementById('cartFooter');
-  if (cart.length === 0) {
-    el.innerHTML = '<div class="cart-empty"><div class="empty-icon">🧸</div><p>Your cart is empty!<br>Add some fun toys 🎉</p></div>';
-    footer.style.display = 'none'; return;
-  }
-  footer.style.display = 'block';
-  el.innerHTML = '';
-  cart.forEach(function(item, idx) {
-    var div = document.createElement('div'); div.className = 'cart-item';
-    div.innerHTML = '<img class="cart-item-img" src="'+item.img+'" alt="'+item.name+'" onerror="this.outerHTML=\'<div class=cart-item-img-placeholder>\'+\''+item.emoji+'\'+\'</div>\'">'
-      +'<div class="cart-item-info"><div class="cart-item-name">'+item.emoji+' '+item.name+'</div>'
-      +'<div class="cart-item-price">₹'+item.price+'</div>'
-      +'<div class="cart-item-qty">'
-      +'<button class="qty-btn" onclick="changeQty('+idx+',-1)">−</button>'
-      +'<span class="qty-num">'+item.qty+'</span>'
-      +'<button class="qty-btn" onclick="changeQty('+idx+',1)">+</button>'
-      +'</div></div>'
-      +'<button class="cart-remove" onclick="removeItem('+idx+')">✕</button>';
-    el.appendChild(div);
-  });
-  document.getElementById('cartSubtotal').textContent = '₹'+total;
-  var delivery = total >= 499 ? 'FREE 🎉' : '₹49';
-  document.getElementById('cartDelivery').textContent = delivery;
-  document.getElementById('cartTotal').textContent = total >= 499 ? '₹'+total : '₹'+(total+49);
-  var left = 499 - total;
-  var bar = document.getElementById('shippingBar');
-  if (left <= 0) { bar.textContent = '🎉 You qualify for FREE delivery!'; bar.style.background = '#D1FAE5'; bar.style.color = '#065F46'; }
-  else { bar.innerHTML = '🚚 Add ₹<span>'+left+'</span> more for FREE delivery!'; bar.style.background = '#EDE9FE'; bar.style.color = 'var(--violet)'; }
+var total = getCartTotal();
+var count = cart.reduce(function(s,i){return s+i.qty},0);
+var cc = document.getElementById(‘cartCount’);
+if (count > 0) { cc.classList.remove(‘hidden’); cc.textContent = count; }
+else { cc.classList.add(‘hidden’); }
+var el = document.getElementById(‘cartItems’);
+var footer = document.getElementById(‘cartFooter’);
+if (cart.length === 0) {
+el.innerHTML = ‘<div class="cart-empty"><div class="empty-icon">🧸</div><p>Your cart is empty!<br>Add some fun toys 🎉</p></div>’;
+footer.style.display = ‘none’; return;
+}
+footer.style.display = ‘block’;
+el.innerHTML = ‘’;
+cart.forEach(function(item, idx) {
+var div = document.createElement(‘div’); div.className = ‘cart-item’;
+div.innerHTML = ‘<img class="cart-item-img" src="'+item.img+'" alt="'+item.name+'" onerror="this.outerHTML=\'<div class=cart-item-img-placeholder>\'+\''+item.emoji+'\'+\'</div>\'">’
++’<div class="cart-item-info"><div class="cart-item-name">’+item.emoji+’ ‘+item.name+’</div>’
++’<div class="cart-item-price">₹’+item.price+’</div>’
++’<div class="cart-item-qty">’
++’<button class="qty-btn" onclick="changeQty('+idx+',-1)">−</button>’
++’<span class="qty-num">’+item.qty+’</span>’
++’<button class="qty-btn" onclick="changeQty('+idx+',1)">+</button>’
++’</div></div>’
++’<button class="cart-remove" onclick="removeItem('+idx+')">✕</button>’;
+el.appendChild(div);
+});
+document.getElementById(‘cartSubtotal’).textContent = ‘₹’+total;
+var delivery = total >= 499 ? ‘FREE 🎉’ : ‘₹49’;
+document.getElementById(‘cartDelivery’).textContent = delivery;
+document.getElementById(‘cartTotal’).textContent = total >= 499 ? ‘₹’+total : ‘₹’+(total+49);
+var left = 499 - total;
+var bar = document.getElementById(‘shippingBar’);
+if (left <= 0) { bar.textContent = ‘🎉 You qualify for FREE delivery!’; bar.style.background = ‘#D1FAE5’; bar.style.color = ‘#065F46’; }
+else { bar.innerHTML = ‘🚚 Add ₹<span>’+left+’</span> more for FREE delivery!’; bar.style.background = ‘#EDE9FE’; bar.style.color = ‘var(–violet)’; }
 }
 
 function addToCart(name, emoji, price, img) {
-  var found = cart.find(function(i){return i.name===name});
-  if (found) { found.qty++; }
-  else { cart.push({name:name, emoji:emoji, price:price, img:img, qty:1}); }
-  updateCartUI();
-  showToast('🛒 '+name+' added to cart!');
-  openCart();
+var found = cart.find(function(i){return i.name===name});
+if (found) { found.qty++; }
+else { cart.push({name:name, emoji:emoji, price:price, img:img, qty:1}); }
+updateCartUI();
+showToast(‘🛒 ‘+name+’ added to cart!’);
+openCart();
 }
 
 function changeQty(idx, d) {
-  cart[idx].qty += d;
-  if (cart[idx].qty <= 0) cart.splice(idx,1);
-  updateCartUI();
+cart[idx].qty += d;
+if (cart[idx].qty <= 0) cart.splice(idx,1);
+updateCartUI();
 }
 
 function removeItem(idx) { cart.splice(idx,1); updateCartUI(); }
@@ -1077,312 +1079,301 @@ function removeItem(idx) { cart.splice(idx,1); updateCartUI(); }
 function clearCart() { cart = []; updateCartUI(); }
 
 function openCart() {
-  document.getElementById('cartSidebar').classList.add('open');
-  document.getElementById('cartOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+document.getElementById(‘cartSidebar’).classList.add(‘open’);
+document.getElementById(‘cartOverlay’).classList.add(‘open’);
+document.body.style.overflow = ‘hidden’;
 }
 
 function closeCart() {
-  document.getElementById('cartSidebar').classList.remove('open');
-  document.getElementById('cartOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+document.getElementById(‘cartSidebar’).classList.remove(‘open’);
+document.getElementById(‘cartOverlay’).classList.remove(‘open’);
+document.body.style.overflow = ‘’;
 }
 
 function orderViaWA() {
-  var msg = 'Hi NubeeNest! I\'d like to order:\n';
-  cart.forEach(function(i){ msg += '• '+i.name+' x'+i.qty+' = ₹'+(i.price*i.qty)+'\n'; });
-  msg += 'Total: ₹'+getCartTotal();
-  window.open('https://wa.me/916362391450?text='+encodeURIComponent(msg),'_blank');
+var msg = ‘Hi NubeeNest! I'd like to order:\n’;
+cart.forEach(function(i){ msg += ‘• ‘+i.name+’ x’+i.qty+’ = ₹’+(i.price*i.qty)+’\n’; });
+msg += ‘Total: ₹’+getCartTotal();
+window.open(‘https://wa.me/916362391450?text=’+encodeURIComponent(msg),’_blank’);
 }
 
 /* ══ TOAST ══ */
 var toastTimer;
 function showToast(msg) {
-  var t = document.getElementById('toast'); t.textContent = msg;
-  t.classList.add('show'); clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+var t = document.getElementById(‘toast’); t.textContent = msg;
+t.classList.add(‘show’); clearTimeout(toastTimer);
+toastTimer = setTimeout(function(){ t.classList.remove(‘show’); }, 2500);
 }
 
 /* ══ CHECKOUT / MODAL ══ */
 var currentStep = 1;
-var userPhone = '';
+var userPhone = ‘’;
 
 function openCheckout() {
-  if (cart.length === 0) { showToast('Add items to cart first!'); return; }
-  closeCart();
-  document.getElementById('checkoutModal').classList.add('open');
-  goToStep(1);
+if (cart.length === 0) { showToast(‘Add items to cart first!’); return; }
+closeCart();
+document.getElementById(‘checkoutModal’).classList.add(‘open’);
+goToStep(1);
 }
 
 function closeCheckout() {
-  document.getElementById('checkoutModal').classList.remove('open');
+document.getElementById(‘checkoutModal’).classList.remove(‘open’);
 }
 
 function goToStep(n) {
-  currentStep = n;
-  // Hide all step panels
-  ['phoneStep','otpStep','addressStep','paymentStep','successStep'].forEach(function(id){ document.getElementById(id).classList.remove('active'); });
-  // Update dots
-  for (var i=1;i<=3;i++) {
-    var dot = document.getElementById('dot'+i);
-    if (i < n) { dot.className='step-dot done'; dot.textContent='✓'; }
-    else if (i===n) { dot.className='step-dot active'; dot.textContent=i; }
-    else { dot.className='step-dot pending'; dot.textContent=i; }
-  }
-  for (var j=1;j<=2;j++) {
-    document.getElementById('line'+j).className = j<n ? 'step-line done' : 'step-line';
-  }
-  if (n===1) { document.getElementById('phoneStep').classList.add('active'); document.getElementById('modalTitle').textContent='Secure Checkout'; }
-  else if (n===2) { document.getElementById('addressStep').classList.add('active'); document.getElementById('modalTitle').textContent='Delivery Address'; }
-  else if (n===3) { buildPaymentSummary(); document.getElementById('paymentStep').classList.add('active'); document.getElementById('modalTitle').textContent='Payment'; }
-  else if (n===4) { document.getElementById('dot3').className='step-dot done'; document.getElementById('dot3').textContent='✓'; document.getElementById('line2').className='step-line done'; document.getElementById('successStep').classList.add('active'); document.getElementById('modalTitle').textContent='Order Confirmed! 🎉'; }
+currentStep = n;
+// Hide all step panels
+[‘phoneStep’,‘otpStep’,‘addressStep’,‘paymentStep’,‘successStep’].forEach(function(id){ document.getElementById(id).classList.remove(‘active’); });
+// Update dots
+for (var i=1;i<=3;i++) {
+var dot = document.getElementById(‘dot’+i);
+if (i < n) { dot.className=‘step-dot done’; dot.textContent=‘✓’; }
+else if (i===n) { dot.className=‘step-dot active’; dot.textContent=i; }
+else { dot.className=‘step-dot pending’; dot.textContent=i; }
+}
+for (var j=1;j<=2;j++) {
+document.getElementById(‘line’+j).className = j<n ? ‘step-line done’ : ‘step-line’;
+}
+if (n===1) { document.getElementById(‘phoneStep’).classList.add(‘active’); document.getElementById(‘modalTitle’).textContent=‘Secure Checkout’; }
+else if (n===2) { document.getElementById(‘addressStep’).classList.add(‘active’); document.getElementById(‘modalTitle’).textContent=‘Delivery Address’; }
+else if (n===3) { buildPaymentSummary(); document.getElementById(‘paymentStep’).classList.add(‘active’); document.getElementById(‘modalTitle’).textContent=‘Payment’; }
+else if (n===4) { document.getElementById(‘dot3’).className=‘step-dot done’; document.getElementById(‘dot3’).textContent=‘✓’; document.getElementById(‘line2’).className=‘step-line done’; document.getElementById(‘successStep’).classList.add(‘active’); document.getElementById(‘modalTitle’).textContent=‘Order Confirmed! 🎉’; }
 }
 
 function sendOTP() {
-  var phone = document.getElementById('phoneInput').value.trim();
-  if (!/^\d{10}$/.test(phone)) { showToast('Please enter a valid 10-digit number'); return; }
-  userPhone = phone;
-  document.getElementById('phoneStep').classList.remove('active');
-  document.getElementById('otpPhone').textContent = '+91 '+phone;
-  document.getElementById('otpStep').classList.add('active');
-  document.getElementById('otp1').value=''; document.getElementById('otp2').value=''; document.getElementById('otp3').value=''; document.getElementById('otp4').value='';
-  setTimeout(function(){ document.getElementById('otp1').focus(); }, 100);
-  showToast('📱 OTP sent! (Demo: use 1234)');
+var phone = document.getElementById(‘phoneInput’).value.replace(/\s/g,’’).trim();
+if (!/^\d{10}$/.test(phone)) { showToast(‘Please enter a valid 10-digit number’); return; }
+userPhone = phone;
+document.getElementById(‘phoneStep’).classList.remove(‘active’);
+document.getElementById(‘otpPhone’).textContent = ‘+91 ‘+phone;
+document.getElementById(‘otpStep’).classList.add(‘active’);
+document.getElementById(‘otp1’).value=’’; document.getElementById(‘otp2’).value=’’; document.getElementById(‘otp3’).value=’’; document.getElementById(‘otp4’).value=’’;
+setTimeout(function(){ document.getElementById(‘otp1’).focus(); }, 100);
+showToast(‘📱 OTP sent! (Demo: use 1234)’);
 }
 
-function resendOTP() { showToast('📱 OTP resent! (Demo: use 1234)'); }
+function resendOTP() { showToast(‘📱 OTP resent! (Demo: use 1234)’); }
 
 function showPhoneStep() {
-  document.getElementById('otpStep').classList.remove('active');
-  document.getElementById('phoneStep').classList.add('active');
+document.getElementById(‘otpStep’).classList.remove(‘active’);
+document.getElementById(‘phoneStep’).classList.add(‘active’);
 }
 
 function otpNext(el, nextId) {
-  if (el.value.length === 1 && nextId) { document.getElementById(nextId).focus(); }
+if (el.value.length === 1 && nextId) { document.getElementById(nextId).focus(); }
 }
 
 function otpBack(e, el, prevId) {
-  if (e.key === 'Backspace' && !el.value && prevId) { document.getElementById(prevId).focus(); }
+if (e.key === ‘Backspace’ && !el.value && prevId) { document.getElementById(prevId).focus(); }
 }
 
 function verifyOTP() {
-  var otp = document.getElementById('otp1').value + document.getElementById('otp2').value + document.getElementById('otp3').value + document.getElementById('otp4').value;
-  if (otp === '1234') { goToStep(2); showToast('✅ Verified successfully!'); }
-  else { showToast('❌ Wrong OTP. Demo OTP is 1234'); }
+var otp = document.getElementById(‘otp1’).value + document.getElementById(‘otp2’).value + document.getElementById(‘otp3’).value + document.getElementById(‘otp4’).value;
+if (otp === ‘1234’) { goToStep(2); showToast(‘✅ Verified successfully!’); }
+else { showToast(‘❌ Wrong OTP. Demo OTP is 1234’); }
 }
 
 function goToPayment() {
-  var name = document.getElementById('addrName').value.trim();
-  var line1 = document.getElementById('addrLine1').value.trim();
-  var city = document.getElementById('addrCity').value.trim();
-  var pin = document.getElementById('addrPin').value.trim();
-  var state = document.getElementById('addrState').value;
-  if (!name || !line1 || !city || !pin || !state) { showToast('Please fill all address fields'); return; }
-  if (!/^\d{6}$/.test(pin)) { showToast('Enter a valid 6-digit PIN code'); return; }
-  goToStep(3);
+var name = document.getElementById(‘addrName’).value.trim();
+var line1 = document.getElementById(‘addrLine1’).value.trim();
+var city = document.getElementById(‘addrCity’).value.trim();
+var pin = document.getElementById(‘addrPin’).value.trim();
+var state = document.getElementById(‘addrState’).value;
+if (!name || !line1 || !city || !pin || !state) { showToast(‘Please fill all address fields’); return; }
+if (!/^\d{6}$/.test(pin)) { showToast(‘Enter a valid 6-digit PIN code’); return; }
+goToStep(3);
 }
 
 function buildPaymentSummary() {
-  var html = '';
-  cart.forEach(function(i){ html += '<div class="summary-row"><span>'+i.emoji+' '+i.name+' ×'+i.qty+'</span><span>₹'+(i.price*i.qty)+'</span></div>'; });
-  document.getElementById('summaryItems').innerHTML = html;
-  var sub = getCartTotal();
-  var del = sub >= 499 ? 'FREE 🎉' : '₹49';
-  var total = sub >= 499 ? sub : sub+49;
-  document.getElementById('sumSubtotal').textContent = '₹'+sub;
-  document.getElementById('sumDelivery').textContent = del;
-  document.getElementById('sumTotal').textContent = '₹'+total;
+var html = ‘’;
+cart.forEach(function(i){ html += ‘<div class="summary-row"><span>’+i.emoji+’ ‘+i.name+’ ×’+i.qty+’</span><span>₹’+(i.price*i.qty)+’</span></div>’; });
+document.getElementById(‘summaryItems’).innerHTML = html;
+var sub = getCartTotal();
+var del = sub >= 499 ? ‘FREE 🎉’ : ‘₹49’;
+var total = sub >= 499 ? sub : sub+49;
+document.getElementById(‘sumSubtotal’).textContent = ‘₹’+sub;
+document.getElementById(‘sumDelivery’).textContent = del;
+document.getElementById(‘sumTotal’).textContent = ‘₹’+total;
 }
 
 function selectPay(radio) {
-  document.querySelectorAll('.pay-opt').forEach(function(l){ l.classList.remove('selected'); });
-  radio.closest('.pay-opt').classList.add('selected');
-  document.getElementById('upiIdInput').className = 'upi-input' + (radio.value==='upi' ? ' show' : '');
-  document.getElementById('cardFields').style.display = radio.value==='card' ? 'block' : 'none';
+document.querySelectorAll(’.pay-opt’).forEach(function(l){ l.classList.remove(‘selected’); });
+radio.closest(’.pay-opt’).classList.add(‘selected’);
+document.getElementById(‘upiIdInput’).className = ‘upi-input’ + (radio.value===‘upi’ ? ’ show’ : ‘’);
+document.getElementById(‘cardFields’).style.display = radio.value===‘card’ ? ‘block’ : ‘none’;
 }
 
 function formatCard(input) {
-  var v = input.value.replace(/\D/g,'').substring(0,16);
-  input.value = v.replace(/(.{4})/g,'$1 ').trim();
+var v = input.value.replace(/\D/g,’’).substring(0,16);
+input.value = v.replace(/(.{4})/g,’$1 ’).trim();
 }
 
 function placeOrder() {
-  var btn = document.getElementById('payNowBtn');
-  btn.innerHTML = '<span class="spinner"></span> Processing...';
-  btn.disabled = true;
-  setTimeout(function() {
-    btn.innerHTML = 'Pay Now & Confirm Order 🎉'; btn.disabled = false;
-    var orderId = 'NN-' + Math.floor(100000+Math.random()*900000);
-    document.getElementById('orderIdDisplay').textContent = 'Order #'+orderId;
-    goToStep(4);
-  }, 2000);
+var btn = document.getElementById(‘payNowBtn’);
+btn.innerHTML = ‘<span class="spinner"></span> Processing…’;
+btn.disabled = true;
+setTimeout(function() {
+btn.innerHTML = ‘Pay Now & Confirm Order 🎉’; btn.disabled = false;
+var orderId = ‘NN-’ + Math.floor(100000+Math.random()*900000);
+document.getElementById(‘orderIdDisplay’).textContent = ‘Order #’+orderId;
+goToStep(4);
+}, 2000);
 }
 
 /* ══ NAV TOGGLE ══ */
-document.getElementById('navToggle').addEventListener('click', function(){
-  var nav = document.getElementById('main-nav');
-  nav.classList.toggle('open');
+document.getElementById(‘navToggle’).addEventListener(‘click’, function(){
+var nav = document.getElementById(‘main-nav’);
+nav.classList.toggle(‘open’);
 });
-document.querySelectorAll('#main-nav a').forEach(function(a){
-  a.addEventListener('click', function(){ document.getElementById('main-nav').classList.remove('open'); });
+document.querySelectorAll(’#main-nav a’).forEach(function(a){
+a.addEventListener(‘click’, function(){ document.getElementById(‘main-nav’).classList.remove(‘open’); });
 });
 
 /* ══ AGE FILTER ══ */
-document.querySelectorAll('.age-btn').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('.age-btn').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    var age = btn.dataset.age;
-    document.querySelectorAll('.product-card').forEach(function(card){
-      card.classList.toggle('hidden', age !== 'all' && card.dataset.age !== age);
-    });
-  });
+document.querySelectorAll(’.age-btn’).forEach(function(btn){
+btn.addEventListener(‘click’, function(){
+document.querySelectorAll(’.age-btn’).forEach(function(b){ b.classList.remove(‘active’); });
+btn.classList.add(‘active’);
+var age = btn.dataset.age;
+document.querySelectorAll(’.product-card’).forEach(function(card){
+card.classList.toggle(‘hidden’, age !== ‘all’ && card.dataset.age !== age);
+});
+});
 });
 
 /* ══ SCROLL REVEAL ══ */
-var revEls = document.querySelectorAll('.reveal');
-revEls.forEach(function(el){ el.classList.add('hidden-reveal'); });
+var revEls = document.querySelectorAll(’.reveal’);
+revEls.forEach(function(el){ el.classList.add(‘hidden-reveal’); });
 var io = new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if (!e.isIntersecting) return;
-    var siblings = Array.from(e.target.parentElement.querySelectorAll('.reveal'));
-    e.target.style.transitionDelay = (siblings.indexOf(e.target)*0.1)+'s';
-    e.target.classList.remove('hidden-reveal'); e.target.classList.add('visible');
-    io.unobserve(e.target);
-  });
+entries.forEach(function(e){
+if (!e.isIntersecting) return;
+var siblings = Array.from(e.target.parentElement.querySelectorAll(’.reveal’));
+e.target.style.transitionDelay = (siblings.indexOf(e.target)*0.1)+‘s’;
+e.target.classList.remove(‘hidden-reveal’); e.target.classList.add(‘visible’);
+io.unobserve(e.target);
+});
 }, {threshold:0.05});
 revEls.forEach(function(el){ io.observe(el); });
 
 /* ══ GAMES ══ */
-var memEmojis=['🧱','🧩','🚗','🎈','⭐','🌈','🦁','🐸'];
+var memEmojis=[‘🧱’,‘🧩’,‘🚗’,‘🎈’,‘⭐’,‘🌈’,‘🦁’,‘🐸’];
 var memCards=[],memFlipped=[],memMatched=0,memMoves=0,memLock=false;
 function initMemory(){
-  var pairs=[...memEmojis,...memEmojis].sort(function(){return Math.random()-0.5});
-  memCards=[];memFlipped=[];memMatched=0;memMoves=0;memLock=false;
-  document.getElementById('mem-moves').textContent=0;
-  document.getElementById('mem-pairs').textContent=0;
-  var grid=document.getElementById('memGrid');grid.innerHTML='';
-  pairs.forEach(function(em,i){
-    var btn=document.createElement('button');
-    btn.className='mem-card';btn.dataset.emoji=em;btn.dataset.idx=i;btn.textContent='';
-    btn.addEventListener('click',function(){flipMem(this)});
-    grid.appendChild(btn);memCards.push(btn);
-  });
+var pairs=[…memEmojis,…memEmojis].sort(function(){return Math.random()-0.5});
+memCards=[];memFlipped=[];memMatched=0;memMoves=0;memLock=false;
+document.getElementById(‘mem-moves’).textContent=0;
+document.getElementById(‘mem-pairs’).textContent=0;
+var grid=document.getElementById(‘memGrid’);grid.innerHTML=’’;
+pairs.forEach(function(em,i){
+var btn=document.createElement(‘button’);
+btn.className=‘mem-card’;btn.dataset.emoji=em;btn.dataset.idx=i;btn.textContent=’’;
+btn.addEventListener(‘click’,function(){flipMem(this)});
+grid.appendChild(btn);memCards.push(btn);
+});
 }
 function flipMem(card){
-  if(memLock||card.classList.contains('flipped')||card.classList.contains('matched'))return;
-  card.classList.add('flipped');card.textContent=card.dataset.emoji;memFlipped.push(card);
-  if(memFlipped.length===2){
-    memLock=true;memMoves++;document.getElementById('mem-moves').textContent=memMoves;
-    if(memFlipped[0].dataset.emoji===memFlipped[1].dataset.emoji){
-      memFlipped[0].classList.add('matched');memFlipped[1].classList.add('matched');
-      memMatched++;document.getElementById('mem-pairs').textContent=memMatched;
-      memFlipped=[];memLock=false;
-      if(memMatched===8)setTimeout(function(){alert('🎉 You matched all pairs in '+memMoves+' moves!');},200);
-    }else{
-      setTimeout(function(){
-        memFlipped[0].classList.remove('flipped');memFlipped[0].textContent='';
-        memFlipped[1].classList.remove('flipped');memFlipped[1].textContent='';
-        memFlipped=[];memLock=false;
-      },900);
-    }
-  }
+if(memLock||card.classList.contains(‘flipped’)||card.classList.contains(‘matched’))return;
+card.classList.add(‘flipped’);card.textContent=card.dataset.emoji;memFlipped.push(card);
+if(memFlipped.length===2){
+memLock=true;memMoves++;document.getElementById(‘mem-moves’).textContent=memMoves;
+if(memFlipped[0].dataset.emoji===memFlipped[1].dataset.emoji){
+memFlipped[0].classList.add(‘matched’);memFlipped[1].classList.add(‘matched’);
+memMatched++;document.getElementById(‘mem-pairs’).textContent=memMatched;
+memFlipped=[];memLock=false;
+if(memMatched===8)setTimeout(function(){alert(‘🎉 You matched all pairs in ‘+memMoves+’ moves!’);},200);
+}else{
+setTimeout(function(){
+memFlipped[0].classList.remove(‘flipped’);memFlipped[0].textContent=’’;
+memFlipped[1].classList.remove(‘flipped’);memFlipped[1].textContent=’’;
+memFlipped=[];memLock=false;
+},900);
+}
+}
 }
 initMemory();
 
-var colours=[{name:'RED',hex:'#EF4444'},{name:'BLUE',hex:'#3B82F6'},{name:'GREEN',hex:'#22C55E'},{name:'PINK',hex:'#EC4899'},{name:'ORANGE',hex:'#F97316'},{name:'PURPLE',hex:'#8B5CF6'},{name:'YELLOW',hex:'#EAB308'},{name:'TEAL',hex:'#14B8A6'}];
+var colours=[{name:‘RED’,hex:’#EF4444’},{name:‘BLUE’,hex:’#3B82F6’},{name:‘GREEN’,hex:’#22C55E’},{name:‘PINK’,hex:’#EC4899’},{name:‘ORANGE’,hex:’#F97316’},{name:‘PURPLE’,hex:’#8B5CF6’},{name:‘YELLOW’,hex:’#EAB308’},{name:‘TEAL’,hex:’#14B8A6’}];
 var colourScore=0,colourBest=0,colourCorrect=null,colourLocked=false;
 function nextColour(){
-  colourLocked=false;
-  var word=colours[Math.floor(Math.random()*colours.length)];
-  var ink=colours[Math.floor(Math.random()*colours.length)];
-  colourCorrect=ink.name;
-  document.getElementById('colourWord').textContent=word.name;
-  document.getElementById('colourWord').style.color=ink.hex;
-  var opts=[ink];
-  var pool=colours.filter(function(c){return c.name!==ink.name}).sort(function(){return Math.random()-0.5}).slice(0,3);
-  opts=opts.concat(pool).sort(function(){return Math.random()-0.5});
-  var container=document.getElementById('colourOpts');container.innerHTML='';
-  opts.forEach(function(c){
-    var btn=document.createElement('button');btn.className='colour-opt';btn.style.background=c.hex;btn.textContent=c.name;btn.dataset.name=c.name;
-    btn.addEventListener('click',function(){checkColour(this)});container.appendChild(btn);
-  });
+colourLocked=false;
+var word=colours[Math.floor(Math.random()*colours.length)];
+var ink=colours[Math.floor(Math.random()*colours.length)];
+colourCorrect=ink.name;
+document.getElementById(‘colourWord’).textContent=word.name;
+document.getElementById(‘colourWord’).style.color=ink.hex;
+var opts=[ink];
+var pool=colours.filter(function(c){return c.name!==ink.name}).sort(function(){return Math.random()-0.5}).slice(0,3);
+opts=opts.concat(pool).sort(function(){return Math.random()-0.5});
+var container=document.getElementById(‘colourOpts’);container.innerHTML=’’;
+opts.forEach(function(c){
+var btn=document.createElement(‘button’);btn.className=‘colour-opt’;btn.style.background=c.hex;btn.textContent=c.name;btn.dataset.name=c.name;
+btn.addEventListener(‘click’,function(){checkColour(this)});container.appendChild(btn);
+});
 }
 function checkColour(btn){
-  if(colourLocked)return;colourLocked=true;
-  if(btn.dataset.name===colourCorrect){
-    btn.classList.add('correct');colourScore++;if(colourScore>colourBest)colourBest=colourScore;
-    document.getElementById('colourScore').textContent=colourScore;document.getElementById('colourBest').textContent=colourBest;
-    setTimeout(nextColour,700);
-  }else{
-    btn.classList.add('wrong');colourScore=0;document.getElementById('colourScore').textContent=colourScore;setTimeout(nextColour,900);
-  }
+if(colourLocked)return;colourLocked=true;
+if(btn.dataset.name===colourCorrect){
+btn.classList.add(‘correct’);colourScore++;if(colourScore>colourBest)colourBest=colourScore;
+document.getElementById(‘colourScore’).textContent=colourScore;document.getElementById(‘colourBest’).textContent=colourBest;
+setTimeout(nextColour,700);
+}else{
+btn.classList.add(‘wrong’);colourScore=0;document.getElementById(‘colourScore’).textContent=colourScore;setTimeout(nextColour,900);
+}
 }
 nextColour();
 
-var countItems=['🌟','🍎','🐸','🚗','🧩','🎈','🦁','🌈'];
+var countItems=[‘🌟’,‘🍎’,‘🐸’,‘🚗’,‘🧩’,‘🎈’,‘🦁’,‘🌈’];
 var countScore=0,countLocked=false;
 function nextCount(){
-  countLocked=false;document.getElementById('countResult').textContent='';
-  var n=Math.floor(Math.random()*9)+1;var em=countItems[Math.floor(Math.random()*countItems.length)];
-  document.getElementById('countEmojis').textContent=em.repeat(n);
-  document.getElementById('countQ').textContent='How many '+em+' are there?';
-  var wrongs=new Set([n]);while(wrongs.size<4)wrongs.add(Math.floor(Math.random()*12)+1);
-  var opts=Array.from(wrongs).sort(function(){return Math.random()-0.5});
-  var container=document.getElementById('countOpts');container.innerHTML='';
-  opts.forEach(function(num){
-    var btn=document.createElement('button');btn.className='count-opt';btn.textContent=num;
-    btn.addEventListener('click',function(){checkCount(this,num,n)});container.appendChild(btn);
-  });
+countLocked=false;document.getElementById(‘countResult’).textContent=’’;
+var n=Math.floor(Math.random()*9)+1;var em=countItems[Math.floor(Math.random()*countItems.length)];
+document.getElementById(‘countEmojis’).textContent=em.repeat(n);
+document.getElementById(‘countQ’).textContent=‘How many ‘+em+’ are there?’;
+var wrongs=new Set([n]);while(wrongs.size<4)wrongs.add(Math.floor(Math.random()*12)+1);
+var opts=Array.from(wrongs).sort(function(){return Math.random()-0.5});
+var container=document.getElementById(‘countOpts’);container.innerHTML=’’;
+opts.forEach(function(num){
+var btn=document.createElement(‘button’);btn.className=‘count-opt’;btn.textContent=num;
+btn.addEventListener(‘click’,function(){checkCount(this,num,n)});container.appendChild(btn);
+});
 }
 function checkCount(btn,chosen,correct){
-  if(countLocked)return;countLocked=true;
-  if(chosen===correct){
-    btn.classList.add('correct');document.getElementById('countResult').innerHTML='🎉 Correct!';document.getElementById('countResult').style.color='#059669';
-    countScore++;document.getElementById('countScore').textContent=countScore;setTimeout(nextCount,1200);
-  }else{
-    btn.classList.add('wrong');document.getElementById('countResult').innerHTML='❌ It was <strong>'+correct+'</strong>!';document.getElementById('countResult').style.color='#EF4444';
-    countScore=Math.max(0,countScore-1);document.getElementById('countScore').textContent=countScore;setTimeout(nextCount,1400);
-  }
+if(countLocked)return;countLocked=true;
+if(chosen===correct){
+btn.classList.add(‘correct’);document.getElementById(‘countResult’).innerHTML=‘🎉 Correct!’;document.getElementById(‘countResult’).style.color=’#059669’;
+countScore++;document.getElementById(‘countScore’).textContent=countScore;setTimeout(nextCount,1200);
+}else{
+btn.classList.add(‘wrong’);document.getElementById(‘countResult’).innerHTML=‘❌ It was <strong>’+correct+’</strong>!’;document.getElementById(‘countResult’).style.color=’#EF4444’;
+countScore=Math.max(0,countScore-1);document.getElementById(‘countScore’).textContent=countScore;setTimeout(nextCount,1400);
+}
 }
 nextCount();
 
-var balloonEmojis=['🎈','⭐','🌟','💛','🧡','❤️','💜','💚'];
+var balloonEmojis=[‘🎈’,‘⭐’,‘🌟’,‘💛’,‘🧡’,‘❤️’,‘💜’,‘💚’];
 var balloonPopped=0,balloonTimers=[];
 function initBalloons(){
-  var area=document.getElementById('balloonArea');area.innerHTML='';balloonPopped=0;
-  balloonTimers.forEach(clearTimeout);balloonTimers=[];
-  document.getElementById('balloonCount').textContent=0;
-  spawnBalloons(6);
+var area=document.getElementById(‘balloonArea’);area.innerHTML=’’;balloonPopped=0;
+balloonTimers.forEach(clearTimeout);balloonTimers=[];
+document.getElementById(‘balloonCount’).textContent=0;
+spawnBalloons(6);
 }
 function spawnBalloons(n){
-  var area=document.getElementById('balloonArea');
-  for(var i=0;i<n;i++){
-    (function(delay){
-      var t=setTimeout(function(){
-        var b=document.createElement('button');b.className='balloon';
-        b.textContent=balloonEmojis[Math.floor(Math.random()*balloonEmojis.length)];
-        var dur=(3+Math.random()*4).toFixed(1);
-        b.style.left=(5+Math.random()*85).toFixed(0)+'%';
-        b.style.animationDuration=dur+'s';
-        b.addEventListener('click',function(){popBalloon(this)});
-        area.appendChild(b);
-        var rem=setTimeout(function(){if(b.parentNode)b.remove();},parseFloat(dur)*1000+200);
-        balloonTimers.push(rem);
-      },delay);
-      balloonTimers.push(t);
-    })(i*400);
-  }
-  var loop=setTimeout(function(){spawnBalloons(3);},n*400+1000);
-  balloonTimers.push(loop);
+var area=document.getElementById(‘balloonArea’);
+for(var i=0;i<n;i++){
+(function(delay){
+var t=setTimeout(function(){
+var b=document.createElement(‘button’);b.className=‘balloon’;
+b.textContent=balloonEmojis[Math.floor(Math.random()*balloonEmojis.length)];
+var dur=(3+Math.random()*4).toFixed(1);
+b.style.left=(5+Math.random()*85).toFixed(0)+’%’;
+b.style.animationDuration=dur+‘s’;
+b.addEventListener(‘click’,function(){popBalloon(this)});
+area.appendChild(b);
+var rem=setTimeout(function(){if(b.parentNode)b.remove();},parseFloat(dur)*1000+200);
+balloonTimers.push(rem);
+},delay);
+balloonTimers.push(t);
+})(i*400);
 }
-function popBalloon(btn){
-  btn.style.transform='scale(1.6)';btn.style.opacity='0';
-  setTimeout(function(){if(btn.parentNode)btn.remove();},180);
-  balloonPopped++;document.getElementById('balloonCount').textContent=balloonPopped;
-}
-initBalloons();
-</script>
-
-</body>
-</html>
+var loop=setTimeout(function(){spawnBalloons(3);},n*400+1000);
+balloon
