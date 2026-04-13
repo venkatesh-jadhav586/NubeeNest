@@ -1,482 +1,152 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NubeeNest — Play. Learn. Grow.</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --violet: #7C3AED; --violet-light: #A78BFA; --blush: #F472B6;
-      --mint: #34D399; --sun: #FBBF24; --sky: #38BDF8;
-      --ink: #1E1B4B; --ink2: #312E81; --white: #FFFFFF;
-      --wa-green: #25D366; --offer-red: #EF4444; --offer-orange: #F97316;
-      --cart-accent: #7C3AED;
+    /* ══ EXTRAS: Marquee + Cart + Modal ══ */
+    .offers-marquee-wrap{background:linear-gradient(90deg,#EF4444,#F97316,#FBBF24,#F97316,#EF4444);background-size:300%;animation:banner-shift 4s linear infinite;padding:10px 0;overflow:hidden;}
+    @keyframes banner-shift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+    .offers-marquee{display:flex;animation:marquee-run 20s linear infinite;width:max-content;}
+    .offers-marquee span{color:#fff;font-weight:700;font-size:0.82rem;padding:0 32px;white-space:nowrap;font-family:'Fredoka',sans-serif;}
+    .offers-marquee span::after{content:'🔥';margin-left:28px;}
+    @keyframes marquee-run{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    .cart-btn{position:relative;background:none;border:2px solid var(--violet);border-radius:50px;padding:8px 20px;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1rem;color:var(--violet);transition:all 0.2s;white-space:nowrap;flex-shrink:0;}
+    .cart-btn:hover{background:var(--violet);color:#fff;}
+    .cart-count{background:#EF4444;color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;position:absolute;top:-8px;right:-8px;}
+    .cart-count.hidden{display:none;}
+
+    .cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:800;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+    .cart-overlay.open{opacity:1;pointer-events:all;}
+    .cart-sidebar{position:fixed;top:0;right:-440px;width:420px;max-width:100vw;height:100vh;background:#fff;z-index:801;display:flex;flex-direction:column;transition:right 0.35s cubic-bezier(0.4,0,0.2,1);box-shadow:-8px 0 40px rgba(0,0,0,0.18);}
+    .cart-sidebar.open{right:0;}
+    .cart-head{padding:22px 26px;border-bottom:2px solid var(--violet-lt);display:flex;justify-content:space-between;align-items:center;background:var(--violet-lt);}
+    .cart-head h2{font-family:'Fredoka',sans-serif;font-size:1.4rem;font-weight:700;color:var(--violet);}
+    .cart-close{background:none;border:none;font-size:1.6rem;cursor:pointer;color:var(--violet);line-height:1;font-weight:700;}
+    .cart-items{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+    .cart-empty{text-align:center;padding:60px 20px;}
+    .cart-empty-icon{font-size:3.5rem;margin-bottom:14px;}
+    .cart-empty p{font-family:'Fredoka',sans-serif;font-size:1rem;color:#9CA3AF;}
+    .cart-item{display:flex;gap:14px;padding:14px;background:#F9FAFB;border-radius:16px;position:relative;border:1.5px solid #F3F4F6;}
+    .cart-item-emoji{width:70px;height:70px;border-radius:12px;background:var(--violet-lt);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;}
+    .cart-item-info{flex:1;}
+    .cart-item-name{font-family:'Fredoka',sans-serif;font-weight:700;font-size:0.95rem;color:var(--ink);margin-bottom:4px;}
+    .cart-item-price{font-weight:700;color:var(--violet);font-size:1rem;font-family:'Fredoka',sans-serif;}
+    .cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:8px;}
+    .qty-btn{width:28px;height:28px;border-radius:8px;border:2px solid var(--border);background:#fff;font-weight:700;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--violet);transition:all 0.15s;font-family:'Fredoka',sans-serif;}
+    .qty-btn:hover{background:var(--violet);color:#fff;border-color:var(--violet);}
+    .qty-num{font-weight:700;font-size:0.95rem;min-width:22px;text-align:center;font-family:'Fredoka',sans-serif;}
+    .cart-remove{position:absolute;top:10px;right:10px;background:none;border:none;font-size:1.1rem;cursor:pointer;color:#9CA3AF;transition:color 0.15s;}
+    .cart-remove:hover{color:#EF4444;}
+    .cart-footer{padding:20px 24px;border-top:2px solid var(--violet-lt);background:var(--violet-lt);}
+    .cart-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.92rem;color:var(--ink-soft);font-weight:600;font-family:'Fredoka',sans-serif;}
+    .cart-row.total{font-size:1.1rem;font-weight:700;color:var(--ink);margin-top:6px;padding-top:8px;border-top:1.5px solid var(--border);}
+    .cart-row.total span:last-child{color:var(--violet);}
+    .free-bar{background:#fff;border-radius:10px;padding:8px 14px;font-size:0.8rem;color:var(--violet);font-weight:700;margin-bottom:14px;text-align:center;font-family:'Fredoka',sans-serif;border:1.5px solid var(--border);}
+    .checkout-btn{width:100%;padding:15px;background:var(--violet);color:#fff;border:none;border-radius:14px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(108,60,225,0.35);margin-bottom:10px;}
+    .checkout-btn:hover{background:var(--violet-d);transform:translateY(-1px);}
+    .wa-cart-btn{width:100%;padding:12px;background:#25D366;color:#fff;border:none;border-radius:14px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:0.92rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;}
+    .wa-cart-btn:hover{background:#1ebe59;}
+
+    .add-cart-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--violet);color:#fff;font-weight:700;font-size:0.9rem;font-family:'Fredoka',sans-serif;padding:11px 22px;border-radius:50px;transition:all 0.2s;border:none;cursor:pointer;width:100%;margin-top:10px;}
+    .add-cart-btn:hover{background:var(--violet-d);transform:scale(1.03);}
+    .offer-badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,#EF4444,#F97316);color:#fff;font-size:0.72rem;font-weight:700;padding:5px 12px;border-radius:50px;animation:pulse-badge 2s ease-in-out infinite;z-index:2;}
+    @keyframes pulse-badge{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+    .price-block{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+    .price-now{font-size:1.4rem;font-weight:700;color:var(--violet);}
+    .price-was{font-size:0.9rem;color:#9CA3AF;text-decoration:line-through;}
+    .price-save{background:#FEF3C7;color:#92400E;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:50px;}
+    .wa-prod-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:#25D366;color:#fff;font-weight:700;font-size:0.88rem;font-family:'Fredoka',sans-serif;padding:10px 18px;border-radius:50px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;width:100%;margin-top:8px;}
+    .wa-prod-btn:hover{background:#1ebe59;}
+    .card-btns{display:flex;gap:8px;flex-direction:column;}
+
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:900;display:none;align-items:center;justify-content:center;padding:20px;}
+    .modal-overlay.open{display:flex;}
+    .modal-box{background:#fff;border-radius:28px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+    .modal-head{padding:22px 26px 18px;border-bottom:2px solid #F3F4F6;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:2;border-radius:28px 28px 0 0;}
+    .modal-head h3{font-family:'Fredoka',sans-serif;font-size:1.3rem;font-weight:700;color:var(--ink);}
+    .modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:#9CA3AF;font-weight:700;}
+    .modal-body{padding:22px 26px 26px;}
+
+    .step-bar{display:flex;align-items:flex-start;margin-bottom:26px;}
+    .step-col{display:flex;flex-direction:column;align-items:center;gap:4px;}
+    .step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;font-family:'Fredoka',sans-serif;flex-shrink:0;transition:all 0.3s;}
+    .step-dot.active{background:var(--violet);color:#fff;box-shadow:0 0 0 4px rgba(108,60,225,0.2);}
+    .step-dot.done{background:var(--mint);color:#fff;}
+    .step-dot.pending{background:#F3F4F6;color:#9CA3AF;}
+    .step-lbl{font-size:0.68rem;font-weight:700;color:#9CA3AF;font-family:'Fredoka',sans-serif;}
+    .step-line{flex:1;height:2px;background:#F3F4F6;margin-top:15px;transition:background 0.3s;}
+    .step-line.done{background:var(--mint);}
+
+    .form-group{margin-bottom:14px;}
+    .form-group label{display:block;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:6px;font-family:'Fredoka',sans-serif;}
+    .form-group input,.form-group select{width:100%;padding:12px 16px;border:2px solid #E5E7EB;border-radius:12px;font-family:'Fredoka',sans-serif;font-size:0.95rem;color:var(--ink);outline:none;transition:border 0.2s;}
+    .form-group input:focus,.form-group select:focus{border-color:var(--violet);}
+    .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .phone-row{display:flex;gap:8px;}
+    .cc-box{width:72px;flex-shrink:0;padding:12px 8px;border:2px solid #E5E7EB;border-radius:12px;font-family:'Fredoka',sans-serif;font-size:0.95rem;background:#F9FAFB;color:var(--ink);outline:none;text-align:center;}
+
+    .step-panel{display:none;}
+    .step-panel.active{display:block;}
+
+    .otp-boxes{display:flex;gap:10px;justify-content:center;margin:18px 0;}
+    .otp-box{width:54px;height:58px;border:2px solid #E5E7EB;border-radius:12px;text-align:center;font-size:1.5rem;font-weight:700;color:var(--violet);font-family:'Fredoka',sans-serif;outline:none;transition:border 0.2s;}
+    .otp-box:focus{border-color:var(--violet);box-shadow:0 0 0 4px rgba(108,60,225,0.12);}
+    .otp-note{text-align:center;font-size:0.82rem;color:#9CA3AF;margin-bottom:14px;font-family:'Fredoka',sans-serif;}
+    .otp-note span{color:var(--violet);font-weight:700;cursor:pointer;}
+    .modal-btn{width:100%;padding:14px;background:var(--violet);color:#fff;border:none;border-radius:12px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+    .modal-btn:hover{background:var(--violet-d);}
+    .back-link{display:block;text-align:center;margin-top:12px;font-size:0.85rem;color:#9CA3AF;cursor:pointer;font-weight:600;font-family:'Fredoka',sans-serif;}
+    .back-link:hover{color:var(--violet);}
+
+    .pay-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+    .pay-opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border:2px solid #E5E7EB;border-radius:14px;cursor:pointer;transition:all 0.2s;font-family:'Fredoka',sans-serif;}
+    .pay-opt.sel,.pay-opt:hover{border-color:var(--violet);background:var(--violet-lt);}
+    .pay-opt input[type=radio]{accent-color:var(--violet);width:18px;height:18px;flex-shrink:0;}
+    .pay-icon{font-size:1.5rem;}
+    .pay-label strong{display:block;font-size:0.9rem;color:var(--ink);font-weight:700;}
+    .pay-label span{font-size:0.78rem;color:#9CA3AF;}
+    .upi-extra{margin-top:10px;display:none;}
+    .upi-extra.show{display:block;}
+    .card-fields-modal{display:none;margin-top:10px;}
+    .pay-now-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--violet),var(--violet-d));color:#fff;border:none;border-radius:14px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;box-shadow:0 6px 24px rgba(108,60,225,0.4);transition:all 0.2s;}
+    .pay-now-btn:hover{transform:translateY(-2px);}
+
+    .order-mini{background:var(--violet-lt);border-radius:14px;padding:14px 16px;margin-bottom:18px;}
+    .order-mini h4{font-size:0.8rem;font-weight:700;color:var(--violet);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;font-family:'Fredoka',sans-serif;}
+    .mini-row{display:flex;justify-content:space-between;font-size:0.85rem;color:#6B7280;margin-bottom:4px;font-weight:600;font-family:'Fredoka',sans-serif;}
+    .mini-row.total{color:var(--ink);font-weight:700;font-size:0.95rem;border-top:1px solid rgba(108,60,225,0.2);padding-top:8px;margin-top:6px;}
+
+    .success-wrap{text-align:center;padding:10px 0;}
+    .success-anim{font-size:5rem;display:block;margin-bottom:14px;animation:pop 0.5s cubic-bezier(0.36,0.07,0.19,0.97);}
+    @keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+    .success-wrap h2{font-family:'Fredoka',sans-serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin-bottom:8px;}
+    .success-wrap p{color:var(--ink-soft);font-size:0.95rem;line-height:1.6;margin-bottom:18px;font-family:'Fredoka',sans-serif;}
+    .order-badge{background:var(--violet-lt);color:var(--violet);font-weight:700;padding:6px 18px;border-radius:50px;display:inline-block;margin-bottom:18px;font-size:0.85rem;font-family:'Fredoka',sans-serif;}
+    .cont-btn{padding:14px 36px;background:var(--violet);color:#fff;border:none;border-radius:50px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;}
+    .cont-btn:hover{background:var(--violet-d);}
+
+    .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 26px;border-radius:50px;font-weight:700;font-size:0.88rem;opacity:0;transition:all 0.3s;z-index:9999;white-space:nowrap;pointer-events:none;font-family:'Fredoka',sans-serif;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    @media(max-width:680px){
+      .cart-sidebar{width:100%;right:-100%;}
+      .form-row-2{grid-template-columns:1fr;}
+      .modal-box{border-radius:20px;}
+      .modal-body{padding:16px 18px 22px;}
     }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Nunito', sans-serif; color: var(--ink); background: #fff; overflow-x: hidden; }
-
-```
-/* ── OFFERS MARQUEE ── */
-.offers-marquee-wrap { background: linear-gradient(90deg,var(--offer-red),var(--offer-orange),var(--sun),var(--offer-orange),var(--offer-red)); background-size:300%; animation:banner-shift 4s linear infinite; padding:10px 0; overflow:hidden; }
-@keyframes banner-shift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-.offers-marquee { display:flex; gap:0; animation:marquee-run 18s linear infinite; width:max-content; }
-.offers-marquee span { color:#fff; font-weight:800; font-size:0.82rem; padding:0 28px; white-space:nowrap; }
-.offers-marquee span::after { content:'🔥'; margin-left:28px; }
-@keyframes marquee-run{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* ── HEADER ── */
-header { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 28px; background:rgba(255,255,255,0.97); backdrop-filter:blur(16px); border-bottom:1px solid rgba(124,58,237,0.1); box-shadow:0 2px 20px rgba(124,58,237,0.08); }
-.logo-box { display:flex; align-items:center; gap:8px; text-decoration:none; }
-.logo-box span { font-family:'Baloo 2',cursive; font-size:1.5rem; font-weight:900; color:var(--violet); }
-.header-search { flex:1; max-width:360px; position:relative; }
-.header-search input { width:100%; padding:10px 44px 10px 18px; border-radius:50px; border:2px solid #EDE9FE; background:#F5F3FF; font-size:0.88rem; color:var(--ink); outline:none; font-family:inherit; transition:all 0.25s; }
-.header-search input:focus { border-color:var(--violet); background:#fff; box-shadow:0 0 0 4px rgba(124,58,237,0.12); }
-.search-icon { position:absolute; right:10px; top:50%; transform:translateY(-50%); width:30px; height:30px; border-radius:50%; background:var(--violet); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.search-icon svg { fill:white; width:13px; height:13px; }
-.header-right { display:flex; align-items:center; gap:16px; }
-nav { display:flex; align-items:center; gap:20px; }
-nav a { text-decoration:none; color:var(--ink); font-weight:700; font-size:0.88rem; transition:color 0.2s; white-space:nowrap; }
-nav a:hover { color:var(--violet); }
-.nav-cta { background:var(--violet); color:#fff!important; padding:8px 18px; border-radius:50px; }
-.nav-toggle { display:none; background:none; border:none; cursor:pointer; flex-direction:column; gap:5px; flex-shrink:0; }
-.nav-toggle span { display:block; width:24px; height:2px; background:var(--ink); border-radius:2px; }
-
-/* ── CART ICON BUTTON ── */
-.cart-btn { position:relative; background:none; border:2px solid var(--violet); border-radius:50px; padding:7px 14px; cursor:pointer; display:flex; align-items:center; gap:7px; font-family:inherit; font-weight:800; font-size:0.88rem; color:var(--violet); transition:all 0.2s; white-space:nowrap; }
-.cart-btn:hover { background:var(--violet); color:#fff; }
-.cart-count { background:var(--offer-red); color:#fff; border-radius:50%; width:18px; height:18px; font-size:0.68rem; font-weight:900; display:flex; align-items:center; justify-content:center; position:absolute; top:-6px; right:-6px; }
-.cart-count.hidden { display:none; }
-
-/* ══════════════════════════════════
-   CART SIDEBAR
-══════════════════════════════════ */
-.cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:500; opacity:0; pointer-events:none; transition:opacity 0.3s; }
-.cart-overlay.open { opacity:1; pointer-events:all; }
-.cart-sidebar { position:fixed; top:0; right:-420px; width:420px; max-width:100vw; height:100vh; background:#fff; z-index:501; display:flex; flex-direction:column; transition:right 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow:-8px 0 40px rgba(0,0,0,0.18); }
-.cart-sidebar.open { right:0; }
-.cart-head { padding:20px 24px; border-bottom:1px solid #EDE9FE; display:flex; justify-content:space-between; align-items:center; background:#F5F3FF; }
-.cart-head h2 { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:900; color:var(--violet); }
-.cart-close { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--ink); line-height:1; }
-.cart-items { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:14px; }
-.cart-empty { text-align:center; padding:60px 20px; color:#9CA3AF; }
-.cart-empty .empty-icon { font-size:3rem; margin-bottom:12px; }
-.cart-item { display:flex; gap:14px; padding:14px; background:#F9FAFB; border-radius:16px; position:relative; }
-.cart-item-img { width:72px; height:72px; border-radius:12px; object-fit:cover; flex-shrink:0; }
-.cart-item-img-placeholder { width:72px; height:72px; border-radius:12px; background:linear-gradient(135deg,#EDE9FE,#DDD6FE); display:flex; align-items:center; justify-content:center; font-size:2rem; flex-shrink:0; }
-.cart-item-info { flex:1; }
-.cart-item-name { font-weight:800; font-size:0.9rem; color:var(--ink); margin-bottom:4px; }
-.cart-item-price { font-weight:900; color:var(--violet); font-size:0.95rem; }
-.cart-item-qty { display:flex; align-items:center; gap:8px; margin-top:8px; }
-.qty-btn { width:28px; height:28px; border-radius:8px; border:2px solid #EDE9FE; background:#fff; font-weight:900; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--violet); transition:all 0.15s; }
-.qty-btn:hover { background:var(--violet); color:#fff; border-color:var(--violet); }
-.qty-num { font-weight:800; font-size:0.9rem; min-width:20px; text-align:center; }
-.cart-remove { position:absolute; top:10px; right:10px; background:none; border:none; font-size:1rem; cursor:pointer; color:#9CA3AF; transition:color 0.15s; }
-.cart-remove:hover { color:var(--offer-red); }
-.cart-footer { padding:20px 24px; border-top:1px solid #EDE9FE; background:#F5F3FF; }
-.cart-subtotal { display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.9rem; color:#6B7280; font-weight:600; }
-.cart-total { display:flex; justify-content:space-between; font-size:1.1rem; font-weight:900; color:var(--ink); margin-bottom:16px; }
-.cart-total span:last-child { color:var(--violet); }
-.free-shipping-bar { background:#EDE9FE; border-radius:8px; padding:8px 12px; font-size:0.78rem; color:var(--violet); font-weight:700; margin-bottom:14px; text-align:center; }
-.checkout-btn { width:100%; padding:15px; background:var(--violet); color:#fff; border:none; border-radius:14px; font-family:inherit; font-weight:900; font-size:1rem; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 20px rgba(124,58,237,0.35); }
-.checkout-btn:hover { background:var(--ink2); transform:translateY(-1px); }
-.wa-cart-btn { width:100%; padding:12px; background:var(--wa-green); color:#fff; border:none; border-radius:14px; font-family:inherit; font-weight:800; font-size:0.9rem; cursor:pointer; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; }
-.wa-cart-btn:hover { background:#1ebe59; }
-
-/* ══════════════════════════════════
-   CHECKOUT MODAL (OTP + Address + Payment)
-══════════════════════════════════ */
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:600; display:none; align-items:center; justify-content:center; padding:20px; }
-.modal-overlay.open { display:flex; }
-.modal-box { background:#fff; border-radius:28px; width:100%; max-width:480px; max-height:90vh; overflow-y:auto; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
-.modal-head { padding:24px 28px 20px; border-bottom:1px solid #F3F4F6; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:#fff; z-index:1; border-radius:28px 28px 0 0; }
-.modal-head h3 { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:900; color:var(--ink); }
-.modal-close { background:none; border:none; font-size:1.5rem; cursor:pointer; color:#9CA3AF; }
-.modal-body { padding:24px 28px 28px; }
-.step-indicator { display:flex; align-items:center; gap:0; margin-bottom:28px; }
-.step-dot { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.82rem; flex-shrink:0; transition:all 0.3s; }
-.step-dot.active { background:var(--violet); color:#fff; box-shadow:0 0 0 4px rgba(124,58,237,0.2); }
-.step-dot.done { background:var(--mint); color:#fff; }
-.step-dot.pending { background:#F3F4F6; color:#9CA3AF; }
-.step-line { flex:1; height:2px; background:#F3F4F6; transition:background 0.3s; }
-.step-line.done { background:var(--mint); }
-.step-label { font-size:0.7rem; font-weight:700; color:#9CA3AF; text-align:center; margin-top:4px; }
-
-/* OTP Step */
-.otp-step, .address-step, .payment-step, .success-step { display:none; }
-.otp-step.active, .address-step.active, .payment-step.active, .success-step.active { display:block; }
-.input-group { margin-bottom:16px; }
-.input-group label { display:block; font-size:0.82rem; font-weight:800; color:var(--ink); margin-bottom:6px; }
-.input-group input, .input-group select { width:100%; padding:13px 16px; border:2px solid #E5E7EB; border-radius:12px; font-family:inherit; font-size:0.95rem; color:var(--ink); outline:none; transition:border 0.2s; }
-.input-group input:focus, .input-group select:focus { border-color:var(--violet); }
-.phone-row { display:flex; gap:10px; }
-.country-code { width:90px; flex-shrink:0; padding:13px 10px; border:2px solid #E5E7EB; border-radius:12px; font-family:inherit; font-size:0.95rem; background:#F9FAFB; color:var(--ink); outline:none; }
-.send-otp-btn { width:100%; padding:14px; background:var(--violet); color:#fff; border:none; border-radius:12px; font-family:inherit; font-weight:900; font-size:1rem; cursor:pointer; margin-top:6px; transition:all 0.2s; }
-.send-otp-btn:hover { background:var(--ink2); }
-.otp-boxes { display:flex; gap:10px; justify-content:center; margin:20px 0; }
-.otp-box { width:52px; height:56px; border:2px solid #E5E7EB; border-radius:12px; text-align:center; font-size:1.5rem; font-weight:900; color:var(--violet); font-family:inherit; outline:none; transition:border 0.2s; }
-.otp-box:focus { border-color:var(--violet); box-shadow:0 0 0 4px rgba(124,58,237,0.12); }
-.otp-note { text-align:center; font-size:0.82rem; color:#9CA3AF; margin-bottom:16px; }
-.otp-note span { color:var(--violet); font-weight:700; cursor:pointer; }
-.verify-btn { width:100%; padding:14px; background:var(--violet); color:#fff; border:none; border-radius:12px; font-family:inherit; font-weight:900; font-size:1rem; cursor:pointer; transition:all 0.2s; }
-.verify-btn:hover { background:var(--ink2); }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.continue-btn { width:100%; padding:14px; background:var(--violet); color:#fff; border:none; border-radius:12px; font-family:inherit; font-weight:900; font-size:1rem; cursor:pointer; margin-top:8px; transition:all 0.2s; }
-.continue-btn:hover { background:var(--ink2); }
-.back-link { display:block; text-align:center; margin-top:14px; font-size:0.85rem; color:#9CA3AF; cursor:pointer; font-weight:600; }
-.back-link:hover { color:var(--violet); }
-/* Payment */
-.payment-methods { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
-.pay-opt { display:flex; align-items:center; gap:14px; padding:14px 16px; border:2px solid #E5E7EB; border-radius:14px; cursor:pointer; transition:all 0.2s; }
-.pay-opt:hover, .pay-opt.selected { border-color:var(--violet); background:#F5F3FF; }
-.pay-opt input[type=radio] { accent-color:var(--violet); width:18px; height:18px; }
-.pay-opt-icon { font-size:1.5rem; }
-.pay-opt-label { flex:1; }
-.pay-opt-label strong { display:block; font-size:0.9rem; color:var(--ink); font-weight:800; }
-.pay-opt-label span { font-size:0.78rem; color:#9CA3AF; }
-.upi-input { margin-top:10px; display:none; }
-.upi-input.show { display:block; }
-.pay-now-btn { width:100%; padding:16px; background:linear-gradient(135deg,var(--violet),var(--ink2)); color:#fff; border:none; border-radius:14px; font-family:inherit; font-weight:900; font-size:1.05rem; cursor:pointer; box-shadow:0 6px 24px rgba(124,58,237,0.4); transition:all 0.2s; }
-.pay-now-btn:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(124,58,237,0.5); }
-.order-summary-mini { background:#F5F3FF; border-radius:14px; padding:14px 16px; margin-bottom:20px; }
-.order-summary-mini h4 { font-size:0.82rem; font-weight:800; color:var(--violet); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.05em; }
-.summary-row { display:flex; justify-content:space-between; font-size:0.85rem; color:#6B7280; margin-bottom:4px; font-weight:600; }
-.summary-row.total { color:var(--ink); font-weight:900; font-size:0.95rem; border-top:1px solid #DDD6FE; padding-top:8px; margin-top:8px; }
-/* Success */
-.success-step { text-align:center; padding:20px 0; }
-.success-anim { font-size:5rem; display:block; margin-bottom:16px; animation:bounce-in 0.5s cubic-bezier(0.36,0.07,0.19,0.97); }
-@keyframes bounce-in{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
-.success-step h2 { font-family:'Baloo 2',cursive; font-size:1.8rem; font-weight:900; color:var(--ink); margin-bottom:8px; }
-.success-step p { color:#6B7280; font-size:0.95rem; line-height:1.6; margin-bottom:24px; }
-.order-id { background:#EDE9FE; color:var(--violet); font-weight:800; padding:6px 16px; border-radius:50px; display:inline-block; margin-bottom:20px; font-size:0.85rem; }
-.continue-shopping { padding:14px 32px; background:var(--violet); color:#fff; border:none; border-radius:12px; font-family:inherit; font-weight:800; font-size:0.95rem; cursor:pointer; }
-
-/* ── HERO ── */
-.hero { min-height:88vh; display:flex; align-items:center; position:relative; overflow:hidden; padding:80px 32px 60px; background:linear-gradient(135deg,#F5F3FF 0%,#EDE9FE 40%,#FDF4FF 100%); }
-.blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.35; pointer-events:none; }
-.blob-a { width:500px; height:500px; background:var(--violet); top:-100px; left:-100px; }
-.blob-b { width:400px; height:400px; background:var(--blush); top:60%; right:-80px; }
-.blob-c { width:300px; height:300px; background:var(--sun); bottom:-50px; left:30%; }
-.hero-inner { position:relative; z-index:1; display:flex; align-items:center; gap:60px; max-width:1200px; margin:0 auto; width:100%; }
-.hero-text { flex:1; }
-.hero-pill { display:inline-flex; align-items:center; gap:8px; background:rgba(124,58,237,0.12); color:var(--violet); font-size:0.85rem; font-weight:800; padding:6px 16px; border-radius:50px; margin-bottom:20px; }
-.hero-text h1 { font-family:'Baloo 2',cursive; font-size:clamp(2.5rem,5vw,4rem); font-weight:900; line-height:1.1; margin-bottom:20px; }
-.c1{color:var(--violet)} .c2{color:var(--blush)} .c3{color:var(--mint)}
-.hero-text p { font-size:1.1rem; color:#6B7280; line-height:1.7; margin-bottom:32px; max-width:480px; }
-.hero-actions { display:flex; gap:16px; flex-wrap:wrap; }
-.btn-primary { background:var(--violet); color:#fff; padding:14px 32px; border-radius:50px; font-weight:900; font-size:1rem; text-decoration:none; transition:all 0.2s; box-shadow:0 4px 20px rgba(124,58,237,0.4); }
-.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(124,58,237,0.5); }
-.btn-secondary { background:#fff; color:var(--violet); padding:14px 32px; border-radius:50px; font-weight:900; font-size:1rem; text-decoration:none; border:2px solid var(--violet); transition:all 0.2s; }
-.btn-secondary:hover { background:var(--violet); color:#fff; }
-.hero-mosaic { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:200px 200px; gap:16px; flex:0 0 460px; }
-.mosaic-card { position:relative; border-radius:20px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.12); }
-.mosaic-card:first-child { grid-row:span 2; }
-.mosaic-card img { width:100%; height:100%; object-fit:cover; }
-.mosaic-tag { position:absolute; bottom:12px; left:12px; background:rgba(255,255,255,0.9); color:var(--ink); font-size:0.75rem; font-weight:800; padding:4px 12px; border-radius:50px; }
-
-/* ── STATS ── */
-.stats-strip { display:flex; justify-content:center; background:var(--ink); }
-.stat { flex:1; max-width:220px; text-align:center; padding:28px 20px; border-right:1px solid rgba(255,255,255,0.08); }
-.stat:last-child { border-right:none; }
-.stat-num { display:block; font-size:2rem; font-weight:900; color:var(--sun); font-family:'Baloo 2',cursive; }
-.stat-lbl { font-size:0.78rem; color:rgba(255,255,255,0.6); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; }
-
-/* ── SECTIONS ── */
-section { padding:80px 32px; }
-.sec-center { text-align:center; max-width:700px; margin:0 auto 48px; }
-.sec-eyebrow { display:inline-block; font-size:0.82rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--violet); margin-bottom:10px; }
-.sec-title { font-family:'Baloo 2',cursive; font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:900; color:var(--ink); line-height:1.2; margin-bottom:14px; }
-.sec-sub { font-size:1.02rem; color:#6B7280; line-height:1.7; }
-
-/* ── AGE FILTER ── */
-.age-filter { display:flex; gap:10px; justify-content:center; margin-top:24px; flex-wrap:wrap; }
-.age-btn { padding:8px 22px; border-radius:50px; border:2px solid #E5E7EB; background:#fff; color:#6B7280; font-weight:700; font-size:0.88rem; cursor:pointer; transition:all 0.2s; font-family:inherit; }
-.age-btn.active, .age-btn:hover { border-color:var(--violet); background:var(--violet); color:#fff; }
-
-/* ── PRODUCTS ── */
-#products { background:#FAFAFA; }
-.product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:28px; max-width:1200px; margin:0 auto; }
-.product-card { background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.06); transition:transform 0.3s,box-shadow 0.3s; position:relative; }
-.product-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(124,58,237,0.15); }
-.product-card.hidden { display:none; }
-.product-img-wrap { position:relative; height:220px; overflow:hidden; }
-.product-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s; }
-.product-card:hover .product-img-wrap img { transform:scale(1.06); }
-.prod-emoji { position:absolute; bottom:12px; right:12px; background:rgba(255,255,255,0.95); font-size:1.4rem; padding:8px; border-radius:12px; }
-.prod-age { position:absolute; top:12px; left:12px; background:var(--violet); color:#fff; font-size:0.72rem; font-weight:800; padding:4px 12px; border-radius:50px; }
-.offer-badge { position:absolute; top:12px; right:12px; background:linear-gradient(135deg,var(--offer-red),var(--offer-orange)); color:#fff; font-size:0.72rem; font-weight:900; padding:5px 11px; border-radius:50px; animation:pulse-badge 2s ease-in-out infinite; }
-@keyframes pulse-badge{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.product-info { padding:20px 22px 22px; }
-.product-info h3 { font-family:'Baloo 2',cursive; font-size:1.15rem; font-weight:900; color:var(--ink); margin-bottom:6px; }
-.product-info p { font-size:0.88rem; color:#6B7280; line-height:1.6; margin-bottom:14px; }
-.price-block { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
-.price-now { font-size:1.3rem; font-weight:900; color:var(--violet); }
-.price-was { font-size:0.88rem; color:#9CA3AF; text-decoration:line-through; }
-.price-save { background:#FEF3C7; color:#92400E; font-size:0.72rem; font-weight:800; padding:2px 8px; border-radius:50px; }
-.card-btns { display:flex; gap:10px; }
-.add-cart-btn { flex:1; padding:11px 14px; border-radius:12px; border:2px solid var(--violet); background:#fff; color:var(--violet); font-weight:800; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:6px; }
-.add-cart-btn:hover { background:var(--violet); color:#fff; }
-.wa-order-btn { display:flex; align-items:center; justify-content:center; gap:6px; flex:1; padding:11px 14px; border-radius:12px; font-weight:800; font-size:0.85rem; text-decoration:none; background:var(--wa-green); color:#fff; border:none; cursor:pointer; font-family:inherit; transition:all 0.2s; }
-.wa-order-btn:hover { background:#1ebe59; }
-
-/* ── WHY US ── */
-#why { background:linear-gradient(135deg,#F5F3FF,#FDF4FF); }
-.why-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:24px; max-width:1100px; margin:0 auto; }
-.why-card { background:#fff; border-radius:20px; padding:28px 24px; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.06); transition:transform 0.3s; }
-.why-card:hover { transform:translateY(-4px); }
-.why-icon { font-size:2rem; display:block; margin-bottom:14px; }
-.why-card h4 { font-size:1rem; font-weight:800; color:var(--ink); margin-bottom:8px; }
-.why-card p { font-size:0.88rem; color:#6B7280; line-height:1.6; }
-
-/* ── TESTIMONIALS ── */
-#testimonials { background:#fff; overflow:hidden; }
-.testimonials-track-wrap { overflow:hidden; }
-.testimonials-track { display:flex; gap:20px; animation:scroll-track 30s linear infinite; width:max-content; }
-.testimonials-track:hover { animation-play-state:paused; }
-@keyframes scroll-track{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.tcard { background:#F9FAFB; border-radius:20px; padding:28px 24px; width:290px; flex-shrink:0; border:1px solid #F3F4F6; position:relative; }
-.tcard-stars { color:var(--sun); font-size:0.9rem; margin-bottom:10px; }
-.tcard p { font-size:0.88rem; color:#374151; line-height:1.65; margin-bottom:18px; }
-.tcard-author { display:flex; align-items:center; gap:12px; }
-.tcard-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1rem; color:#fff; flex-shrink:0; }
-.tcard-name { font-weight:800; font-size:0.88rem; color:var(--ink); }
-.tcard-meta { font-size:0.75rem; color:#9CA3AF; }
-
-/* ── STORES ── */
-#stores { background:#FAFAFA; }
-.stores-wrap { display:flex; justify-content:center; gap:24px; flex-wrap:wrap; }
-.store-card { display:flex; flex-direction:column; align-items:center; gap:12px; padding:28px 36px; border-radius:20px; text-decoration:none; background:#fff; border:2px solid #F3F4F6; box-shadow:0 4px 16px rgba(0,0,0,0.06); transition:all 0.2s; min-width:170px; }
-.store-card:hover { transform:translateY(-4px); }
-.store-card.amazon:hover { border-color:#FF9900; }
-.store-card.flipkart:hover { border-color:#2874F0; }
-.store-card img { height:36px; object-fit:contain; }
-.store-card span { font-size:0.8rem; font-weight:700; color:#9CA3AF; }
-
-/* ── WA ORDER ── */
-#wa-order { background:linear-gradient(135deg,#0D1F12,#1A3324,#0A4D2E); padding:80px 32px; position:relative; overflow:hidden; }
-.wa-section-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:60px; }
-.wa-left { flex:1; }
-.wa-eyebrow { display:inline-flex; align-items:center; gap:8px; color:var(--wa-green); font-size:0.82rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:16px; }
-.wa-left h2 { font-family:'Baloo 2',cursive; font-size:clamp(2rem,3.5vw,3rem); font-weight:900; color:#fff; line-height:1.2; margin-bottom:16px; }
-.wa-left h2 span { color:var(--wa-green); }
-.wa-left p { font-size:1rem; color:rgba(255,255,255,0.65); line-height:1.7; margin-bottom:28px; }
-.wa-steps { display:flex; flex-direction:column; gap:14px; margin-bottom:32px; }
-.wa-step { display:flex; align-items:flex-start; gap:14px; }
-.wa-step-num { width:34px; height:34px; border-radius:50%; background:var(--wa-green); color:#fff; font-weight:900; font-size:0.88rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.wa-step-text strong { display:block; color:#fff; font-size:0.92rem; font-weight:800; margin-bottom:2px; }
-.wa-step-text span { color:rgba(255,255,255,0.5); font-size:0.82rem; }
-.wa-cta-btn { display:inline-flex; align-items:center; gap:10px; background:var(--wa-green); color:#fff; padding:14px 32px; border-radius:50px; font-weight:900; font-size:1rem; text-decoration:none; box-shadow:0 6px 24px rgba(37,211,102,0.45); transition:all 0.2s; }
-.wa-cta-btn:hover { transform:translateY(-2px); }
-.wa-right { flex:0 0 360px; }
-.wa-phone-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:24px; padding:24px; }
-.wa-phone-header { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-.wa-avatar { width:40px; height:40px; border-radius:50%; background:var(--wa-green); display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
-.wa-chat-name { color:#fff; font-weight:800; font-size:0.92rem; }
-.wa-chat-status { color:var(--wa-green); font-size:0.75rem; }
-.wa-messages { display:flex; flex-direction:column; gap:10px; }
-.wa-msg { padding:10px 14px; border-radius:14px; font-size:0.82rem; line-height:1.5; max-width:85%; }
-.wa-msg.recv { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.85); align-self:flex-start; }
-.wa-msg.sent { background:var(--wa-green); color:#fff; align-self:flex-end; }
-.wa-msg::after { content:attr(data-time); display:block; font-size:0.65rem; opacity:0.6; margin-top:4px; }
-
-/* ── INSTAGRAM ── */
-#instagram { background:linear-gradient(135deg,#F0ABFC22,#A78BFA22); }
-.insta-banner { display:flex; gap:48px; align-items:center; max-width:1100px; margin:0 auto; background:linear-gradient(135deg,#7C3AED,#C026D3); border-radius:32px; padding:48px; color:#fff; }
-.insta-left { flex:1; }
-.insta-left h2 { font-family:'Baloo 2',cursive; font-size:1.8rem; font-weight:900; margin-bottom:10px; }
-.insta-left p { opacity:0.85; line-height:1.7; margin-bottom:14px; }
-.insta-handle { font-size:1.1rem; font-weight:900; margin-bottom:22px; }
-.btn-insta { display:inline-flex; align-items:center; gap:10px; background:#fff; color:#7C3AED; padding:13px 26px; border-radius:50px; font-weight:900; font-size:0.92rem; text-decoration:none; transition:transform 0.2s; }
-.btn-insta:hover { transform:translateY(-2px); }
-.insta-right { display:grid; grid-template-columns:1fr 1fr; gap:12px; flex:0 0 240px; }
-.insta-img { border-radius:16px; overflow:hidden; height:110px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.8rem; }
-.insta-img img { width:100%; height:100%; object-fit:cover; }
-
-/* ── NEWSLETTER ── */
-#newsletter { background:#fff; }
-.newsletter-box { max-width:660px; margin:0 auto; background:linear-gradient(135deg,#F5F3FF,#EDE9FE); border-radius:28px; padding:48px; text-align:center; }
-.nl-form { display:flex; gap:12px; margin-top:24px; }
-.nl-form input { flex:1; padding:14px 18px; border-radius:50px; border:2px solid #E5E7EB; font-size:0.92rem; font-family:inherit; outline:none; transition:border 0.2s; }
-.nl-form input:focus { border-color:var(--violet); }
-.nl-form button { padding:14px 26px; border-radius:50px; background:var(--violet); color:#fff; font-weight:800; font-size:0.92rem; border:none; cursor:pointer; font-family:inherit; white-space:nowrap; }
-.nl-note { font-size:0.78rem; color:#9CA3AF; margin-top:10px; }
-
-/* ── CONTACT ── */
-#contact { background:#FAFAFA; }
-.contact-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:48px; max-width:1000px; margin:0 auto; }
-.cinfo-head { font-size:1.2rem; font-weight:900; color:var(--ink); margin-bottom:10px; }
-.cinfo-body { font-size:0.88rem; color:#6B7280; line-height:1.7; margin-bottom:20px; }
-.cinfo-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-.cinfo-row a { color:var(--violet); text-decoration:none; font-weight:600; font-size:0.88rem; }
-.cinfo-socials { display:flex; gap:10px; margin-top:18px; }
-.csocial { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
-.csocial.insta { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
-.csocial.wa { background:var(--wa-green); }
-.cform { display:flex; flex-direction:column; gap:14px; }
-.cform input, .cform textarea { padding:13px 16px; border-radius:12px; border:2px solid #E5E7EB; font-size:0.92rem; font-family:inherit; outline:none; transition:border 0.2s; }
-.cform input:focus, .cform textarea:focus { border-color:var(--violet); }
-.cform textarea { height:120px; resize:vertical; }
-.cform button { padding:14px; border-radius:12px; background:var(--violet); color:#fff; font-weight:800; font-size:0.95rem; border:none; cursor:pointer; font-family:inherit; }
-
-/* ── FOOTER ── */
-footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
-.footer-inner { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:48px; max-width:1100px; margin:0 auto; padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,0.08); }
-.footer-brand p { font-size:0.86rem; color:rgba(255,255,255,0.5); line-height:1.7; margin-bottom:18px; }
-.footer-socials { display:flex; gap:10px; }
-.fsocial { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; }
-.fsocial.insta { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
-.fsocial.wa { background:var(--wa-green); }
-.footer-col h5 { font-size:0.82rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:rgba(255,255,255,0.5); margin-bottom:14px; }
-.footer-col a { display:block; color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.88rem; margin-bottom:8px; transition:color 0.2s; }
-.footer-col a:hover { color:#fff; }
-.footer-bottom { display:flex; justify-content:space-between; align-items:center; padding:20px 0; max-width:1100px; margin:0 auto; font-size:0.8rem; color:rgba(255,255,255,0.3); }
-
-/* ── FLOATING BUTTONS ── */
-.float-group { position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:12px; z-index:200; }
-.insta-float, .wa-float { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 4px 16px rgba(0,0,0,0.2); transition:transform 0.2s; }
-.insta-float:hover, .wa-float:hover { transform:scale(1.1); }
-.insta-float { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
-.wa-float { background:var(--wa-green); }
-
-/* ── TOAST ── */
-.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:12px 24px; border-radius:50px; font-weight:800; font-size:0.88rem; opacity:0; transition:all 0.3s; z-index:999; white-space:nowrap; pointer-events:none; }
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-/* ── GAMES ── */
-#games { background:linear-gradient(135deg,#FFF7ED,#FEF3C7,#F0FDF4); }
-.games-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:24px; max-width:1100px; margin:0 auto; }
-.game-card { background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.07); transition:transform 0.3s,box-shadow 0.3s; }
-.game-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(124,58,237,0.15); }
-.game-header { padding:22px 22px 0; display:flex; align-items:center; gap:14px; }
-.game-icon { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.7rem; flex-shrink:0; }
-.game-icon.purple{background:linear-gradient(135deg,#EDE9FE,#DDD6FE)} .game-icon.pink{background:linear-gradient(135deg,#FCE7F3,#FBCFE8)} .game-icon.green{background:linear-gradient(135deg,#D1FAE5,#A7F3D0)} .game-icon.yellow{background:linear-gradient(135deg,#FEF3C7,#FDE68A)}
-.game-meta h3 { font-family:'Baloo 2',cursive; font-size:1rem; font-weight:900; color:var(--ink); margin-bottom:3px; }
-.game-meta span { font-size:0.75rem; color:#9CA3AF; font-weight:700; }
-.game-area { padding:18px 22px 22px; }
-.memory-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
-.mem-card { aspect-ratio:1; border-radius:10px; font-size:1.3rem; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; background:linear-gradient(135deg,var(--violet),#A78BFA); transition:transform 0.3s; border:none; color:transparent; }
-.mem-card.flipped { background:#F5F3FF; color:inherit; transform:rotateY(180deg); }
-.mem-card.matched { background:linear-gradient(135deg,var(--mint),#059669); color:#fff; cursor:default; }
-.game-score { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:0.8rem; font-weight:700; color:#6B7280; }
-.game-score-num { background:#EDE9FE; color:var(--violet); padding:3px 10px; border-radius:50px; font-weight:900; }
-.game-btn { width:100%; margin-top:10px; padding:9px; border-radius:10px; border:none; cursor:pointer; font-weight:900; font-size:0.82rem; background:linear-gradient(135deg,var(--violet),#A78BFA); color:#fff; font-family:inherit; }
-.colour-word { font-size:1.8rem; font-weight:900; margin-bottom:6px; text-align:center; }
-.colour-prompt { font-size:0.75rem; color:#9CA3AF; font-weight:700; text-align:center; margin-bottom:12px; }
-.colour-options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-.colour-opt { padding:12px 8px; border-radius:10px; border:3px solid transparent; cursor:pointer; font-weight:900; font-size:0.82rem; color:#fff; transition:transform 0.15s; font-family:inherit; }
-.colour-opt.correct { border-color:var(--mint); }
-.colour-opt.wrong { border-color:var(--offer-red); opacity:0.6; }
-.colour-score { text-align:center; margin-top:8px; font-size:0.78rem; font-weight:900; color:var(--violet); }
-.count-emojis { font-size:1.4rem; line-height:1.8; min-height:56px; word-break:break-all; margin-bottom:8px; text-align:center; }
-.count-question { font-size:0.88rem; font-weight:800; color:var(--ink); margin-bottom:10px; text-align:center; }
-.count-options { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
-.count-opt { padding:9px 4px; border-radius:10px; border:2px solid #E5E7EB; background:#fff; font-weight:900; font-size:1rem; cursor:pointer; font-family:inherit; color:var(--ink); transition:all 0.15s; }
-.count-opt:hover { border-color:var(--violet); background:#EDE9FE; }
-.count-opt.correct { background:var(--mint); border-color:var(--mint); color:#fff; }
-.count-opt.wrong { background:var(--offer-red); border-color:var(--offer-red); color:#fff; }
-.count-result { text-align:center; margin-top:8px; font-size:0.82rem; font-weight:800; min-height:20px; }
-.balloon-area { position:relative; height:170px; background:linear-gradient(180deg,#E0F2FE,#BAE6FD); border-radius:12px; overflow:hidden; margin-bottom:8px; }
-.balloon { position:absolute; font-size:1.9rem; cursor:pointer; animation:balloon-float linear infinite; user-select:none; border:none; background:none; }
-@keyframes balloon-float{from{transform:translateY(200px)}to{transform:translateY(-60px)}}
-.balloon-score { text-align:center; font-size:0.78rem; font-weight:900; color:var(--violet); }
-
-/* ── MOBILE ── */
-@media(max-width:900px){
-  header{padding:12px 16px}
-  .header-search{display:none}
-  nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,0.98);flex-direction:column;justify-content:center;align-items:center;gap:28px;font-size:1.1rem;z-index:300}
-  nav.open{display:flex}
-  .nav-toggle{display:flex}
-  .cart-btn{flex-shrink:0}
-  .hero-inner{flex-direction:column;text-align:center}
-  .hero-mosaic{flex:none;width:100%;max-width:380px;margin:0 auto}
-  .hero-actions{justify-content:center}
-  .stats-strip{flex-wrap:wrap}
-  .wa-section-inner{flex-direction:column}
-  .wa-right{flex:none;width:100%}
-  .insta-banner{flex-direction:column;padding:28px 20px}
-  .contact-grid{grid-template-columns:1fr}
-  .footer-inner{grid-template-columns:1fr 1fr}
-  .nl-form{flex-direction:column}
-  section{padding:56px 18px}
-  .cart-sidebar{width:100%;max-width:100%}
-  .form-row{grid-template-columns:1fr}
-}
-@media(max-width:480px){
-  .modal-box{border-radius:20px}
-  .modal-body{padding:18px 18px 22px}
-}
-
-/* ── REVEAL ── */
-.reveal{opacity:1;transform:translateY(0);transition:opacity 0.6s,transform 0.6s}
-.reveal.hidden-reveal{opacity:0;transform:translateY(20px)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-/* ── PROCESSING SPINNER ── */
-.spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px}
-@keyframes spin{to{transform:rotate(360deg)}}
-```
-
   </style>
 </head>
 <body>
 
-<!-- TOAST -->
-
 <div class="toast" id="toast"></div>
 
-<!-- ══ OFFERS MARQUEE ══ -->
-
-<div class="offers-marquee-wrap">
-  <div class="offers-marquee">
-    <span>🎉 LAUNCH OFFER — Flat 20% OFF on Educational Blocks</span>
-    <span>🚗 Buy 2 Toy Car Sets, Get 1 FREE</span>
-    <span>🧩 Puzzle Toy — ₹399 only (was ₹499)</span>
-    <span>🚚 FREE Delivery on orders above ₹499</span>
-    <span>📱 Order via WhatsApp &amp; get 10% instant discount</span>
-    <span>🎁 Gift wrapping FREE on all orders this week</span>
-    <span>🎉 LAUNCH OFFER — Flat 20% OFF on Educational Blocks</span>
-    <span>🚗 Buy 2 Toy Car Sets, Get 1 FREE</span>
-    <span>🧩 Puzzle Toy — ₹399 only (was ₹499)</span>
-    <span>🚚 FREE Delivery on orders above ₹499</span>
-    <span>📱 Order via WhatsApp &amp; get 10% instant discount</span>
-    <span>🎁 Gift wrapping FREE on all orders this week</span>
-  </div>
-</div>
-
-<!-- ══ HEADER ══ -->
-
-<header>
-  <a href="#" class="logo-box">
-    <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest Logo" style="height:48px;object-fit:contain;" onerror="this.style.display='none';document.getElementById('logoText').style.display='inline'">
-    <span id="logoText" style="display:none;font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:900;color:var(--violet)">🪺 NubeeNest</span>
-  </a>
-  <div class="header-search">
-    <input type="text" placeholder="🔍  Search toys, age groups...">
-    <button class="search-icon"><svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg></button>
-  </div>
-  <div class="header-right">
-    <nav id="main-nav">
-      <a href="#">Home</a>
-      <a href="#products">Products</a>
-      <a href="#wa-order">WhatsApp Order</a>
-      <a href="#stores">Stores</a>
-      <a href="#instagram">Instagram</a>
-      <a href="#games">🎮 Play</a>
-      <a href="#contact" class="nav-cta">Contact Us</a>
-    </nav>
-    <button class="cart-btn" id="cartBtn" onclick="openCart()">
-      🛒 Cart
-      <span class="cart-count hidden" id="cartCount">0</span>
-    </button>
-    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
-  </div>
-</header>
-
-<!-- ══ CART SIDEBAR ══ -->
-
+<!-- CART OVERLAY + SIDEBAR -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 <div class="cart-sidebar" id="cartSidebar">
   <div class="cart-head">
@@ -485,15 +155,15 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
   </div>
   <div class="cart-items" id="cartItems">
     <div class="cart-empty">
-      <div class="empty-icon">🧸</div>
+      <div class="cart-empty-icon">🧸</div>
       <p>Your cart is empty!<br>Add some fun toys 🎉</p>
     </div>
   </div>
   <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="free-shipping-bar" id="shippingBar">🚚 Add ₹<span id="shippingLeft">0</span> more for FREE delivery!</div>
-    <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">₹0</span></div>
-    <div class="cart-subtotal"><span>Delivery</span><span id="cartDelivery">FREE</span></div>
-    <div class="cart-total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <div class="free-bar" id="freeBar">🚚 Add ₹499 more for FREE delivery!</div>
+    <div class="cart-row"><span>Subtotal</span><span id="cSub">₹0</span></div>
+    <div class="cart-row"><span>Delivery</span><span id="cDel">₹49</span></div>
+    <div class="cart-row total"><span>Total</span><span id="cTot">₹0</span></div>
     <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
     <button class="wa-cart-btn" onclick="orderViaWA()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -502,174 +172,186 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
   </div>
 </div>
 
-<!-- ══ CHECKOUT MODAL ══ -->
-
+<!-- CHECKOUT MODAL -->
 <div class="modal-overlay" id="checkoutModal">
   <div class="modal-box">
     <div class="modal-head">
-      <h3 id="modalTitle">Secure Checkout</h3>
+      <h3 id="modalTitle">Secure Checkout 🔒</h3>
       <button class="modal-close" onclick="closeCheckout()">✕</button>
     </div>
     <div class="modal-body">
-      <!-- Step Indicator -->
-      <div class="step-indicator">
-        <div style="display:flex;flex-direction:column;align-items:center">
-          <div class="step-dot active" id="dot1">1</div>
-          <div class="step-label">Login</div>
-        </div>
+      <div class="step-bar">
+        <div class="step-col"><div class="step-dot active" id="dot1">1</div><div class="step-lbl">Login</div></div>
         <div class="step-line" id="line1"></div>
-        <div style="display:flex;flex-direction:column;align-items:center">
-          <div class="step-dot pending" id="dot2">2</div>
-          <div class="step-label">Address</div>
-        </div>
+        <div class="step-col"><div class="step-dot pending" id="dot2">2</div><div class="step-lbl">Address</div></div>
         <div class="step-line" id="line2"></div>
-        <div style="display:flex;flex-direction:column;align-items:center">
-          <div class="step-dot pending" id="dot3">3</div>
-          <div class="step-label">Payment</div>
+        <div class="step-col"><div class="step-dot pending" id="dot3">3</div><div class="step-lbl">Payment</div></div>
+      </div>
+
+      <!-- Phone panel -->
+      <div class="step-panel active" id="pPhone">
+        <p style="font-size:0.9rem;color:var(--ink-soft);margin-bottom:18px;font-family:'Fredoka',sans-serif;">Enter your mobile number to get an OTP.</p>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <div class="phone-row">
+            <input class="cc-box" value="+91" readonly>
+            <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="12" inputmode="numeric" style="flex:1" oninput="this.value=this.value.replace(/[^0-9\s]/g,'')">
+          </div>
+        </div>
+        <button class="modal-btn" onclick="sendOTP()">Send OTP →</button>
+      </div>
+
+      <!-- OTP panel -->
+      <div class="step-panel" id="pOTP">
+        <p style="font-size:0.9rem;color:var(--ink-soft);text-align:center;font-family:'Fredoka',sans-serif;">OTP sent to <strong id="otpNum"></strong></p>
+        <p style="font-size:0.82rem;color:var(--violet);text-align:center;font-weight:700;margin-top:4px;font-family:'Fredoka',sans-serif;">Demo OTP: 1 2 3 4</p>
+        <div class="otp-boxes">
+          <input class="otp-box" maxlength="1" id="ob1" oninput="oNext(this,'ob2')" onkeydown="oBk(event,this,'')">
+          <input class="otp-box" maxlength="1" id="ob2" oninput="oNext(this,'ob3')" onkeydown="oBk(event,this,'ob1')">
+          <input class="otp-box" maxlength="1" id="ob3" oninput="oNext(this,'ob4')" onkeydown="oBk(event,this,'ob2')">
+          <input class="otp-box" maxlength="1" id="ob4" oninput="oNext(this,'')"    onkeydown="oBk(event,this,'ob3')">
+        </div>
+        <p class="otp-note">Didn't get it? <span onclick="showToast('📱 Resent! Use 1234')">Resend OTP</span></p>
+        <button class="modal-btn" onclick="verifyOTP()">Verify & Continue →</button>
+        <span class="back-link" onclick="showP('pPhone')">← Change number</span>
+      </div>
+
+      <!-- Address panel -->
+      <div class="step-panel" id="pAddr">
+        <p style="font-size:0.88rem;color:var(--ink-soft);margin-bottom:16px;font-family:'Fredoka',sans-serif;">Where should we deliver your order?</p>
+        <div class="form-group"><label>Full Name</label><input type="text" id="aN" placeholder="Your full name"></div>
+        <div class="form-group"><label>Flat / Building</label><input type="text" id="aL1" placeholder="Flat 4B, Sunshine Apartments"></div>
+        <div class="form-group"><label>Street / Locality</label><input type="text" id="aL2" placeholder="MG Road, Indiranagar"></div>
+        <div class="form-row-2">
+          <div class="form-group" style="margin-bottom:0"><label>City</label><input type="text" id="aC" placeholder="Bangalore"></div>
+          <div class="form-group" style="margin-bottom:0"><label>PIN Code</label><input type="text" id="aP" placeholder="560001" maxlength="6" inputmode="numeric"></div>
+        </div>
+        <div class="form-group" style="margin-top:12px"><label>State</label>
+          <select id="aSt">
+            <option value="">Select State</option>
+            <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+            <option>Delhi</option><option>Goa</option><option>Gujarat</option>
+            <option>Haryana</option><option>Karnataka</option><option>Kerala</option>
+            <option>Madhya Pradesh</option><option>Maharashtra</option><option>Odisha</option>
+            <option>Punjab</option><option>Rajasthan</option><option>Tamil Nadu</option>
+            <option>Telangana</option><option>Uttar Pradesh</option><option>West Bengal</option>
+          </select>
+        </div>
+        <button class="modal-btn" onclick="goToPay()">Continue to Payment →</button>
+        <span class="back-link" onclick="goStep(1)">← Back</span>
+      </div>
+
+      <!-- Payment panel -->
+      <div class="step-panel" id="pPay">
+        <div class="order-mini">
+          <h4>Order Summary</h4>
+          <div id="miniItems"></div>
+          <div class="mini-row"><span>Subtotal</span><span id="mSub"></span></div>
+          <div class="mini-row"><span>Delivery</span><span id="mDel"></span></div>
+          <div class="mini-row total"><span>Total</span><span id="mTot"></span></div>
+        </div>
+        <div class="pay-opts">
+          <label class="pay-opt sel" id="optUPI">
+            <input type="radio" name="pay" value="upi" checked onchange="selPay(this)">
+            <span class="pay-icon">📱</span>
+            <div class="pay-label"><strong>UPI</strong><span>GPay, PhonePe, Paytm</span></div>
+          </label>
+          <div class="upi-extra show" id="upiF">
+            <div class="form-group" style="margin-bottom:0"><label>UPI ID</label><input type="text" placeholder="yourname@upi" value="6362391450@upi"></div>
+          </div>
+          <label class="pay-opt" id="optCard">
+            <input type="radio" name="pay" value="card" onchange="selPay(this)">
+            <span class="pay-icon">💳</span>
+            <div class="pay-label"><strong>Credit / Debit Card</strong><span>Visa, Mastercard, RuPay</span></div>
+          </label>
+          <div class="card-fields-modal" id="cardF">
+            <div class="form-group"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)"></div>
+            <div class="form-row-2">
+              <div class="form-group" style="margin-bottom:0"><label>Expiry</label><input type="text" placeholder="MM/YY" maxlength="5"></div>
+              <div class="form-group" style="margin-bottom:0"><label>CVV</label><input type="text" placeholder="123" maxlength="3"></div>
+            </div>
+            <div class="form-group" style="margin-top:12px"><label>Name on Card</label><input type="text" placeholder="Your full name"></div>
+          </div>
+          <label class="pay-opt" id="optCOD">
+            <input type="radio" name="pay" value="cod" onchange="selPay(this)">
+            <span class="pay-icon">💵</span>
+            <div class="pay-label"><strong>Cash on Delivery</strong><span>Pay when it arrives</span></div>
+          </label>
+        </div>
+        <button class="pay-now-btn" id="payBtn" onclick="placeOrder()">Pay Now & Confirm Order 🎉</button>
+        <span class="back-link" onclick="goStep(2)">← Back to Address</span>
+      </div>
+
+      <!-- Success panel -->
+      <div class="step-panel" id="pSuccess">
+        <div class="success-wrap">
+          <span class="success-anim">🎉</span>
+          <h2>Order Placed!</h2>
+          <p>Your NubeeNest toys are on their way!<br>Expected delivery in <strong>2–3 business days</strong>.</p>
+          <div class="order-badge" id="orderId">Order #NN-000000</div>
+          <p style="font-size:0.82rem;color:#9CA3AF;margin-bottom:20px;font-family:'Fredoka',sans-serif;">Confirmation sent to your WhatsApp.</p>
+          <button class="cont-btn" onclick="closeCheckout();clearCart()">Continue Shopping 🛍️</button>
         </div>
       </div>
-
-```
-  <!-- STEP 1a: Phone Entry -->
-  <div class="otp-step active" id="phoneStep">
-    <p style="font-size:0.9rem;color:#6B7280;margin-bottom:20px;">Enter your mobile number to continue. We'll send you an OTP to verify.</p>
-    <div class="input-group">
-      <label>Mobile Number</label>
-      <div class="phone-row">
-        <input class="country-code" value="+91" readonly>
-        <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="12" inputmode="numeric" style="flex:1" oninput="this.value=this.value.replace(/[^0-9\s]/g,'')">
-      </div>
     </div>
-    <button class="send-otp-btn" onclick="sendOTP()">Send OTP →</button>
-  </div>
-
-  <!-- STEP 1b: OTP Verify -->
-  <div class="otp-step" id="otpStep">
-    <p style="font-size:0.9rem;color:#6B7280;margin-bottom:8px;text-align:center;">OTP sent to <strong id="otpPhone"></strong></p>
-    <div class="otp-boxes">
-      <input class="otp-box" maxlength="1" id="otp1" oninput="otpNext(this,'otp2')" onkeydown="otpBack(event,this,'')">
-      <input class="otp-box" maxlength="1" id="otp2" oninput="otpNext(this,'otp3')" onkeydown="otpBack(event,this,'otp1')">
-      <input class="otp-box" maxlength="1" id="otp3" oninput="otpNext(this,'otp4')" onkeydown="otpBack(event,this,'otp2')">
-      <input class="otp-box" maxlength="1" id="otp4" oninput="otpNext(this,'')" onkeydown="otpBack(event,this,'otp3')">
-    </div>
-    <p class="otp-note">Didn't receive? <span onclick="resendOTP()">Resend OTP</span> · Demo OTP: <strong>1234</strong></p>
-    <button class="verify-btn" onclick="verifyOTP()">Verify & Continue →</button>
-    <span class="back-link" onclick="showPhoneStep()">← Change number</span>
-  </div>
-
-  <!-- STEP 2: Address -->
-  <div class="address-step" id="addressStep">
-    <p style="font-size:0.88rem;color:#6B7280;margin-bottom:18px;">Where should we deliver your order?</p>
-    <div class="input-group">
-      <label>Full Name</label>
-      <input type="text" id="addrName" placeholder="Your full name">
-    </div>
-    <div class="input-group">
-      <label>Flat / House / Building No.</label>
-      <input type="text" id="addrLine1" placeholder="e.g. Flat 4B, Sunshine Apartments">
-    </div>
-    <div class="input-group">
-      <label>Street / Locality</label>
-      <input type="text" id="addrLine2" placeholder="e.g. MG Road, Indiranagar">
-    </div>
-    <div class="form-row">
-      <div class="input-group" style="margin-bottom:0">
-        <label>City</label>
-        <input type="text" id="addrCity" placeholder="Bangalore">
-      </div>
-      <div class="input-group" style="margin-bottom:0">
-        <label>PIN Code</label>
-        <input type="text" id="addrPin" placeholder="560001" maxlength="6">
-      </div>
-    </div>
-    <div class="input-group" style="margin-top:14px">
-      <label>State</label>
-      <select id="addrState">
-        <option value="">Select State</option>
-        <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
-        <option>Delhi</option><option>Goa</option><option>Gujarat</option>
-        <option>Haryana</option><option>Karnataka</option><option>Kerala</option>
-        <option>Madhya Pradesh</option><option>Maharashtra</option><option>Odisha</option>
-        <option>Punjab</option><option>Rajasthan</option><option>Tamil Nadu</option>
-        <option>Telangana</option><option>Uttar Pradesh</option><option>West Bengal</option>
-      </select>
-    </div>
-    <button class="continue-btn" onclick="goToPayment()">Continue to Payment →</button>
-    <span class="back-link" onclick="goToStep(1)">← Back</span>
-  </div>
-
-  <!-- STEP 3: Payment -->
-  <div class="payment-step" id="paymentStep">
-    <div class="order-summary-mini">
-      <h4>Order Summary</h4>
-      <div id="summaryItems"></div>
-      <div class="summary-row"><span>Subtotal</span><span id="sumSubtotal"></span></div>
-      <div class="summary-row"><span>Delivery</span><span id="sumDelivery">FREE 🎉</span></div>
-      <div class="summary-row total"><span>Total</span><span id="sumTotal"></span></div>
-    </div>
-    <div class="payment-methods">
-      <label class="pay-opt selected" id="payUPI">
-        <input type="radio" name="payMethod" value="upi" checked onchange="selectPay(this)">
-        <span class="pay-opt-icon">📱</span>
-        <div class="pay-opt-label"><strong>UPI</strong><span>Google Pay, PhonePe, Paytm</span></div>
-      </label>
-      <div class="upi-input show" id="upiIdInput">
-        <div class="input-group" style="margin-bottom:0">
-          <label>Enter UPI ID</label>
-          <input type="text" id="upiId" placeholder="yourname@upi" value="6362391450@upi">
-        </div>
-      </div>
-      <label class="pay-opt" id="payCard">
-        <input type="radio" name="payMethod" value="card" onchange="selectPay(this)">
-        <span class="pay-opt-icon">💳</span>
-        <div class="pay-opt-label"><strong>Credit / Debit Card</strong><span>Visa, Mastercard, RuPay</span></div>
-      </label>
-      <label class="pay-opt" id="payCOD">
-        <input type="radio" name="payMethod" value="cod" onchange="selectPay(this)">
-        <span class="pay-opt-icon">💵</span>
-        <div class="pay-opt-label"><strong>Cash on Delivery</strong><span>Pay when it arrives</span></div>
-      </label>
-    </div>
-    <!-- Card fields (shown on card select) -->
-    <div id="cardFields" style="display:none">
-      <div class="input-group"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)"></div>
-      <div class="form-row">
-        <div class="input-group" style="margin-bottom:0"><label>Expiry</label><input type="text" placeholder="MM/YY" maxlength="5"></div>
-        <div class="input-group" style="margin-bottom:0"><label>CVV</label><input type="text" placeholder="123" maxlength="3"></div>
-      </div>
-      <div class="input-group" style="margin-top:14px"><label>Name on Card</label><input type="text" placeholder="Your full name"></div>
-    </div>
-    <button class="pay-now-btn" onclick="placeOrder()" id="payNowBtn">Pay Now & Confirm Order 🎉</button>
-    <span class="back-link" onclick="goToStep(2)">← Back to Address</span>
-  </div>
-
-  <!-- STEP 4: Success -->
-  <div class="success-step" id="successStep">
-    <span class="success-anim">🎉</span>
-    <h2>Order Placed!</h2>
-    <p>Your NubeeNest toys are on their way!<br>Expected delivery in <strong>2–3 business days</strong>.</p>
-    <div class="order-id" id="orderIdDisplay">Order #NN-000000</div>
-    <p style="font-size:0.82rem;color:#9CA3AF;margin-bottom:20px;">A confirmation will be sent to your WhatsApp number.</p>
-    <button class="continue-shopping" onclick="closeCheckout();clearCart()">Continue Shopping 🛍️</button>
-  </div>
-</div>
-```
-
   </div>
 </div>
 
-<!-- ══ HERO ══ -->
+<!-- OFFERS MARQUEE -->
+<div class="offers-marquee-wrap">
+  <div class="offers-marquee">
+    <span>🎉 LAUNCH OFFER — Flat 20% OFF on Educational Blocks</span>
+    <span>🚗 Buy 2 Toy Car Sets, Get 1 FREE</span>
+    <span>🧩 Puzzle Toy — ₹449 only (was ₹599)</span>
+    <span>🚚 FREE Delivery on orders above ₹499</span>
+    <span>📱 Order via WhatsApp &amp; get 10% instant discount</span>
+    <span>🎁 Gift wrapping FREE on all orders this week</span>
+    <span>🎉 LAUNCH OFFER — Flat 20% OFF on Educational Blocks</span>
+    <span>🚗 Buy 2 Toy Car Sets, Get 1 FREE</span>
+    <span>🧩 Puzzle Toy — ₹449 only (was ₹599)</span>
+    <span>🚚 FREE Delivery on orders above ₹499</span>
+    <span>📱 Order via WhatsApp &amp; get 10% instant discount</span>
+    <span>🎁 Gift wrapping FREE on all orders this week</span>
+  </div>
+</div>
 
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo-box">
+    <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest Logo"
+         onerror="this.style.display='none';document.getElementById('lf').style.display='inline'">
+    <span id="lf" style="display:none;font-family:'Fredoka',sans-serif;font-size:1.5rem;font-weight:700;color:var(--violet)">🪺 NubeeNest</span>
+  </a>
+  <nav id="mainNav">
+    <a href="#">Home</a>
+    <a href="#products">Products</a>
+    <a href="#wa-order">WhatsApp Order</a>
+    <a href="#stores">Stores</a>
+    <a href="#instagram">Instagram</a>
+    <a href="#contact" class="nav-cta">Contact Us</a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Cart
+      <span class="cart-count hidden" id="cartCount">0</span>
+    </button>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
 <section class="hero">
-  <div class="blob blob-a"></div><div class="blob blob-b"></div><div class="blob blob-c"></div>
+  <div class="blob blob-a"></div><div class="blob blob-b"></div>
+  <div class="blob blob-c"></div><div class="blob blob-d"></div>
+  <div class="hero-dots"></div>
   <div class="hero-inner">
     <div class="hero-text">
       <div class="hero-pill">🌟 Trusted by 500+ Families</div>
-      <h1><span class="c1">Play</span> · <span class="c2">Learn</span> · <span class="c3">Grow</span></h1>
+      <h1><span class="c1">Play</span> &amp; <span class="c2">Learn</span><br>Watch Them <span class="c3">Grow!</span></h1>
       <p>Creative toys thoughtfully crafted to spark curiosity, build little skills, and fill every day with joy.</p>
       <div class="hero-actions">
-        <a href="#products" class="btn-primary">Shop Now 🛍️</a>
-        <a href="#wa-order" class="btn-secondary">📱 Order on WhatsApp</a>
+        <a href="#products" class="btn-primary">Shop Now</a>
+        <a href="#wa-order" class="btn-secondary">📱 WhatsApp Order</a>
       </div>
     </div>
     <div class="hero-mosaic">
@@ -680,22 +362,20 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
   </div>
 </section>
 
-<!-- ══ STATS ══ -->
-
+<!-- STATS -->
 <div class="stats-strip">
   <div class="stat"><span class="stat-num">500+</span><span class="stat-lbl">Happy Families</span></div>
   <div class="stat"><span class="stat-num">30+</span><span class="stat-lbl">Toy Collections</span></div>
   <div class="stat"><span class="stat-num">3</span><span class="stat-lbl">Platforms</span></div>
-  <div class="stat"><span class="stat-num">4.9 ★</span><span class="stat-lbl">Avg. Rating</span></div>
+  <div class="stat"><span class="stat-num">4.9★</span><span class="stat-lbl">Avg. Rating</span></div>
 </div>
 
-<!-- ══ PRODUCTS ══ -->
-
+<!-- PRODUCTS -->
 <section id="products">
   <div class="sec-center">
     <div class="sec-eyebrow">✨ Our Toys</div>
     <h2 class="sec-title">Kids Can't Stop Playing 🎉</h2>
-    <p class="sec-sub">Every toy is designed to delight, educate, and grow with your child — safe, vibrant, and built to last.</p>
+    <p class="sec-sub">Every toy designed to delight, educate, and grow with your child — safe, vibrant, built to last.</p>
     <div class="age-filter">
       <button class="age-btn active" data-age="all">All Ages</button>
       <button class="age-btn" data-age="2">Age 2+</button>
@@ -707,19 +387,18 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     <div class="product-card reveal" data-age="3">
       <div class="product-img-wrap">
         <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=700&q=80" alt="Educational Blocks">
-        <div class="prod-emoji">🧱</div><div class="prod-age">Age 3+</div><div class="offer-badge">20% OFF</div>
+        <div class="prod-emoji">🧱</div><div class="prod-age">Age 3+</div>
+        <div class="offer-badge">20% OFF</div>
       </div>
       <div class="product-info">
         <h3>Educational Blocks</h3>
         <p>Colourful stacking blocks that teach shapes, colours, and motor skills through hands-on play.</p>
-        <div class="price-block">
-          <span class="price-now">₹399</span><span class="price-was">₹499</span><span class="price-save">Save ₹100</span>
-        </div>
+        <div class="price-block"><span class="price-now">₹399</span><span class="price-was">₹499</span><span class="price-save">Save ₹100</span></div>
         <div class="card-btns">
-          <button class="add-cart-btn" onclick="addToCart('Educational Blocks','🧱',399,'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=200&q=80')">🛒 Add to Cart</button>
-          <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20order%20Educational%20Blocks%20at%20%E2%82%B9399." target="_blank" class="wa-order-btn">
+          <button class="add-cart-btn" onclick="addToCart('Educational Blocks','🧱',399)">🛒 Add to Cart</button>
+          <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20Educational%20Blocks%20at%20%E2%82%B9399." target="_blank" class="wa-prod-btn">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            WhatsApp
+            Order on WhatsApp
           </a>
         </div>
       </div>
@@ -727,19 +406,18 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     <div class="product-card reveal" data-age="4">
       <div class="product-img-wrap">
         <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=700&q=80" alt="Puzzle Toy">
-        <div class="prod-emoji">🧩</div><div class="prod-age">Age 4+</div><div class="offer-badge">Best Seller</div>
+        <div class="prod-emoji">🧩</div><div class="prod-age">Age 4+</div>
+        <div class="offer-badge">Best Seller</div>
       </div>
       <div class="product-info">
         <h3>Puzzle Toy</h3>
         <p>Chunky, vibrant puzzles that sharpen problem-solving and keep little minds engaged for hours.</p>
-        <div class="price-block">
-          <span class="price-now">₹449</span><span class="price-was">₹599</span><span class="price-save">Save ₹150</span>
-        </div>
+        <div class="price-block"><span class="price-now">₹449</span><span class="price-was">₹599</span><span class="price-save">Save ₹150</span></div>
         <div class="card-btns">
-          <button class="add-cart-btn" onclick="addToCart('Puzzle Toy','🧩',449,'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=200&q=80')">🛒 Add to Cart</button>
-          <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20order%20the%20Puzzle%20Toy%20at%20%E2%82%B9449." target="_blank" class="wa-order-btn">
+          <button class="add-cart-btn" onclick="addToCart('Puzzle Toy','🧩',449)">🛒 Add to Cart</button>
+          <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20Puzzle%20Toy%20at%20%E2%82%B9449." target="_blank" class="wa-prod-btn">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            WhatsApp
+            Order on WhatsApp
           </a>
         </div>
       </div>
@@ -747,19 +425,18 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     <div class="product-card reveal" data-age="2">
       <div class="product-img-wrap">
         <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=700&q=80" alt="Toy Car Set">
-        <div class="prod-emoji">🚗</div><div class="prod-age">Age 2+</div><div class="offer-badge">Buy 2 Get 1</div>
+        <div class="prod-emoji">🚗</div><div class="prod-age">Age 2+</div>
+        <div class="offer-badge">Buy 2 Get 1</div>
       </div>
       <div class="product-info">
         <h3>Toy Car Set</h3>
         <p>Bright, durable toy cars for imaginative races, ramps, and adventures big or small.</p>
-        <div class="price-block">
-          <span class="price-now">₹299</span><span class="price-was">₹399</span><span class="price-save">Buy 2 Get 1 Free</span>
-        </div>
+        <div class="price-block"><span class="price-now">₹299</span><span class="price-was">₹399</span><span class="price-save">Buy 2 Get 1 Free</span></div>
         <div class="card-btns">
-          <button class="add-cart-btn" onclick="addToCart('Toy Car Set','🚗',299,'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=200&q=80')">🛒 Add to Cart</button>
-          <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20order%20Toy%20Car%20Set%20with%20Buy%202%20Get%201%20Free." target="_blank" class="wa-order-btn">
+          <button class="add-cart-btn" onclick="addToCart('Toy Car Set','🚗',299)">🛒 Add to Cart</button>
+          <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20Toy%20Car%20Set%20Buy%202%20Get%201%20Free." target="_blank" class="wa-prod-btn">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            WhatsApp
+            Order on WhatsApp
           </a>
         </div>
       </div>
@@ -767,44 +444,36 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
   </div>
 </section>
 
-<!-- ══ WA ORDER ══ -->
-
-<section id="wa-order">
-  <div class="wa-section-inner">
-    <div class="wa-left">
-      <div class="wa-eyebrow">📱 WhatsApp Ordering</div>
-      <h2>Order Directly on <span>WhatsApp</span> — It's That Easy!</h2>
-      <p>No apps, no complicated checkouts. Just tap, message, and your favourite toy is on its way. Get an <strong style="color:var(--wa-green)">instant 10% discount</strong> when you order via WhatsApp!</p>
-      <div class="wa-steps">
-        <div class="wa-step"><div class="wa-step-num">1</div><div class="wa-step-text"><strong>Pick Your Toy</strong><span>Browse products and click "Add to Cart" or "WhatsApp"</span></div></div>
-        <div class="wa-step"><div class="wa-step-num">2</div><div class="wa-step-text"><strong>We Confirm Your Order</strong><span>We reply quickly with price, availability & delivery date</span></div></div>
-        <div class="wa-step"><div class="wa-step-num">3</div><div class="wa-step-text"><strong>Pay & Receive</strong><span>Pay via UPI / bank transfer. We ship it right to your door!</span></div></div>
-      </div>
-      <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20browse%20and%20order." target="_blank" class="wa-cta-btn">
+<!-- WHATSAPP ORDER -->
+<section id="wa-order" style="background:linear-gradient(135deg,#0D1F12,#1A3324);padding:80px 64px;">
+  <div style="max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:60px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:260px;">
+      <div style="color:#25D366;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;font-family:'Fredoka',sans-serif;">📱 WhatsApp Ordering</div>
+      <h2 style="font-family:'Fredoka',sans-serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;color:#fff;line-height:1.2;margin-bottom:16px;">Order on <span style="color:#25D366">WhatsApp</span><br>— Instant 10% Off!</h2>
+      <p style="font-size:1rem;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:28px;font-family:'Fredoka',sans-serif;">No apps, no complicated checkouts. Just tap, message, and your favourite toy is on its way!</p>
+      <a href="https://wa.me/916362391450?text=Hi%20NubeeNest!%20I%27d%20like%20to%20browse%20and%20order." target="_blank"
+         style="display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:14px 32px;border-radius:50px;font-weight:700;font-size:1rem;text-decoration:none;font-family:'Fredoka',sans-serif;box-shadow:0 6px 24px rgba(37,211,102,0.45);">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Start Ordering Now
       </a>
     </div>
-    <div class="wa-right">
-      <div class="wa-phone-card">
-        <div class="wa-phone-header">
-          <div class="wa-avatar">🪺</div>
-          <div><div class="wa-chat-name">NubeeNest</div><div class="wa-chat-status">● Online</div></div>
-        </div>
-        <div class="wa-messages">
-          <div class="wa-msg recv" data-time="10:31 AM">Hi! Welcome to NubeeNest 🎉 What toy can I help you with?</div>
-          <div class="wa-msg sent" data-time="10:32 AM">Hi! I'd like to order Educational Blocks 🧱</div>
-          <div class="wa-msg recv" data-time="10:32 AM">Great! ₹399 (was ₹499). Free delivery above ₹499. Confirm? 🚚</div>
-          <div class="wa-msg sent" data-time="10:33 AM">Yes please! Deliver to Mumbai 😊</div>
-          <div class="wa-msg recv" data-time="10:33 AM">Order confirmed! 🎊 Arriving in 2–3 days. Pay via UPI: 6362391450@upi</div>
-        </div>
+    <div style="flex:0 0 320px;min-width:260px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:24px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🪺</div>
+        <div><div style="color:#fff;font-weight:700;font-family:'Fredoka',sans-serif;">NubeeNest</div><div style="color:#25D366;font-size:0.75rem;font-family:'Fredoka',sans-serif;">● Online</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.85);padding:10px 14px;border-radius:14px;font-size:0.82rem;line-height:1.5;align-self:flex-start;max-width:85%;font-family:'Fredoka',sans-serif;">Hi! Welcome to NubeeNest 🎉 What toy can I help you with?</div>
+        <div style="background:#25D366;color:#fff;padding:10px 14px;border-radius:14px;font-size:0.82rem;align-self:flex-end;max-width:85%;font-family:'Fredoka',sans-serif;">Hi! I'd like Educational Blocks 🧱</div>
+        <div style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.85);padding:10px 14px;border-radius:14px;font-size:0.82rem;align-self:flex-start;max-width:85%;font-family:'Fredoka',sans-serif;">₹399 (was ₹499). Free delivery above ₹499. Confirm? 🚚</div>
+        <div style="background:#25D366;color:#fff;padding:10px 14px;border-radius:14px;font-size:0.82rem;align-self:flex-end;max-width:85%;font-family:'Fredoka',sans-serif;">Yes! Mumbai 😊</div>
+        <div style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.85);padding:10px 14px;border-radius:14px;font-size:0.82rem;align-self:flex-start;max-width:85%;font-family:'Fredoka',sans-serif;">Confirmed! 🎊 2–3 days. Pay: 6362391450@upi</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ WHY US ══ -->
-
+<!-- WHY US -->
 <section id="why">
   <div class="sec-center">
     <div class="sec-eyebrow">💛 Why NubeeNest</div>
@@ -812,15 +481,14 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     <p class="sec-sub">We believe every toy should inspire joy, build skills, and guarantee safe, happy playtime.</p>
   </div>
   <div class="why-grid">
-    <div class="why-card reveal"><span class="why-icon">🛡️</span><h4>100% Safe Materials</h4><p>All toys are non-toxic, BPA-free, and certified safe for babies and toddlers.</p></div>
-    <div class="why-card reveal"><span class="why-icon">🎨</span><h4>Bright &amp; Colourful</h4><p>Vibrant designs that stimulate visual development and keep kids excited to play.</p></div>
+    <div class="why-card reveal"><span class="why-icon">🛡️</span><h4>100% Safe Materials</h4><p>Non-toxic, BPA-free, certified safe for babies and toddlers.</p></div>
+    <div class="why-card reveal"><span class="why-icon">🎨</span><h4>Bright &amp; Colourful</h4><p>Vibrant designs that stimulate visual development and keep kids excited.</p></div>
     <div class="why-card reveal"><span class="why-icon">🧠</span><h4>Skill-Building Play</h4><p>Each toy nurtures motor skills, creativity, and cognitive growth.</p></div>
-    <div class="why-card reveal"><span class="why-icon">🚀</span><h4>Fast Delivery</h4><p>Quick, careful shipping right to your door — so the fun starts sooner.</p></div>
+    <div class="why-card reveal"><span class="why-icon">🚀</span><h4>Fast Delivery</h4><p>Quick, careful shipping right to your door — fun starts sooner.</p></div>
   </div>
 </section>
 
-<!-- ══ TESTIMONIALS ══ -->
-
+<!-- TESTIMONIALS -->
 <section id="testimonials">
   <div class="sec-center">
     <div class="sec-eyebrow">💬 Happy Parents</div>
@@ -829,117 +497,58 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
   </div>
   <div class="testimonials-track-wrap">
     <div class="testimonials-track">
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>My 3-year-old loves the building blocks! Quality is amazing — no sharp edges, super colourful.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--violet)">P</div><div><div class="tcard-name">Priya M.</div><div class="tcard-meta">Mom · Bangalore</div></div></div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>The puzzle toy kept my daughter busy for hours! Delivery was super fast. Will order again.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">R</div><div><div class="tcard-name">Rahul S.</div><div class="tcard-meta">Dad · Mumbai</div></div></div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>Ordered via WhatsApp — so easy! Got a reply in 2 minutes and toy arrived in 2 days. Amazing!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--wa-green)">A</div><div><div class="tcard-name">Anita K.</div><div class="tcard-meta">Aunt · Chennai</div></div></div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>Genuinely educational. Seen my son's motor skills improve so much. Totally worth it!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--sun);color:var(--ink)">S</div><div><div class="tcard-name">Sneha D.</div><div class="tcard-meta">Mom · Pune</div></div></div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>The 20% offer on blocks was a steal. WhatsApp ordering is so convenient — no complicated checkout!</p><div class="tcard-author"><div class="tcard-avatar" style="background:#6C3CE1">V</div><div><div class="tcard-name">Vikram R.</div><div class="tcard-meta">Dad · Hyderabad</div></div></div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>My twins both got a puzzle set and they race to finish them — so much fun! Highly recommend.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">M</div><div><div class="tcard-name">Meena T.</div><div class="tcard-meta">Mom · Delhi</div></div></div></div>
-      <!-- duplicates for loop -->
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>My 3-year-old loves the building blocks! Quality is amazing — no sharp edges, super colourful.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--violet)">P</div><div><div class="tcard-name">Priya M.</div><div class="tcard-meta">Mom · Bangalore</div></div></div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>The puzzle toy kept my daughter busy for hours! Delivery was super fast. Will order again.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">R</div><div><div class="tcard-name">Rahul S.</div><div class="tcard-meta">Dad · Mumbai</div></div></div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>Ordered via WhatsApp — so easy! Got a reply in 2 minutes and toy arrived in 2 days. Amazing!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--wa-green)">A</div><div><div class="tcard-name">Anita K.</div><div class="tcard-meta">Aunt · Chennai</div></div></div></div>
-      <div class="tcard"><div class="tcard-stars">★★★★★</div><p>Genuinely educational. Seen my son's motor skills improve so much. Totally worth it!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--sun);color:var(--ink)">S</div><div><div class="tcard-name">Sneha D.</div><div class="tcard-meta">Mom · Pune</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>My 3-year-old loves the building blocks! No sharp edges, super colourful.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--violet)">P</div><div><div class="tcard-name">Priya M.</div><div class="tcard-meta">Mom · Bangalore</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>Puzzle toy kept my daughter busy for hours! Super fast delivery. Will order again.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">R</div><div><div class="tcard-name">Rahul S.</div><div class="tcard-meta">Dad · Mumbai</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>Ordered via WhatsApp — so easy! Reply in 2 minutes, toy in 2 days!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--mint)">A</div><div><div class="tcard-name">Anita K.</div><div class="tcard-meta">Aunt · Chennai</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>Genuinely educational. My son's motor skills improved so much. Worth it!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--sun);color:var(--ink)">S</div><div><div class="tcard-name">Sneha D.</div><div class="tcard-meta">Mom · Pune</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>The 20% offer on blocks was a steal! WhatsApp ordering is so convenient.</p><div class="tcard-author"><div class="tcard-avatar" style="background:#6C3CE1">V</div><div><div class="tcard-name">Vikram R.</div><div class="tcard-meta">Dad · Hyderabad</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>My twins race to finish their puzzles — so much fun! Highly recommend.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">M</div><div><div class="tcard-name">Meena T.</div><div class="tcard-meta">Mom · Delhi</div></div></div></div>
+      <!-- duplicates -->
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>My 3-year-old loves the building blocks! No sharp edges, super colourful.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--violet)">P</div><div><div class="tcard-name">Priya M.</div><div class="tcard-meta">Mom · Bangalore</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>Puzzle toy kept my daughter busy for hours! Super fast delivery. Will order again.</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--blush)">R</div><div><div class="tcard-name">Rahul S.</div><div class="tcard-meta">Dad · Mumbai</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>Ordered via WhatsApp — so easy! Reply in 2 minutes, toy in 2 days!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--mint)">A</div><div><div class="tcard-name">Anita K.</div><div class="tcard-meta">Aunt · Chennai</div></div></div></div>
+      <div class="tcard"><div class="tcard-quote">"</div><div class="tcard-stars">★★★★★</div><p>Genuinely educational. My son's motor skills improved so much. Worth it!</p><div class="tcard-author"><div class="tcard-avatar" style="background:var(--sun);color:var(--ink)">S</div><div><div class="tcard-name">Sneha D.</div><div class="tcard-meta">Mom · Pune</div></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- ══ STORES ══ -->
-
+<!-- STORES -->
 <section id="stores">
   <div class="sec-center">
     <div class="sec-eyebrow">🛍️ Available On</div>
     <h2 class="sec-title">Shop Wherever You Like</h2>
-    <p class="sec-sub">NubeeNest toys are on all major platforms — pick your favourite and start shopping!</p>
+    <p class="sec-sub">NubeeNest toys are on all major platforms — pick your favourite!</p>
   </div>
   <div class="stores-wrap">
-    <a href="https://amzn.in/d/06avxXTL" target="_blank" class="store-card amazon reveal">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
-      <span>Shop on Amazon</span>
-    </a>
-    <a href="#" class="store-card flipkart reveal">
-      <svg height="36" viewBox="0 0 120 36" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="36" rx="4" fill="#2874F0"/><text x="10" y="26" font-family="Arial,sans-serif" font-weight="900" font-size="22" fill="white">flipkart</text></svg>
-      <span>Shop on Flipkart</span>
-    </a>
-    <a href="#" class="store-card shopify reveal">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg" alt="Shopify">
-      <span>Shop on Shopify</span>
-    </a>
+    <a href="https://amzn.in/d/06avxXTL" target="_blank" class="store-btn amazon reveal">Amazon</a>
+    <a href="#" class="store-btn flipkart reveal">Flipkart</a>
+    <a href="#" class="store-btn shopify reveal">Shopify</a>
   </div>
 </section>
 
-<!-- ══ INSTAGRAM ══ -->
-
+<!-- INSTAGRAM -->
 <section id="instagram">
   <div class="insta-banner reveal">
     <div class="insta-left">
-      <div style="font-size:2.2rem;margin-bottom:10px">📸</div>
+      <div class="insta-icon">📸</div>
       <h2>Follow Us on Instagram!</h2>
       <p>See our toys in action, get parenting inspiration, and join a community of happy families.</p>
-      <div class="insta-handle">@nubeenest.in</div><br>
+      <div class="insta-handle">@nubeenest.in</div><br><br>
       <a href="https://www.instagram.com/nubeenest.in" target="_blank" class="btn-insta">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#7C3AED"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         Follow on Instagram
       </a>
     </div>
     <div class="insta-right">
-      <div class="insta-img"><img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=300&q=80" alt="Post"></div>
-      <div class="insta-img" style="margin-top:22px"><img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=300&q=80" alt="Post"></div>
-      <div class="insta-img"><img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=300&q=80" alt="Post"></div>
-      <div class="insta-img" style="margin-top:22px;background:rgba(255,255,255,.25);font-size:0.9rem;color:#fff;font-weight:800;text-align:center;padding:10px">+ More on Instagram</div>
+      <div class="insta-img"><img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=300&q=80" alt="Post 1"></div>
+      <div class="insta-img insta-img-2"><img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=300&q=80" alt="Post 2"></div>
+      <div class="insta-img"><img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=300&q=80" alt="Post 3"></div>
+      <div class="insta-img insta-img-2" style="font-size:0.9rem;font-weight:700;color:#fff;text-align:center;padding:10px;">+ More on Instagram</div>
     </div>
   </div>
 </section>
 
-<!-- ══ GAMES ══ -->
-
-<section id="games">
-  <div class="sec-center">
-    <div class="sec-eyebrow">🎮 Play Corner</div>
-    <h2 class="sec-title">Fun Games for Little Minds! 🌈</h2>
-    <p class="sec-sub">Take a break and play — mini-games designed just for kids!</p>
-  </div>
-  <div class="games-grid">
-    <div class="game-card reveal">
-      <div class="game-header"><div class="game-icon purple">🧠</div><div class="game-meta"><h3>Memory Match</h3><span>Find all the pairs! 🃏</span></div></div>
-      <div class="game-area">
-        <div class="game-score"><span>Moves: <span id="mem-moves">0</span></span><span class="game-score-num">Pairs: <span id="mem-pairs">0</span>/8</span></div>
-        <div class="memory-grid" id="memGrid"></div>
-        <button class="game-btn" onclick="initMemory()">🔄 New Game</button>
-      </div>
-    </div>
-    <div class="game-card reveal">
-      <div class="game-header"><div class="game-icon pink">🎨</div><div class="game-meta"><h3>Colour Match</h3><span>Tap the RIGHT colour! 🌈</span></div></div>
-      <div class="game-area">
-        <div class="colour-word" id="colourWord">RED</div>
-        <div class="colour-prompt">Tap the colour of the <strong>text</strong>, not the word!</div>
-        <div class="colour-options" id="colourOpts"></div>
-        <div class="colour-score">Score: <span id="colourScore">0</span> | Best: <span id="colourBest">0</span></div>
-      </div>
-    </div>
-    <div class="game-card reveal">
-      <div class="game-header"><div class="game-icon yellow">🔢</div><div class="game-meta"><h3>Count &amp; Pick</h3><span>How many can you count? ⭐</span></div></div>
-      <div class="game-area">
-        <div class="count-emojis" id="countEmojis"></div>
-        <div class="count-question" id="countQ">How many are there?</div>
-        <div class="count-options" id="countOpts"></div>
-        <div class="count-result" id="countResult"></div>
-        <div class="colour-score">Score: <span id="countScore">0</span></div>
-      </div>
-    </div>
-    <div class="game-card reveal">
-      <div class="game-header"><div class="game-icon green">🎈</div><div class="game-meta"><h3>Balloon Pop!</h3><span>Pop as many as you can! 💥</span></div></div>
-      <div class="game-area">
-        <div class="balloon-area" id="balloonArea"></div>
-        <div class="balloon-score">Popped: <span id="balloonCount">0</span></div>
-        <button class="game-btn" style="background:linear-gradient(135deg,var(--mint),#059669);margin-top:10px" onclick="initBalloons()">🎈 New Balloons</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ NEWSLETTER ══ -->
-
+<!-- NEWSLETTER -->
 <section id="newsletter">
   <div class="newsletter-box reveal">
     <div class="sec-eyebrow">📬 Stay Updated</div>
@@ -947,14 +556,13 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     <p class="sec-sub">Join 500+ parents getting exclusive offers and fun activity ideas.</p>
     <div class="nl-form">
       <input type="email" placeholder="Enter your email address">
-      <button onclick="this.textContent='Subscribed ✓';this.style.background='var(--mint)'">Subscribe Free</button>
+      <button onclick="this.textContent='Subscribed ✓';this.style.background='#2DDAB4'">Subscribe Free</button>
     </div>
     <p class="nl-note">🔒 No spam. Unsubscribe anytime.</p>
   </div>
 </section>
 
-<!-- ══ CONTACT ══ -->
-
+<!-- CONTACT -->
 <section id="contact">
   <div class="sec-center">
     <div class="sec-eyebrow">👋 Get In Touch</div>
@@ -965,12 +573,12 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     <div class="reveal">
       <p class="cinfo-head">Say Hello!</p>
       <p class="cinfo-body">Whether it's a question about our toys, help with an order, or just a smile — drop us a message!</p>
-      <div class="cinfo-row"><span>📧</span><a href="/cdn-cgi/l/email-protection#4b253e292e2e252e383f797f727a0b2c262a222765282426"><span class="__cf_email__" data-cfemail="acc2d9cec9c9c2c9dfd89e98959deccbc1cdc5c082cfc3c1">[email&#160;protected]</span></a></div>
-      <div class="cinfo-row"><span>📱</span><a href="tel:+916362391450">+91 63623 91450</a></div>
-      <div class="cinfo-row"><span>📍</span><span style="font-size:0.88rem;color:#6B7280">India</span></div>
+      <div class="cinfo-row"><div class="cinfo-icon">📧</div><a href="mailto:nubeenest2491@gmail.com">nubeenest2491@gmail.com</a></div>
+      <div class="cinfo-row"><div class="cinfo-icon">📱</div><a href="tel:+916362391450">+91 63623 91450</a></div>
+      <div class="cinfo-row"><div class="cinfo-icon">📍</div><span>India</span></div>
       <div class="cinfo-socials">
-        <a href="https://www.instagram.com/nubeenest.in" target="_blank" class="csocial insta"><svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-        <a href="https://wa.me/916362391450" target="_blank" class="csocial wa"><svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="https://www.instagram.com/nubeenest.in" target="_blank" class="csocial insta"><svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a href="https://wa.me/916362391450" target="_blank" class="csocial wa"><svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
       </div>
     </div>
     <form action="https://formsubmit.co/nubeenest2491@gmail.com" method="POST" class="cform reveal">
@@ -983,15 +591,12 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
   </div>
 </section>
 
-<!-- ══ FOOTER ══ -->
-
+<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-      <div class="footer-brand">
-      <div style="margin-bottom:12px">
-        <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest" style="height:48px;object-fit:contain;filter:brightness(0) invert(1)" onerror="this.style.display='none';document.getElementById('footerLogoText').style.display='block'">
-        <div id="footerLogoText" style="display:none;font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:900;color:#fff">🪺 NubeeNest</div>
-      </div>
+    <div class="footer-brand">
+      <img src="images/WhatsApp Image 2026-03-31 at 18.18.41.jpeg" alt="NubeeNest" style="filter:brightness(0) invert(1)" onerror="this.style.display='none';document.getElementById('ftxt').style.display='block'">
+      <span id="ftxt" style="display:none;font-family:'Fredoka',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:12px;display:block;">🪺 NubeeNest</span>
       <p>Creative toys crafted to spark curiosity and bring endless joy to children everywhere.</p>
       <div class="footer-socials">
         <a href="https://www.instagram.com/nubeenest.in" target="_blank" class="fsocial insta"><svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
@@ -1000,388 +605,226 @@ footer { background:var(--ink); color:#fff; padding:60px 32px 0; }
     </div>
     <div class="footer-col"><h5>Quick Links</h5><a href="#">Home</a><a href="#products">Products</a><a href="#wa-order">WhatsApp Order</a><a href="#why">Why NubeeNest</a><a href="#testimonials">Reviews</a></div>
     <div class="footer-col"><h5>Shop On</h5><a href="https://amzn.in/d/06avxXTL" target="_blank">Amazon</a><a href="#">Flipkart</a><a href="#">Shopify</a></div>
-    <div class="footer-col"><h5>Contact</h5><a href="/cdn-cgi/l/email-protection#4c22392e292922293f387e78757d0c2b212d2520622f2321">Email Us</a><a href="tel:+916362391450">+91 63623 91450</a><a href="https://wa.me/916362391450" target="_blank">WhatsApp</a><a href="https://www.instagram.com/nubeenest.in" target="_blank">Instagram</a></div>
+    <div class="footer-col"><h5>Contact</h5><a href="mailto:nubeenest2491@gmail.com">Email Us</a><a href="tel:+916362391450">+91 63623 91450</a><a href="https://wa.me/916362391450" target="_blank">WhatsApp</a><a href="https://www.instagram.com/nubeenest.in" target="_blank">Instagram</a></div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 NubeeNest · Made with ♥ for happy kids everywhere</span>
+    <span>© 2026 NubeeNest · Made with ♥ for happy kids</span>
     <span>Designed with 💜 in India</span>
   </div>
 </footer>
 
 <!-- FLOATING BUTTONS -->
-
 <div class="float-group">
   <a href="https://www.instagram.com/nubeenest.in" target="_blank" class="insta-float">
-    <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
   </a>
   <a href="https://wa.me/916362391450" target="_blank" class="wa-float">
-    <svg viewBox="0 0 24 24" width="26" height="26" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
   </a>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-
-/* ══ CART STATE ══ */
+<script>
+/* ══ CART ══ */
 var cart = [];
+function cTotal(){ return cart.reduce(function(s,i){return s+i.price*i.qty},0); }
+function cCount(){ return cart.reduce(function(s,i){return s+i.qty},0); }
 
-function getCartTotal() { return cart.reduce(function(s,i){return s+i.price*i.qty},0); }
-
-function updateCartUI() {
-var total = getCartTotal();
-var count = cart.reduce(function(s,i){return s+i.qty},0);
-var cc = document.getElementById(‘cartCount’);
-if (count > 0) { cc.classList.remove(‘hidden’); cc.textContent = count; }
-else { cc.classList.add(‘hidden’); }
-var el = document.getElementById(‘cartItems’);
-var footer = document.getElementById(‘cartFooter’);
-if (cart.length === 0) {
-el.innerHTML = ‘<div class="cart-empty"><div class="empty-icon">🧸</div><p>Your cart is empty!<br>Add some fun toys 🎉</p></div>’;
-footer.style.display = ‘none’; return;
-}
-footer.style.display = ‘block’;
-el.innerHTML = ‘’;
-cart.forEach(function(item, idx) {
-var div = document.createElement(‘div’); div.className = ‘cart-item’;
-div.innerHTML = ‘<img class="cart-item-img" src="'+item.img+'" alt="'+item.name+'" onerror="this.outerHTML=\'<div class=cart-item-img-placeholder>\'+\''+item.emoji+'\'+\'</div>\'">’
-+’<div class="cart-item-info"><div class="cart-item-name">’+item.emoji+’ ‘+item.name+’</div>’
-+’<div class="cart-item-price">₹’+item.price+’</div>’
-+’<div class="cart-item-qty">’
-+’<button class="qty-btn" onclick="changeQty('+idx+',-1)">−</button>’
-+’<span class="qty-num">’+item.qty+’</span>’
-+’<button class="qty-btn" onclick="changeQty('+idx+',1)">+</button>’
-+’</div></div>’
-+’<button class="cart-remove" onclick="removeItem('+idx+')">✕</button>’;
-el.appendChild(div);
-});
-document.getElementById(‘cartSubtotal’).textContent = ‘₹’+total;
-var delivery = total >= 499 ? ‘FREE 🎉’ : ‘₹49’;
-document.getElementById(‘cartDelivery’).textContent = delivery;
-document.getElementById(‘cartTotal’).textContent = total >= 499 ? ‘₹’+total : ‘₹’+(total+49);
-var left = 499 - total;
-var bar = document.getElementById(‘shippingBar’);
-if (left <= 0) { bar.textContent = ‘🎉 You qualify for FREE delivery!’; bar.style.background = ‘#D1FAE5’; bar.style.color = ‘#065F46’; }
-else { bar.innerHTML = ‘🚚 Add ₹<span>’+left+’</span> more for FREE delivery!’; bar.style.background = ‘#EDE9FE’; bar.style.color = ‘var(–violet)’; }
-}
-
-function addToCart(name, emoji, price, img) {
-var found = cart.find(function(i){return i.name===name});
-if (found) { found.qty++; }
-else { cart.push({name:name, emoji:emoji, price:price, img:img, qty:1}); }
-updateCartUI();
-showToast(‘🛒 ‘+name+’ added to cart!’);
-openCart();
+function updateCart(){
+  var total = cTotal(), count = cCount();
+  var cc = document.getElementById('cartCount');
+  cc.textContent = count;
+  count > 0 ? cc.classList.remove('hidden') : cc.classList.add('hidden');
+  var el = document.getElementById('cartItems');
+  var ft = document.getElementById('cartFooter');
+  if(cart.length === 0){
+    el.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🧸</div><p>Your cart is empty!<br>Add some fun toys 🎉</p></div>';
+    ft.style.display = 'none'; return;
+  }
+  ft.style.display = 'block';
+  el.innerHTML = '';
+  cart.forEach(function(item, i){
+    var d = document.createElement('div');
+    d.className = 'cart-item';
+    d.innerHTML = '<div class="cart-item-emoji">'+item.emoji+'</div>'+
+      '<div class="cart-item-info">'+
+        '<div class="cart-item-name">'+item.name+'</div>'+
+        '<div class="cart-item-price">₹'+item.price+'</div>'+
+        '<div class="cart-item-qty">'+
+          '<button class="qty-btn" onclick="chQty('+i+',-1)">−</button>'+
+          '<span class="qty-num">'+item.qty+'</span>'+
+          '<button class="qty-btn" onclick="chQty('+i+',1)">+</button>'+
+        '</div></div>'+
+      '<button class="cart-remove" onclick="rmItem('+i+')">✕</button>';
+    el.appendChild(d);
+  });
+  var del = total >= 499 ? 0 : 49;
+  document.getElementById('cSub').textContent = '₹'+total;
+  document.getElementById('cDel').textContent = del===0 ? 'FREE 🎉' : '₹'+del;
+  document.getElementById('cTot').textContent = '₹'+(total+del);
+  var bar = document.getElementById('freeBar');
+  var left = 499 - total;
+  if(left <= 0){ bar.textContent='🎉 You qualify for FREE delivery!'; bar.style.background='#D1FAE5'; bar.style.color='#065F46'; }
+  else { bar.innerHTML='🚚 Add ₹'+left+' more for FREE delivery!'; bar.style.background=''; bar.style.color=''; }
 }
 
-function changeQty(idx, d) {
-cart[idx].qty += d;
-if (cart[idx].qty <= 0) cart.splice(idx,1);
-updateCartUI();
+function addToCart(name, emoji, price){
+  var f = cart.find(function(i){ return i.name===name; });
+  if(f){ f.qty++; } else { cart.push({name:name,emoji:emoji,price:price,qty:1}); }
+  updateCart();
+  showToast('🛒 '+name+' added!');
+  openCart();
 }
+function chQty(i,d){ cart[i].qty+=d; if(cart[i].qty<=0) cart.splice(i,1); updateCart(); }
+function rmItem(i){ cart.splice(i,1); updateCart(); }
+function clearCart(){ cart=[]; updateCart(); }
 
-function removeItem(idx) { cart.splice(idx,1); updateCartUI(); }
-
-function clearCart() { cart = []; updateCartUI(); }
-
-function openCart() {
-document.getElementById(‘cartSidebar’).classList.add(‘open’);
-document.getElementById(‘cartOverlay’).classList.add(‘open’);
-document.body.style.overflow = ‘hidden’;
+function openCart(){
+  document.getElementById('cartSidebar').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
 }
-
-function closeCart() {
-document.getElementById(‘cartSidebar’).classList.remove(‘open’);
-document.getElementById(‘cartOverlay’).classList.remove(‘open’);
-document.body.style.overflow = ‘’;
+function closeCart(){
+  document.getElementById('cartSidebar').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow='';
 }
-
-function orderViaWA() {
-var msg = ‘Hi NubeeNest! I'd like to order:\n’;
-cart.forEach(function(i){ msg += ‘• ‘+i.name+’ x’+i.qty+’ = ₹’+(i.price*i.qty)+’\n’; });
-msg += ‘Total: ₹’+getCartTotal();
-window.open(‘https://wa.me/916362391450?text=’+encodeURIComponent(msg),’_blank’);
+function orderViaWA(){
+  var msg='Hi NubeeNest! I\'d like to order:\n';
+  cart.forEach(function(i){ msg+='• '+i.name+' ×'+i.qty+' = ₹'+(i.price*i.qty)+'\n'; });
+  msg+='Total: ₹'+cTotal();
+  window.open('https://wa.me/916362391450?text='+encodeURIComponent(msg),'_blank');
 }
 
 /* ══ TOAST ══ */
-var toastTimer;
-function showToast(msg) {
-var t = document.getElementById(‘toast’); t.textContent = msg;
-t.classList.add(‘show’); clearTimeout(toastTimer);
-toastTimer = setTimeout(function(){ t.classList.remove(‘show’); }, 2500);
+var _tt;
+function showToast(msg){
+  var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(function(){ t.classList.remove('show'); },2500);
 }
 
-/* ══ CHECKOUT / MODAL ══ */
-var currentStep = 1;
-var userPhone = ‘’;
+/* ══ CHECKOUT ══ */
+function openCheckout(){
+  if(cart.length===0){ showToast('Add items to cart first!'); return; }
+  closeCart();
+  document.getElementById('checkoutModal').classList.add('open');
+  goStep(1);
+}
+function closeCheckout(){ document.getElementById('checkoutModal').classList.remove('open'); }
 
-function openCheckout() {
-if (cart.length === 0) { showToast(‘Add items to cart first!’); return; }
-closeCart();
-document.getElementById(‘checkoutModal’).classList.add(‘open’);
-goToStep(1);
+function showP(id){
+  ['pPhone','pOTP','pAddr','pPay','pSuccess'].forEach(function(p){ document.getElementById(p).classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
 }
 
-function closeCheckout() {
-document.getElementById(‘checkoutModal’).classList.remove(‘open’);
+function goStep(n){
+  for(var i=1;i<=3;i++){
+    var dot=document.getElementById('dot'+i);
+    if(i<n){ dot.className='step-dot done'; dot.textContent='✓'; }
+    else if(i===n){ dot.className='step-dot active'; dot.textContent=i; }
+    else{ dot.className='step-dot pending'; dot.textContent=i; }
+  }
+  for(var j=1;j<=2;j++){ document.getElementById('line'+j).className=j<n?'step-line done':'step-line'; }
+  if(n===1){ showP('pPhone'); document.getElementById('modalTitle').textContent='Secure Checkout 🔒'; }
+  else if(n===2){ showP('pAddr'); document.getElementById('modalTitle').textContent='Delivery Address 📍'; }
+  else if(n===3){ buildSum(); showP('pPay'); document.getElementById('modalTitle').textContent='Payment 💳'; }
 }
 
-function goToStep(n) {
-currentStep = n;
-// Hide all step panels
-[‘phoneStep’,‘otpStep’,‘addressStep’,‘paymentStep’,‘successStep’].forEach(function(id){ document.getElementById(id).classList.remove(‘active’); });
-// Update dots
-for (var i=1;i<=3;i++) {
-var dot = document.getElementById(‘dot’+i);
-if (i < n) { dot.className=‘step-dot done’; dot.textContent=‘✓’; }
-else if (i===n) { dot.className=‘step-dot active’; dot.textContent=i; }
-else { dot.className=‘step-dot pending’; dot.textContent=i; }
+function sendOTP(){
+  var phone=document.getElementById('phoneInput').value.replace(/\s/g,'').trim();
+  if(!/^\d{10}$/.test(phone)){ showToast('Enter a valid 10-digit number'); return; }
+  document.getElementById('otpNum').textContent='+91 '+phone;
+  showP('pOTP');
+  ['ob1','ob2','ob3','ob4'].forEach(function(id){ document.getElementById(id).value=''; });
+  setTimeout(function(){ document.getElementById('ob1').focus(); },100);
+  showToast('📱 OTP sent! Demo: 1234');
 }
-for (var j=1;j<=2;j++) {
-document.getElementById(‘line’+j).className = j<n ? ‘step-line done’ : ‘step-line’;
-}
-if (n===1) { document.getElementById(‘phoneStep’).classList.add(‘active’); document.getElementById(‘modalTitle’).textContent=‘Secure Checkout’; }
-else if (n===2) { document.getElementById(‘addressStep’).classList.add(‘active’); document.getElementById(‘modalTitle’).textContent=‘Delivery Address’; }
-else if (n===3) { buildPaymentSummary(); document.getElementById(‘paymentStep’).classList.add(‘active’); document.getElementById(‘modalTitle’).textContent=‘Payment’; }
-else if (n===4) { document.getElementById(‘dot3’).className=‘step-dot done’; document.getElementById(‘dot3’).textContent=‘✓’; document.getElementById(‘line2’).className=‘step-line done’; document.getElementById(‘successStep’).classList.add(‘active’); document.getElementById(‘modalTitle’).textContent=‘Order Confirmed! 🎉’; }
+function oNext(el,nid){ if(el.value.length===1&&nid) document.getElementById(nid).focus(); }
+function oBk(e,el,pid){ if(e.key==='Backspace'&&!el.value&&pid) document.getElementById(pid).focus(); }
+function verifyOTP(){
+  var otp=['ob1','ob2','ob3','ob4'].map(function(id){ return document.getElementById(id).value; }).join('');
+  if(otp==='1234'){ goStep(2); showToast('✅ Verified!'); }
+  else { showToast('❌ Wrong OTP. Use 1234'); }
 }
 
-function sendOTP() {
-var phone = document.getElementById(‘phoneInput’).value.replace(/\s/g,’’).trim();
-if (!/^\d{10}$/.test(phone)) { showToast(‘Please enter a valid 10-digit number’); return; }
-userPhone = phone;
-document.getElementById(‘phoneStep’).classList.remove(‘active’);
-document.getElementById(‘otpPhone’).textContent = ‘+91 ‘+phone;
-document.getElementById(‘otpStep’).classList.add(‘active’);
-document.getElementById(‘otp1’).value=’’; document.getElementById(‘otp2’).value=’’; document.getElementById(‘otp3’).value=’’; document.getElementById(‘otp4’).value=’’;
-setTimeout(function(){ document.getElementById(‘otp1’).focus(); }, 100);
-showToast(‘📱 OTP sent! (Demo: use 1234)’);
+function goToPay(){
+  var n=document.getElementById('aN').value.trim();
+  var l=document.getElementById('aL1').value.trim();
+  var c=document.getElementById('aC').value.trim();
+  var p=document.getElementById('aP').value.trim();
+  var s=document.getElementById('aSt').value;
+  if(!n||!l||!c||!p||!s){ showToast('Please fill all address fields'); return; }
+  if(!/^\d{6}$/.test(p)){ showToast('Enter a valid 6-digit PIN code'); return; }
+  goStep(3);
 }
 
-function resendOTP() { showToast(‘📱 OTP resent! (Demo: use 1234)’); }
-
-function showPhoneStep() {
-document.getElementById(‘otpStep’).classList.remove(‘active’);
-document.getElementById(‘phoneStep’).classList.add(‘active’);
+function buildSum(){
+  var html='';
+  cart.forEach(function(i){ html+='<div class="mini-row"><span>'+i.emoji+' '+i.name+' ×'+i.qty+'</span><span>₹'+(i.price*i.qty)+'</span></div>'; });
+  document.getElementById('miniItems').innerHTML=html;
+  var sub=cTotal(), del=sub>=499?0:49;
+  document.getElementById('mSub').textContent='₹'+sub;
+  document.getElementById('mDel').textContent=del===0?'FREE 🎉':'₹'+del;
+  document.getElementById('mTot').textContent='₹'+(sub+del);
 }
 
-function otpNext(el, nextId) {
-if (el.value.length === 1 && nextId) { document.getElementById(nextId).focus(); }
+function selPay(radio){
+  document.querySelectorAll('.pay-opt').forEach(function(l){ l.classList.remove('sel'); });
+  radio.closest('.pay-opt').classList.add('sel');
+  document.getElementById('upiF').className='upi-extra'+(radio.value==='upi'?' show':'');
+  document.getElementById('cardF').style.display=radio.value==='card'?'block':'none';
+}
+function fmtCard(inp){ var v=inp.value.replace(/\D/g,'').substring(0,16); inp.value=v.replace(/(.{4})/g,'$1 ').trim(); }
+
+function placeOrder(){
+  var btn=document.getElementById('payBtn');
+  btn.innerHTML='<span class="spinner"></span> Processing...'; btn.disabled=true;
+  setTimeout(function(){
+    btn.innerHTML='Pay Now & Confirm Order 🎉'; btn.disabled=false;
+    var id='NN-'+Math.floor(100000+Math.random()*900000);
+    document.getElementById('orderId').textContent='Order #'+id;
+    ['dot1','dot2','dot3'].forEach(function(d){ var el=document.getElementById(d); el.className='step-dot done'; el.textContent='✓'; });
+    ['line1','line2'].forEach(function(l){ document.getElementById(l).className='step-line done'; });
+    showP('pSuccess'); document.getElementById('modalTitle').textContent='Order Confirmed! 🎉';
+  },2000);
 }
 
-function otpBack(e, el, prevId) {
-if (e.key === ‘Backspace’ && !el.value && prevId) { document.getElementById(prevId).focus(); }
-}
-
-function verifyOTP() {
-var otp = document.getElementById(‘otp1’).value + document.getElementById(‘otp2’).value + document.getElementById(‘otp3’).value + document.getElementById(‘otp4’).value;
-if (otp === ‘1234’) { goToStep(2); showToast(‘✅ Verified successfully!’); }
-else { showToast(‘❌ Wrong OTP. Demo OTP is 1234’); }
-}
-
-function goToPayment() {
-var name = document.getElementById(‘addrName’).value.trim();
-var line1 = document.getElementById(‘addrLine1’).value.trim();
-var city = document.getElementById(‘addrCity’).value.trim();
-var pin = document.getElementById(‘addrPin’).value.trim();
-var state = document.getElementById(‘addrState’).value;
-if (!name || !line1 || !city || !pin || !state) { showToast(‘Please fill all address fields’); return; }
-if (!/^\d{6}$/.test(pin)) { showToast(‘Enter a valid 6-digit PIN code’); return; }
-goToStep(3);
-}
-
-function buildPaymentSummary() {
-var html = ‘’;
-cart.forEach(function(i){ html += ‘<div class="summary-row"><span>’+i.emoji+’ ‘+i.name+’ ×’+i.qty+’</span><span>₹’+(i.price*i.qty)+’</span></div>’; });
-document.getElementById(‘summaryItems’).innerHTML = html;
-var sub = getCartTotal();
-var del = sub >= 499 ? ‘FREE 🎉’ : ‘₹49’;
-var total = sub >= 499 ? sub : sub+49;
-document.getElementById(‘sumSubtotal’).textContent = ‘₹’+sub;
-document.getElementById(‘sumDelivery’).textContent = del;
-document.getElementById(‘sumTotal’).textContent = ‘₹’+total;
-}
-
-function selectPay(radio) {
-document.querySelectorAll(’.pay-opt’).forEach(function(l){ l.classList.remove(‘selected’); });
-radio.closest(’.pay-opt’).classList.add(‘selected’);
-document.getElementById(‘upiIdInput’).className = ‘upi-input’ + (radio.value===‘upi’ ? ’ show’ : ‘’);
-document.getElementById(‘cardFields’).style.display = radio.value===‘card’ ? ‘block’ : ‘none’;
-}
-
-function formatCard(input) {
-var v = input.value.replace(/\D/g,’’).substring(0,16);
-input.value = v.replace(/(.{4})/g,’$1 ’).trim();
-}
-
-function placeOrder() {
-var btn = document.getElementById(‘payNowBtn’);
-btn.innerHTML = ‘<span class="spinner"></span> Processing…’;
-btn.disabled = true;
-setTimeout(function() {
-btn.innerHTML = ‘Pay Now & Confirm Order 🎉’; btn.disabled = false;
-var orderId = ‘NN-’ + Math.floor(100000+Math.random()*900000);
-document.getElementById(‘orderIdDisplay’).textContent = ‘Order #’+orderId;
-goToStep(4);
-}, 2000);
-}
-
-/* ══ NAV TOGGLE ══ */
-document.getElementById(‘navToggle’).addEventListener(‘click’, function(){
-var nav = document.getElementById(‘main-nav’);
-nav.classList.toggle(‘open’);
-document.body.style.overflow = nav.classList.contains(‘open’) ? ‘hidden’ : ‘’;
+/* ══ NAV ══ */
+document.getElementById('navToggle').addEventListener('click',function(){
+  var nav=document.getElementById('mainNav'), tog=document.getElementById('navToggle');
+  var open=nav.classList.toggle('open');
+  tog.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
 });
-document.querySelectorAll(’#main-nav a’).forEach(function(a){
-a.addEventListener(‘click’, function(){
-document.getElementById(‘main-nav’).classList.remove(‘open’);
-document.body.style.overflow = ‘’;
-});
+document.querySelectorAll('#mainNav a').forEach(function(a){
+  a.addEventListener('click',function(){
+    document.getElementById('mainNav').classList.remove('open');
+    document.getElementById('navToggle').classList.remove('open');
+    document.body.style.overflow='';
+  });
 });
 
 /* ══ AGE FILTER ══ */
-document.querySelectorAll(’.age-btn’).forEach(function(btn){
-btn.addEventListener(‘click’, function(){
-document.querySelectorAll(’.age-btn’).forEach(function(b){ b.classList.remove(‘active’); });
-btn.classList.add(‘active’);
-var age = btn.dataset.age;
-document.querySelectorAll(’.product-card’).forEach(function(card){
-card.classList.toggle(‘hidden’, age !== ‘all’ && card.dataset.age !== age);
-});
-});
+document.querySelectorAll('.age-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.age-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var age=btn.dataset.age;
+    document.querySelectorAll('.product-card').forEach(function(c){
+      c.classList.toggle('hidden',age!=='all'&&c.dataset.age!==age);
+    });
+  });
 });
 
 /* ══ SCROLL REVEAL ══ */
-var revEls = document.querySelectorAll(’.reveal’);
-revEls.forEach(function(el){ el.classList.add(‘hidden-reveal’); });
-var io = new IntersectionObserver(function(entries){
-entries.forEach(function(e){
-if (!e.isIntersecting) return;
-var siblings = Array.from(e.target.parentElement.querySelectorAll(’.reveal’));
-e.target.style.transitionDelay = (siblings.indexOf(e.target)*0.1)+‘s’;
-e.target.classList.remove(‘hidden-reveal’); e.target.classList.add(‘visible’);
-io.unobserve(e.target);
-});
-}, {threshold:0.05});
-revEls.forEach(function(el){ io.observe(el); });
-
-/* ══ GAMES ══ */
-var memEmojis=[‘🧱’,‘🧩’,‘🚗’,‘🎈’,‘⭐’,‘🌈’,‘🦁’,‘🐸’];
-var memCards=[],memFlipped=[],memMatched=0,memMoves=0,memLock=false;
-function initMemory(){
-var pairs=[…memEmojis,…memEmojis].sort(function(){return Math.random()-0.5});
-memCards=[];memFlipped=[];memMatched=0;memMoves=0;memLock=false;
-document.getElementById(‘mem-moves’).textContent=0;
-document.getElementById(‘mem-pairs’).textContent=0;
-var grid=document.getElementById(‘memGrid’);grid.innerHTML=’’;
-pairs.forEach(function(em,i){
-var btn=document.createElement(‘button’);
-btn.className=‘mem-card’;btn.dataset.emoji=em;btn.dataset.idx=i;btn.textContent=’’;
-btn.addEventListener(‘click’,function(){flipMem(this)});
-grid.appendChild(btn);memCards.push(btn);
-});
-}
-function flipMem(card){
-if(memLock||card.classList.contains(‘flipped’)||card.classList.contains(‘matched’))return;
-card.classList.add(‘flipped’);card.textContent=card.dataset.emoji;memFlipped.push(card);
-if(memFlipped.length===2){
-memLock=true;memMoves++;document.getElementById(‘mem-moves’).textContent=memMoves;
-if(memFlipped[0].dataset.emoji===memFlipped[1].dataset.emoji){
-memFlipped[0].classList.add(‘matched’);memFlipped[1].classList.add(‘matched’);
-memMatched++;document.getElementById(‘mem-pairs’).textContent=memMatched;
-memFlipped=[];memLock=false;
-if(memMatched===8)setTimeout(function(){alert(‘🎉 You matched all pairs in ‘+memMoves+’ moves!’);},200);
-}else{
-setTimeout(function(){
-memFlipped[0].classList.remove(‘flipped’);memFlipped[0].textContent=’’;
-memFlipped[1].classList.remove(‘flipped’);memFlipped[1].textContent=’’;
-memFlipped=[];memLock=false;
-},900);
-}
-}
-}
-initMemory();
-
-var colours=[{name:‘RED’,hex:’#EF4444’},{name:‘BLUE’,hex:’#3B82F6’},{name:‘GREEN’,hex:’#22C55E’},{name:‘PINK’,hex:’#EC4899’},{name:‘ORANGE’,hex:’#F97316’},{name:‘PURPLE’,hex:’#8B5CF6’},{name:‘YELLOW’,hex:’#EAB308’},{name:‘TEAL’,hex:’#14B8A6’}];
-var colourScore=0,colourBest=0,colourCorrect=null,colourLocked=false;
-function nextColour(){
-colourLocked=false;
-var word=colours[Math.floor(Math.random()*colours.length)];
-var ink=colours[Math.floor(Math.random()*colours.length)];
-colourCorrect=ink.name;
-document.getElementById(‘colourWord’).textContent=word.name;
-document.getElementById(‘colourWord’).style.color=ink.hex;
-var opts=[ink];
-var pool=colours.filter(function(c){return c.name!==ink.name}).sort(function(){return Math.random()-0.5}).slice(0,3);
-opts=opts.concat(pool).sort(function(){return Math.random()-0.5});
-var container=document.getElementById(‘colourOpts’);container.innerHTML=’’;
-opts.forEach(function(c){
-var btn=document.createElement(‘button’);btn.className=‘colour-opt’;btn.style.background=c.hex;btn.textContent=c.name;btn.dataset.name=c.name;
-btn.addEventListener(‘click’,function(){checkColour(this)});container.appendChild(btn);
-});
-}
-function checkColour(btn){
-if(colourLocked)return;colourLocked=true;
-if(btn.dataset.name===colourCorrect){
-btn.classList.add(‘correct’);colourScore++;if(colourScore>colourBest)colourBest=colourScore;
-document.getElementById(‘colourScore’).textContent=colourScore;document.getElementById(‘colourBest’).textContent=colourBest;
-setTimeout(nextColour,700);
-}else{
-btn.classList.add(‘wrong’);colourScore=0;document.getElementById(‘colourScore’).textContent=colourScore;setTimeout(nextColour,900);
-}
-}
-nextColour();
-
-var countItems=[‘🌟’,‘🍎’,‘🐸’,‘🚗’,‘🧩’,‘🎈’,‘🦁’,‘🌈’];
-var countScore=0,countLocked=false;
-function nextCount(){
-countLocked=false;document.getElementById(‘countResult’).textContent=’’;
-var n=Math.floor(Math.random()*9)+1;var em=countItems[Math.floor(Math.random()*countItems.length)];
-document.getElementById(‘countEmojis’).textContent=em.repeat(n);
-document.getElementById(‘countQ’).textContent=‘How many ‘+em+’ are there?’;
-var wrongs=new Set([n]);while(wrongs.size<4)wrongs.add(Math.floor(Math.random()*12)+1);
-var opts=Array.from(wrongs).sort(function(){return Math.random()-0.5});
-var container=document.getElementById(‘countOpts’);container.innerHTML=’’;
-opts.forEach(function(num){
-var btn=document.createElement(‘button’);btn.className=‘count-opt’;btn.textContent=num;
-btn.addEventListener(‘click’,function(){checkCount(this,num,n)});container.appendChild(btn);
-});
-}
-function checkCount(btn,chosen,correct){
-if(countLocked)return;countLocked=true;
-if(chosen===correct){
-btn.classList.add(‘correct’);document.getElementById(‘countResult’).innerHTML=‘🎉 Correct!’;document.getElementById(‘countResult’).style.color=’#059669’;
-countScore++;document.getElementById(‘countScore’).textContent=countScore;setTimeout(nextCount,1200);
-}else{
-btn.classList.add(‘wrong’);document.getElementById(‘countResult’).innerHTML=‘❌ It was <strong>’+correct+’</strong>!’;document.getElementById(‘countResult’).style.color=’#EF4444’;
-countScore=Math.max(0,countScore-1);document.getElementById(‘countScore’).textContent=countScore;setTimeout(nextCount,1400);
-}
-}
-nextCount();
-
-var balloonEmojis=[‘🎈’,‘⭐’,‘🌟’,‘💛’,‘🧡’,‘❤️’,‘💜’,‘💚’];
-var balloonPopped=0,balloonTimers=[];
-function initBalloons(){
-var area=document.getElementById(‘balloonArea’);area.innerHTML=’’;balloonPopped=0;
-balloonTimers.forEach(clearTimeout);balloonTimers=[];
-document.getElementById(‘balloonCount’).textContent=0;
-spawnBalloons(6);
-}
-function spawnBalloons(n){
-var area=document.getElementById(‘balloonArea’);
-for(var i=0;i<n;i++){
-(function(delay){
-var t=setTimeout(function(){
-var b=document.createElement(‘button’);b.className=‘balloon’;
-b.textContent=balloonEmojis[Math.floor(Math.random()*balloonEmojis.length)];
-var dur=(3+Math.random()*4).toFixed(1);
-b.style.left=(5+Math.random()*85).toFixed(0)+’%’;
-b.style.animationDuration=dur+‘s’;
-b.addEventListener(‘click’,function(){popBalloon(this)});
-area.appendChild(b);
-var rem=setTimeout(function(){if(b.parentNode)b.remove();},parseFloat(dur)*1000+200);
-balloonTimers.push(rem);
-},delay);
-balloonTimers.push(t);
-})(i*400);
-}
-var loop=setTimeout(function(){spawnBalloons(3);},n*400+1000);
-balloon
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(!e.isIntersecting) return;
+    var sibs=Array.from(e.target.parentElement.querySelectorAll('.reveal'));
+    e.target.style.transitionDelay=(sibs.indexOf(e.target)*0.1)+'s';
+    e.target.classList.add('visible'); obs.unobserve(e.target);
+  });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+</script>
+</body>
+</html>
